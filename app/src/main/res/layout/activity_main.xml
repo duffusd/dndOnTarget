@@ -23,4 +23,18 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="D&D On Point" />
 
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="395dp"
+        android:layout_height="561dp"
+        android:fillViewport="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="162dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </android.support.v4.widget.NestedScrollView>
+
 </android.support.constraint.ConstraintLayout>
