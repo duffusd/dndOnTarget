@@ -16,7 +16,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         dbHelper = new DatabaseHelper(this);
-        dbHelper.addName("test character");
+        //dbHelper.addName("test character");
+        //dbHelper.updateName("Eric", 1);
+        //dbHelper.deleteCharacter(2);
+
         setContentView(R.layout.activity_main);
     }
 }
