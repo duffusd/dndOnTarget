@@ -1,24 +1,30 @@
 package com.example.dnd;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
-import com.example.dnd.data.DatabaseHelper;
+import com.example.dnd.data.AttackDatabaseHelper;
+import com.example.dnd.data.CharacterDatabaseHelper;
 
 public class MainActivity extends AppCompatActivity {
 
-    DatabaseHelper dbHelper;
+    CharacterDatabaseHelper characterDbHelper;
+    AttackDatabaseHelper attackDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        dbHelper = new DatabaseHelper(this);
-        //dbHelper.addName("test character");
-        //dbHelper.updateName("Eric", 1);
-        //dbHelper.deleteCharacter(2);
+        characterDbHelper = new CharacterDatabaseHelper(this);
+        attackDbHelper = new AttackDatabaseHelper(this);
+
+        //attackDbHelper.addHitModifier(100);
+        //attackDbHelper.updateHitModifier(2, 0);
+        //attackDbHelper.deleteAttack(2);
+
+        //characterDbHelper.addName("test character");
+        //characterDbHelper.updateName("Eric", 1);
+        //characterDbHelper.deleteCharacter(2);
 
         setContentView(R.layout.activity_main);
     }
