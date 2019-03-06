@@ -48,6 +48,8 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+
+
     public void updateName(String newName, int id){
 
         try {
@@ -108,5 +110,11 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
             Log.e(ERROR_SQLite, "findCharacter(): Couldn't find a character");
             return false;
         }
+    }
+
+    public Cursor getListContents(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor data = db.rawQuery("SELECT * FROM " + CharacterContract.getTableName(), null);
+        return data;
     }
 }
