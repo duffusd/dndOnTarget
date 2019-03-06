@@ -12,11 +12,11 @@ public class AttackContract implements BaseColumns {
     private static final String attack_dice_id = "attack_dice_id";
 
     private static final String SQL_CREATE_TABLE_ATTACKS=
-            "CREATE TABLE " + AttackContract.table_name + " (" +
-                    AttackContract._id + " INTEGER PRIMARY KEY, " +
-                    AttackContract.attack_dice_id + " INTEGER," +
-                    AttackContract.hitModifier + " INTEGER," +
-                    AttackContract.damageModifier + " INTEGER" +
+            "CREATE TABLE " + table_name + " (" +
+                    _id + " INTEGER PRIMARY KEY, " +
+                    attack_dice_id + " INTEGER NOT NULL," +
+                    hitModifier + " INTEGER," +
+                    damageModifier + " INTEGER " +
                     ")";
 
     public static String getDbName() { return db_name; }
@@ -27,4 +27,5 @@ public class AttackContract implements BaseColumns {
     public static String getIdColName() { return _id; }
     public static String getHitModifierColName() { return hitModifier; }
     public static String getDamageModifierColName() { return damageModifier; }
+    public static String getAttackDiceIdColName() { return attack_dice_id; }
 }

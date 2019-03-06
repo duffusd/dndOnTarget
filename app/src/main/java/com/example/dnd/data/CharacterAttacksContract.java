@@ -9,14 +9,13 @@ public class CharacterAttacksContract {
 
     // SQL to create a table
     private static final String TABLE_CHARACTER_ATTACKS_CREATE=
-            "CREATE TABLE " + CharacterAttacksContract.table_name + " (" +
-                    CharacterAttacksContract.characterId + " INTEGER NOT NULL, " +
-                    CharacterAttacksContract.attackId + " INTEGER NOT NULL, " +
-                    "PRIMARY KEY (" + CharacterAttacksContract.characterId + ", " +
-                    CharacterAttacksContract.attackId + "), " +
-                    "FOREIGN KEY (" + CharacterAttacksContract.characterId + ") " +
+            "CREATE TABLE " + table_name + " (" +
+                    characterId + " INTEGER NOT NULL, " +
+                    attackId + " INTEGER NOT NULL, " +
+                    "PRIMARY KEY (" + characterId + ", " + attackId + "), " +
+                    "FOREIGN KEY (" + characterId + ") " +
                     "REFERENCES " + CharacterContract.getTableName() + "( " + CharacterContract.getIdColName() + ") ON DELETE CASCADE," +
-                    "FOREIGN KEY (" + CharacterAttacksContract.attackId +
+                    "FOREIGN KEY (" + attackId +
                     ") REFERENCES " + AttackContract.getTableName() + "( " + AttackContract.getIdColName() + ") ON DELETE CASCADE)";
 
 
