@@ -13,21 +13,19 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
 
     //Constants for db name and version
     private static final String ERROR_SQLite = "SQLite:Attacks";
+    private Context _context;
 
     // non-default constructor
     public AttackDatabaseHelper(Context context){
         super(context, AttackContract.getDbName(), null, DatabaseContract.version);
         SQLiteDatabase db = getWritableDatabase();
+        _context = context;
     }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        try {
-            db.execSQL(AttackContract.getSQLCreateTable());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        db.execSQL(AttackContract.getSQLCreateTable());
     }
 
     @Override
@@ -36,23 +34,50 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        if (!db.isReadOnly()) {
+            // Enable foreign key constraints
+            db.execSQL("PRAGMA foreign_keys=ON;");
+        }
+    }
 
 
+    public void addAttack(int hit, int damage, int attackDiceId){
 
-    public void addModifiers(int hit, int damage){
+        // verify that attackDiceId exists in the AttackDice table
+        AttackDiceDatabaseHelper attackDiceDbHelper = new AttackDiceDatabaseHelper(_context);
+        boolean findAttackDiceId = attackDiceDbHelper.findAttackDiceById(attackDiceId);
+        System.out.println("findAttackDiceId: " + findAttackDiceId);
 
+        /*
+        if (!findAttackDiceId) {
+            Log.e(ERROR_SQLite, "Can't find attackDiceId");
+            return;
+
+        }
+        */
+
+        // now insert the new attack to attackTable
         try {
 
             SQLiteDatabase db = getWritableDatabase();
             ContentValues newValue = new ContentValues();
+
             newValue.put(AttackContract.getHitModifierColName(), hit);
             newValue.put(AttackContract.getDamageModifierColName(), damage);
+
+            if (findAttackDiceId)
+                newValue.put(AttackContract.getAttackDiceIdColName(), attackDiceId);
+
+            System.out.println("!!!!!!!!!!!!!!");
             db.insert(AttackContract.getTableName(), null, newValue);
             db.close();
 
         } catch (SQLiteException e){
             e.printStackTrace();
-            Log.e(ERROR_SQLite, "Attacks table: Adding hit and damage modifiers failed");
+            Log.e(ERROR_SQLite, AttackContract.getTableName() + ": Adding hit and damage modifiers failed");
 
         }
     }
@@ -118,12 +143,13 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
 
             SQLiteDatabase db = getWritableDatabase();
             Cursor c = db.rawQuery(sqlSelectAttackId, null);
-            db.close();
 
-            if (c != null) {
+            if (c != null && c.getCount() == 1) {
+                db.close();
                 return true;
             }
             else
+                db.close();
                 return false;
 
         } catch (SQLiteException e) {

@@ -94,11 +94,13 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
                     " WHERE " + CharacterContract.getIdColName() + "=" + id;
 
             Cursor c = db.rawQuery(sqlSelectCharacterId, null);
-            db.close();
-            if (c != null && c.moveToFirst()) {
+
+            if (c != null && c.getCount() == 1) {
+                db.close();
                 return true;
             }
             else
+                db.close();
                 return false;
 
         } catch (SQLiteException e) {

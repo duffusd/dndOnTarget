@@ -52,6 +52,12 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
                 values.put(CharacterAttacksContract.getAttackIdColName(), attackId);
                 db.insert(CharacterAttacksContract.getTableName(), null, values);
             }
+            else if (!findCharacter)
+                Log.e(ERROR_SQLite, "Invalid characterID");
+            else if (!findAttack)
+                Log.e(ERROR_SQLite, "Invalid attackID");
+            else
+                Log.e(ERROR_SQLite, "Invalid CharacterID and AttackID");
 
             db.close();
 
