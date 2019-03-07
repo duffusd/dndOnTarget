@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.dnd.R;
+
 public class DiceDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String ERROR_SQLite = "SQLite:Dice";
@@ -19,16 +21,8 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(DiceContract.getSqlCreateTable());
 
-        //TODO WHY doesn't this work??
-        /*
-        ContentValues value = new ContentValues();
-        db = getWritableDatabase();
-        value.put(DiceContract.getNumberColName(), 0);
-        db.insert(DiceContract.getTableName(), null, value);
-        db.close();
-        */
+        db.execSQL(DiceContract.getSqlCreateTable());
     }
 
 
@@ -36,7 +30,6 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
 
         int diceNumbers[] = {4, 6, 8, 10, 12, 20};
         SQLiteDatabase db = getWritableDatabase();
-
 
         for (int number : diceNumbers){
 

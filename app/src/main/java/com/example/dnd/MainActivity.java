@@ -1,6 +1,7 @@
 package com.example.dnd;
 
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,7 +15,10 @@ import com.example.dnd.data.AttackDatabaseHelper;
 import com.example.dnd.data.AttackDiceDatabaseHelper;
 import com.example.dnd.data.CharacterAttacksDatabaseHelper;
 import com.example.dnd.data.CharacterDatabaseHelper;
+import com.example.dnd.data.DiceContract;
+import com.example.dnd.data.DiceDatabaseHelper;
 
+import android.util.Log;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,18 +26,36 @@ public class MainActivity extends AppCompatActivity {
     CharacterDatabaseHelper characterDbHelper;
     AttackDiceDatabaseHelper attackDiceDbHelper;
     AttackDatabaseHelper attackDbHelper;
+
     //CharacterAttacksDatabaseHelper characterAttacksDbHelper;
 
     // created for the listview and showing the characters
     CharacterDatabaseHelper myDB;
 
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /* **********************************************
+         * Check if diceTable is already in Dice.db.
+         * SQLiteOpenHelper onCreate() and onUpgrade() callbacks are invoked
+         * when the database is actually opened, for example by a call to getWritableDatabase().
+         * By calling insertNumbers(), which calls getWritableDatabase(), the table gets created
+         * and values be inserted
+         * This is to avoid unique constraint error on number column
+         * **************/
+
+        DiceDatabaseHelper diceDbHelper = new DiceDatabaseHelper(this);
+        SQLiteDatabase diceDb = diceDbHelper.getReadableDatabase();
+
+        Cursor cursor = diceDb.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = \"" + DiceContract.getTableName() + "\"", null);
+        int result = cursor.getCount();
+
+        if (result == 0){
+            diceDbHelper.insertNumbers();
+        }
+
 
         ListView listView = (ListView) findViewById(R.id.listView);
         myDB = new CharacterDatabaseHelper(this);
