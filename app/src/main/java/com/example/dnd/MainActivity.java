@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
     CharacterDatabaseHelper characterDbHelper;
     AttackDiceDatabaseHelper attackDiceDbHelper;
     AttackDatabaseHelper attackDbHelper;
-    CharacterAttacksDatabaseHelper characterAttacksDbHelper;
+    //CharacterAttacksDatabaseHelper characterAttacksDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         //characterDbHelper = new CharacterDatabaseHelper(this);
         //attackDiceDbHelper = new AttackDiceDatabaseHelper(this);
         //attackDbHelper = new AttackDatabaseHelper(this);
-        characterAttacksDbHelper = new CharacterAttacksDatabaseHelper(this);
+        //characterAttacksDbHelper = new CharacterAttacksDatabaseHelper(this);
 
 
         //attackDbHelper.addHitModifier(100);
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         //attackDiceDbHelper.deleteAttackDice(1);
         //attackDbHelper.addAttack(1500, 150, 1);
 
-        characterAttacksDbHelper.addCharacterAttack(1, 2);
+        //characterAttacksDbHelper.addCharacterAttack(1, 2);
 
         setContentView(R.layout.activity_main);
     }

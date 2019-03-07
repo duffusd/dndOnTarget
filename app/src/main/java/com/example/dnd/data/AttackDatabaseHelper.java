@@ -44,42 +44,39 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public void addAttack(int hit, int damage, int attackDiceId){
+    public void addAttack(String attackName, int hit, int damage, int diceId){
+
+        SQLiteDatabase db = getWritableDatabase();
 
         // verify that attackDiceId exists in the AttackDice table
-        AttackDiceDatabaseHelper attackDiceDbHelper = new AttackDiceDatabaseHelper(_context);
-        boolean findAttackDiceId = attackDiceDbHelper.findAttackDiceById(attackDiceId);
-        System.out.println("findAttackDiceId: " + findAttackDiceId);
+        DiceDatabaseHelper diceDbHelper = new DiceDatabaseHelper(_context);
+        Boolean validDiceId = diceDbHelper.findDiceById(diceId);
 
-        /*
-        if (!findAttackDiceId) {
-            Log.e(ERROR_SQLite, "Can't find attackDiceId");
-            return;
+            // now insert the new attack to attackTable
+            try {
 
-        }
-        */
+                ContentValues newValue = new ContentValues();
 
-        // now insert the new attack to attackTable
-        try {
+                newValue.put(AttackContract.getAttackNameColName(), attackName);
+                newValue.put(AttackContract.getHitModifierColName(), hit);
+                newValue.put(AttackContract.getDamageModifierColName(), damage);
 
-            SQLiteDatabase db = getWritableDatabase();
-            ContentValues newValue = new ContentValues();
+                // inserting -1 if diceId is invalid
+                if(validDiceId) {
+                    newValue.put(AttackContract.getDiceIdColName(), diceId);
+                }
+                else {
+                    newValue.put(AttackContract.getDiceIdColName(), -1);
+                }
 
-            newValue.put(AttackContract.getHitModifierColName(), hit);
-            newValue.put(AttackContract.getDamageModifierColName(), damage);
+                db.insert(AttackContract.getTableName(), null, newValue);
+                db.close();
 
-            if (findAttackDiceId)
-                newValue.put(AttackContract.getAttackDiceIdColName(), attackDiceId);
-
-            System.out.println("!!!!!!!!!!!!!!");
-            db.insert(AttackContract.getTableName(), null, newValue);
-            db.close();
-
-        } catch (SQLiteException e){
-            e.printStackTrace();
-            Log.e(ERROR_SQLite, AttackContract.getTableName() + ": Adding hit and damage modifiers failed");
-
-        }
+            } catch (SQLiteException e){
+                e.printStackTrace();
+                Log.e(ERROR_SQLite, AttackContract.getTableName() + ": Adding a new attack failed");
+                db.close();
+            }
     }
 
 
