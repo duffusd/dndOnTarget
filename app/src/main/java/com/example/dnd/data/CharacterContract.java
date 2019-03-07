@@ -13,7 +13,7 @@ public final class CharacterContract implements BaseColumns {
     private static final String SQL_CREATE_TABLE_CHARACTERS =
             "CREATE TABLE " + table_name + " (" +
                     _id + " INTEGER PRIMARY KEY, " +
-                    name_col + " TEXT NOT NULL, " +
+                    name_col + " TEXT NOT NULL UNIQUE, " +
                     characterAttacksId_col + " INTEGER" +
                     ")";
 

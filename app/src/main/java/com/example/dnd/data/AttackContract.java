@@ -4,17 +4,19 @@ import android.provider.BaseColumns;
 
 public class AttackContract implements BaseColumns {
 
-    private static final String db_name = "attacks.db";
+    private static final String db_name = "Attacks.db";
     private static final String table_name = "attacksTable";
     private static final String _id = BaseColumns._ID;
+    private static final String attackName = "attackName";
     private static final String hitModifier = "hitModifier";
     private static final String damageModifier = "damageModifier";
-    private static final String attack_dice_id = "attack_dice_id";
+    private static final String dice_id = "dice_id";
 
     private static final String SQL_CREATE_TABLE_ATTACKS=
             "CREATE TABLE " + table_name + " (" +
                     _id + " INTEGER PRIMARY KEY, " +
-                    attack_dice_id + " INTEGER NOT NULL," +
+                    attackName + " TEXT NOT NULL UNIQUE, " +
+                    dice_id + " INTEGER," +
                     hitModifier + " INTEGER," +
                     damageModifier + " INTEGER " +
                     ")";
@@ -27,5 +29,6 @@ public class AttackContract implements BaseColumns {
     public static String getIdColName() { return _id; }
     public static String getHitModifierColName() { return hitModifier; }
     public static String getDamageModifierColName() { return damageModifier; }
-    public static String getAttackDiceIdColName() { return attack_dice_id; }
+    public static String getDiceIdColName() { return dice_id; }
+    public static String getAttackNameColName() { return attackName; }
 }

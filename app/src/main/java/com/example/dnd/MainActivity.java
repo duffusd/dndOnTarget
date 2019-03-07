@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     CharacterDatabaseHelper characterDbHelper;
     AttackDiceDatabaseHelper attackDiceDbHelper;
     AttackDatabaseHelper attackDbHelper;
-    CharacterAttacksDatabaseHelper characterAttacksDbHelper;
+    //CharacterAttacksDatabaseHelper characterAttacksDbHelper;
 
     // created for the listview and showing the characters
     CharacterDatabaseHelper myDB;
@@ -34,14 +34,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_main);
-
-        characterDbHelper = new CharacterDatabaseHelper(this);
-        attackDiceDbHelper = new AttackDiceDatabaseHelper(this);
-        attackDbHelper = new AttackDatabaseHelper(this);
-        characterAttacksDbHelper = new CharacterAttacksDatabaseHelper(this);
-
 
         ListView listView = (ListView) findViewById(R.id.listView);
         myDB = new CharacterDatabaseHelper(this);
@@ -90,9 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         //characterAttacksDbHelper.addCharacterAttack(1, 2);
-
-
-
 
 
     }
