@@ -33,20 +33,44 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public void addName(String name){
+    public boolean addName(String name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CharacterContract.getNameColName(), name);
 
-        try {
-            SQLiteDatabase db = getWritableDatabase();
-            ContentValues values = new ContentValues();
-            values.put(CharacterContract.getNameColName(), name);
-            db.insert(CharacterContract.getTableName(), null, values);
-            db.close();
-
-        } catch (SQLiteException e){
-            e.printStackTrace();
-            Log.e(ERROR_SQLite, "Adding a new character failed");
+        long result = db.insert(CharacterContract.getTableName(), null, contentValues);
+        //if date as inserted incorrectly it will return -1
+        if (result == -1) {
+            return false;
+        } else {
+            return true;
         }
+
+
+
+//      try {
+//            SQLiteDatabase db = getWritableDatabase();
+//            ContentValues values = new ContentValues();
+//            values.put(CharacterContract.getNameColName(), name);
+//            db.insert(CharacterContract.getTableName(), null, values);
+//            //db.close();
+//            long result = db.insert((CharacterContract.getTableName()), null, values);
+//          if (result == -1) {
+//              return false;
+//          } else {
+//              return true;
+//          }
+//
+//        } catch (SQLiteException e){
+//            e.printStackTrace();
+//            Log.e(ERROR_SQLite, "Adding a new character failed");
+//
+//        }
+//
+//        return true;
     }
+
+
 
     public void updateName(String newName, int id){
 
@@ -57,7 +81,7 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
             newValue.put(CharacterContract.getNameColName(), newName);
             db.update(CharacterContract.getTableName(), newValue,
                     CharacterContract.getIdColName() + "=" + id, null);
-            db.close();
+            //db.close();
 
         } catch (SQLiteException e){
             e.printStackTrace();
@@ -108,5 +132,11 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
             Log.e(ERROR_SQLite, "findCharacter(): Couldn't find a character");
             return false;
         }
+    }
+
+    public Cursor getListContents(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor data = db.rawQuery("SELECT * FROM " + CharacterContract.getTableName(), null);
+        return data;
     }
 }
