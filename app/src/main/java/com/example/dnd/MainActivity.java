@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-
         characterDbHelper = new CharacterDatabaseHelper(this);
         attackDiceDbHelper = new AttackDiceDatabaseHelper(this);
         attackDbHelper = new AttackDatabaseHelper(this);
