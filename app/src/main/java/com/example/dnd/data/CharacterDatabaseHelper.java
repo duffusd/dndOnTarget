@@ -37,37 +37,20 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(CharacterContract.getNameColName(), name);
+        long result = -1; // initiating variable with -1
 
-        long result = db.insert(CharacterContract.getTableName(), null, contentValues);
-        //if date as inserted incorrectly it will return -1
-        if (result == -1) {
-            return false;
-        } else {
-            return true;
+        try {
+            result = db.insert(CharacterContract.getTableName(), null, contentValues);
+        }catch(SQLiteException e){
+            e.printStackTrace();
+            Log.e(ERROR_SQLite, "Inserting a new character name failed");
         }
 
-
-
-//      try {
-//            SQLiteDatabase db = getWritableDatabase();
-//            ContentValues values = new ContentValues();
-//            values.put(CharacterContract.getNameColName(), name);
-//            db.insert(CharacterContract.getTableName(), null, values);
-//            //db.close();
-//            long result = db.insert((CharacterContract.getTableName()), null, values);
-//          if (result == -1) {
-//              return false;
-//          } else {
-//              return true;
-//          }
-//
-//        } catch (SQLiteException e){
-//            e.printStackTrace();
-//            Log.e(ERROR_SQLite, "Adding a new character failed");
-//
-//        }
-//
-//        return true;
+        if(result == -1){
+            return false;
+        }
+        else
+            return true;
     }
 
     public void updateName(String newName, int id){
