@@ -70,8 +70,6 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
 //        return true;
     }
 
-
-
     public void updateName(String newName, int id){
 
         try {
@@ -138,5 +136,22 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor data = db.rawQuery("SELECT * FROM " + CharacterContract.getTableName(), null);
         return data;
+    }
+
+    // Data-seeds method
+    public void addCharacterNames(){
+
+        SQLiteDatabase db = getWritableDatabase();
+        String characters[] = {"Claire", "Shaun", "Bob", "Leah"};
+
+        for (String character : characters){
+
+            ContentValues value = new ContentValues();
+            value.put(CharacterContract.getNameColName(), character);
+            db.insert(CharacterContract.getTableName(), null, value);
+        }
+
+        db.close();
+
     }
 }
