@@ -1,6 +1,8 @@
 package com.example.dnd;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -25,16 +27,21 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    CharacterDatabaseHelper characterDbHelper;
-    AttackDiceDatabaseHelper attackDiceDbHelper;
-    AttackDatabaseHelper attackDbHelper;
+    //CharacterDatabaseHelper characterDbHelper;
+    //AttackDiceDatabaseHelper attackDiceDbHelper;
+    //AttackDatabaseHelper attackDbHelper;
 
-    //CharacterAttacksDatabaseHelper characterAttacksDbHelper;
 
     // created for the listview and showing the characters
-    CharacterDatabaseHelper myDB;
+    CharacterDatabaseHelper myCharacterDB;
+
 
     private Button addEditCharacterButton;
+
+    public static final String SharedPrefs = "CharacterPref";
+    public static final String SharedPrefCharacterName = "characterNameKey";
+
+    public static SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +53,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         addEditCharacterButton = findViewById(R.id.addEditCharacterButton);
         addEditCharacterButton.setOnClickListener(this);
 
-        /* **********************************************
-         * Check if diceTable is already in Dice.db.
-         * SQLiteOpenHelper onCreate() and onUpgrade() callbacks are invoked
-         * when the database is actually opened, for example by a call to getWritableDatabase().
-         * By calling insertNumbers(), which calls getWritableDatabase(), the table gets created
-         * and values be inserted
-         * This is to avoid unique constraint error on number column
-         * **************/
+        // set up shared preferences for this app
+        sharedPreferences = getSharedPreferences(SharedPrefs, Context.MODE_PRIVATE);
 
+        // Insert dice numbers to diceTable if the table is empty
         DiceDatabaseHelper diceDbHelper = new DiceDatabaseHelper(this);
         SQLiteDatabase diceDb = diceDbHelper.getReadableDatabase();
 
@@ -66,52 +68,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         //populate an ArrayList<String> from the database and then view it
-
-        ListView listView = (ListView) findViewById(R.id.listView);
-        myDB = new CharacterDatabaseHelper(this);
-
+        ListView listView = findViewById(R.id.listView);
+        myCharacterDB = new CharacterDatabaseHelper(this);
         ArrayList<String> theList = new ArrayList<>();
-        Cursor data = myDB.getListContents();
+        ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, theList);
+
+        Cursor data = myCharacterDB.getListContents();
+
         if(data.getCount() == 0){
             Toast.makeText(this, "There are no contents in this list!",Toast.LENGTH_LONG).show();
         }else{
             while(data.moveToNext()){
                 theList.add(data.getString(1));
-                ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, theList);
                 listView.setAdapter(listAdapter);
             }
         }
 
-       // attackDbHelper.addHitModifier(100);
-       // attackDbHelper.addName("Banshing Blow")
-        //attackDbHelper.updateHitModifier(2, 0);
-        //attackDbHelper.deleteAttack(2);
+        // Set OnItemClickLister to characters' listView
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedCharacter = (String)parent.getItemAtPosition(position);
 
-        //  Test Characters to add to the DB
-//        characterDbHelper.addName("Oazon");
-//        characterDbHelper.addName("Balrog");
-//        characterDbHelper.addName("Vinn");
-//        characterDbHelper.addName("Lini");
-//        characterDbHelper.addName("Kaliden");
-//        characterDbHelper.addName("Yasha");
-//        characterDbHelper.addName("Tyrien");
-
-
-        //characterDbHelper.updateName("Eric", 1);
-        //characterDbHelper.deleteCharacter(2);
-
-        //attackDiceDbHelper.addAttackDice("1d24");
-        //attackDiceDbHelper.updateAttackDice(1, "1d1");
-        //attackDiceDbHelper.deleteAttackDice(1);
-//        attackDbHelper.addAttack(5, 1, 1);
-//        attackDbHelper.addAttack(6, 2, 1);
-//        attackDbHelper.addAttack(7, 3, 1);
-//        attackDbHelper.addAttack(8, 4, 1);
-
-
-        //characterAttacksDbHelper.addCharacterAttack(1, 2);
-
-
+                // save the name of the selected character in shared preferences
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(SharedPrefCharacterName, selectedCharacter);
+                editor.commit();
+            }
+        });
     }
 
     @Override
@@ -125,4 +109,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    public static void clearSharedPreferences(){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.commit();
+    }
 }
