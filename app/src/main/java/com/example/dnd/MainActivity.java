@@ -125,11 +125,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void launchCharacterAddEditActivity(View view){
-
-        Intent intent = new Intent(this, CharacterAddEdit.class);
-        startActivity(intent);
-        Log.d("CharacterAddEditActivity", "Button clicked!");
-
-    }
 }
