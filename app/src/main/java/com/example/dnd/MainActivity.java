@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_character_add_edit);
+
         /* **********************************************
          * Check if diceTable is already in Dice.db.
          * SQLiteOpenHelper onCreate() and onUpgrade() callbacks are invoked
@@ -49,9 +52,9 @@ public class MainActivity extends AppCompatActivity {
         DiceDatabaseHelper diceDbHelper = new DiceDatabaseHelper(this);
         SQLiteDatabase diceDb = diceDbHelper.getReadableDatabase();
 
-        Cursor cursor = diceDb.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = \"" + DiceContract.getTableName() + "\"", null);
+        Cursor cursor = diceDb.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = \"" +
+                DiceContract.getTableName() + "\"", null);
         int result = cursor.getCount();
-
         if (result == 0){
             diceDbHelper.insertNumbers();
         }
