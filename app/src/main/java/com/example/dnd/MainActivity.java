@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final String SharedPrefs = "CharacterPref";
     public static final String SharedPrefCharacterName = "characterNameKey";
+    public static final String SharedPrefCharacterId = "characterId";
 
     public static SharedPreferences sharedPreferences;
 
@@ -89,10 +90,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedCharacter = (String)parent.getItemAtPosition(position);
+                String selectedCharacterId = myCharacterDB.getCharacterIdByName(selectedCharacter);
+                myCharacterDB.getCharacterIdByName(selectedCharacter);
 
                 // save the name of the selected character in shared preferences
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(SharedPrefCharacterName, selectedCharacter);
+                editor.putString(SharedPrefCharacterId, selectedCharacterId);
                 editor.commit();
             }
         });
