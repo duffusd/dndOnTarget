@@ -18,6 +18,9 @@ public class CharacterAddEdit extends AppCompatActivity {
     private Button btnAdd;
     private Button deleteCharacterButton;
     private EditText editText;
+    private String selectedCharacterName;
+    private Integer selectedCharacterId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,14 +28,23 @@ public class CharacterAddEdit extends AppCompatActivity {
 
         setContentView(R.layout.activity_character_add_edit);
         myDB = new CharacterDatabaseHelper(this);
+        selectedCharacterName = MainActivity.sharedPreferences.getString(MainActivity.SharedPrefCharacterName, "");
 
-        // get the text field for a character name.
-        // If the user chose to edit the existing character, populate this field with that character's name
+
+        /* get the text field for a character name.
+         * If the user chose to edit the existing character, populate this field with that character's name
+         * and get its id
+         * */
+
         editText =  findViewById(R.id.characterNameEditText);
-        final String selectedCharacterName = MainActivity.sharedPreferences.getString(MainActivity.SharedPrefCharacterName, "");
+
         if(!selectedCharacterName.isEmpty()){
+
             editText.setText(selectedCharacterName);
+            String id_str = myDB.getCharacterIdByName(selectedCharacterName);
+            selectedCharacterId = Integer.parseInt(id_str);
         }
+
 
         // get Sava character button and set onClickLister
         btnAdd = findViewById(R.id.saveCharacterButton);
@@ -40,20 +52,31 @@ public class CharacterAddEdit extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String newEntry = editText.getText().toString().trim();
+                // Adding a new character
+                if (selectedCharacterId == null) {
 
-                if (newEntry.isEmpty() || newEntry.length() == 0){
-                    Toast.makeText(CharacterAddEdit.this, "You must put something in the text field!", Toast.LENGTH_LONG).show();
-                }
-                else{
+                    final String newEntry = editText.getText().toString().trim();
 
-                    boolean insertData = myDB.addName(newEntry);
-
-                    if(insertData){
-                        Toast.makeText(CharacterAddEdit.this, "" + newEntry + " Successfully Inserted!", Toast.LENGTH_LONG).show();
-                    }else {
-                        Toast.makeText(CharacterAddEdit.this, "Something went wrong :(.", Toast.LENGTH_LONG).show();
+                    if (newEntry.isEmpty() || newEntry.length() == 0){
+                        Toast.makeText(CharacterAddEdit.this, "You must put something in the text field!", Toast.LENGTH_LONG).show();
                     }
+                    else{
+
+                        boolean insertData = myDB.addName(newEntry);
+
+                        if(insertData){
+                            Toast.makeText(CharacterAddEdit.this, "" + newEntry + " Successfully Inserted!", Toast.LENGTH_LONG).show();
+                        }else {
+                            Toast.makeText(CharacterAddEdit.this, "Something went wrong :(.", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+                // Updating an existing character
+                else {
+
+                    final String newName = editText.getText().toString().trim();
+                    myDB.updateName(newName, selectedCharacterId);
+                    Toast.makeText(CharacterAddEdit.this, "Updated " + newName, Toast.LENGTH_LONG).show();
                 }
 
                 // clear sharedpreferences
@@ -65,11 +88,11 @@ public class CharacterAddEdit extends AppCompatActivity {
         // Set onClickLister to delete character button
         deleteCharacterButton = findViewById(R.id.deleteCharacterButton);
         deleteCharacterButton.setOnClickListener(new OnClickListener() {
+
             @Override
             public void onClick(View v) {
 
-                String id = myDB.getCharacterIdByName(selectedCharacterName);
-                myDB.deleteCharacter(Integer.valueOf(id));
+                myDB.deleteCharacter(selectedCharacterId);
                 Toast.makeText(CharacterAddEdit.this, "Deleted " + selectedCharacterName, Toast.LENGTH_LONG).show();
                 MainActivity.clearSharedPreferences();
             }

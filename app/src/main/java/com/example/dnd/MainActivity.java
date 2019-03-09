@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // set up shared preferences for this app
         sharedPreferences = getSharedPreferences(SharedPrefs, Context.MODE_PRIVATE);
+        clearSharedPreferences(); // clear existing shared preferences
 
         // Insert dice numbers to diceTable if the table is empty
         DiceDatabaseHelper diceDbHelper = new DiceDatabaseHelper(this);

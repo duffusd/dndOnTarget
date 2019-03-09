@@ -64,7 +64,7 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
             newValue.put(CharacterContract.getNameColName(), newName);
             db.update(CharacterContract.getTableName(), newValue,
                     CharacterContract.getIdColName() + "=" + id, null);
-            //db.close();
+            db.close();
 
         } catch (SQLiteException e){
             e.printStackTrace();
