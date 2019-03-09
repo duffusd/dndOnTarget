@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.dnd.Character;
+
 public class CharacterDatabaseHelper extends SQLiteOpenHelper {
 
     //Constants for db name and version
@@ -113,6 +115,33 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
             Log.e(ERROR_SQLite, "findCharacter(): Couldn't find a character");
             return false;
         }
+    }
+
+    public String getCharacterIdByName(String name){
+
+        String sqlSelectCharacterId =
+                "SELECT " + CharacterContract.getIdColName() +
+                        " FROM " + CharacterContract.getTableName() +
+                        " WHERE " + CharacterContract.getNameColName() + "=" + "'" + name + "'";
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = null;
+
+        try{
+            c = db.rawQuery(sqlSelectCharacterId, null);
+        } catch(SQLiteException e){
+            e.printStackTrace();
+            Log.e(ERROR_SQLite, "getCharacterIdByName failed");
+        }
+
+        if (c != null){
+            c.moveToFirst();
+            Integer id = c.getInt(c.getColumnIndex(CharacterContract.getIdColName()));
+            return id.toString();
+        }
+        else
+            return "";
+
     }
 
     public Cursor getListContents(){

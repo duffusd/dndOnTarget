@@ -3,6 +3,7 @@ package com.example.dnd;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View.OnClickListener;
 import android.widget.Toast;
 
 import android.view.View;
@@ -12,9 +13,11 @@ import android.widget.EditText;
 import com.example.dnd.data.CharacterDatabaseHelper;
 
 public class CharacterAddEdit extends AppCompatActivity {
-    CharacterDatabaseHelper myDB;
-    public Button btnAdd;
-    EditText editText;
+
+    private CharacterDatabaseHelper myDB;
+    private Button btnAdd;
+    private Button deleteCharacterButton;
+    private EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,15 +26,17 @@ public class CharacterAddEdit extends AppCompatActivity {
         setContentView(R.layout.activity_character_add_edit);
         myDB = new CharacterDatabaseHelper(this);
 
+        // get the text field for a character name.
+        // If the user chose to edit the existing character, populate this field with that character's name
         editText =  findViewById(R.id.characterNameEditText);
-        String selectedCharacterName = MainActivity.sharedPreferences.getString(MainActivity.SharedPrefCharacterName, "");
+        final String selectedCharacterName = MainActivity.sharedPreferences.getString(MainActivity.SharedPrefCharacterName, "");
         if(!selectedCharacterName.isEmpty()){
             editText.setText(selectedCharacterName);
         }
 
+        // get Sava character button and set onClickLister
         btnAdd = findViewById(R.id.saveCharacterButton);
-
-        btnAdd.setOnClickListener(new View.OnClickListener() {
+        btnAdd.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -56,5 +61,18 @@ public class CharacterAddEdit extends AppCompatActivity {
             }
         });
 
+
+        // Set onClickLister to delete character button
+        deleteCharacterButton = findViewById(R.id.deleteCharacterButton);
+        deleteCharacterButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String id = myDB.getCharacterIdByName(selectedCharacterName);
+                myDB.deleteCharacter(Integer.valueOf(id));
+                Toast.makeText(CharacterAddEdit.this, "Deleted " + selectedCharacterName, Toast.LENGTH_LONG).show();
+                MainActivity.clearSharedPreferences();
+            }
+        });
     }
 }
