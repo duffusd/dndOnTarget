@@ -117,6 +117,36 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    // get the id of the CharacterAttacks column with character id
+    public int getCharacterAttacksId(int id) {
+
+        SQLiteDatabase db = getReadableDatabase();
+        String sqlSelectCharacterAttackId =
+                "SELECT " + CharacterContract.getCharacterAttacksIdColName()
+                        + " FROM " + CharacterContract.getTableName()
+                        + " WHERE " + CharacterContract.getCharacterAttacksIdColName()
+                        + "=" + id;
+
+        Cursor c = null;
+
+        try {
+            c = db.rawQuery(sqlSelectCharacterAttackId, null);
+
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            Log.e(ERROR_SQLite, "getCharacterAttacksId() FAILED");
+            return -1;
+        }
+
+            if (c != null) {
+                c.moveToFirst();
+                int idCharAtks = c.getInt(c.getColumnIndex(CharacterContract.getCharacterAttacksIdColName()));
+                return idCharAtks;
+            } else {
+                return -1;
+            }
+    }
+
     public String getCharacterIdByName(String name){
 
         String sqlSelectCharacterId =

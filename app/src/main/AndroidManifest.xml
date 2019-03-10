@@ -10,7 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Roller"></activity>
-        <activity android:name=".AttackAddEdit" />
+        <activity android:name=".AttackAddEdit"
+            android:parentActivityName=".CharacterAddEdit"/>
         <activity android:name=".CharacterAddEdit"
             android:parentActivityName=".MainActivity"/>
         <activity android:name=".MainActivity">

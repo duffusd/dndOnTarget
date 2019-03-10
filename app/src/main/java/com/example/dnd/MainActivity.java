@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,14 +17,10 @@ import android.widget.Toast;
 import android.util.Log;
 import android.widget.EditText;
 
-import com.example.dnd.data.AttackDatabaseHelper;
-import com.example.dnd.data.AttackDiceDatabaseHelper;
-import com.example.dnd.data.CharacterAttacksDatabaseHelper;
 import com.example.dnd.data.CharacterDatabaseHelper;
 import com.example.dnd.data.DiceContract;
 import com.example.dnd.data.DiceDatabaseHelper;
 
-import android.util.Log;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -34,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //AttackDiceDatabaseHelper attackDiceDbHelper;
     //AttackDatabaseHelper attackDbHelper;
 
-public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
 
     // created for the listview and showing the characters
