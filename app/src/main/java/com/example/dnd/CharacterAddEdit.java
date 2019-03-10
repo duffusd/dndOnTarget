@@ -1,9 +1,11 @@
 package com.example.dnd;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
 import android.view.View.OnClickListener;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import android.view.View;
@@ -13,13 +15,16 @@ import android.widget.EditText;
 import com.example.dnd.data.CharacterDatabaseHelper;
 
 public class CharacterAddEdit extends AppCompatActivity {
+    public static final String ATTACKS_ID = "com.example.dnd.ATTACKS_ID";
 
     private CharacterDatabaseHelper myDB;
     private Button btnAdd;
     private Button deleteCharacterButton;
+    private Button btnAddEditAttack;
     private EditText editText;
     private String selectedCharacterName;
     private Integer selectedCharacterId;
+    private ListView listAttack;
 
 
     @Override
@@ -30,6 +35,7 @@ public class CharacterAddEdit extends AppCompatActivity {
         myDB = new CharacterDatabaseHelper(this);
         selectedCharacterName = MainActivity.sharedPreferences.getString(MainActivity.SharedPrefCharacterName, "");
 
+        listAttack = findViewById(R.id.attackListView);
 
         /* get the text field for a character name.
          * If the user chose to edit the existing character, populate this field with that character's name
@@ -97,5 +103,13 @@ public class CharacterAddEdit extends AppCompatActivity {
                 MainActivity.clearSharedPreferences();
             }
         });
+    }
+
+    // listener for add/edit attack button to start addEditAttack activity
+    public void addEditAttack(View view) {
+        Intent intent = new Intent(this, AttackAddEdit.class);
+        int id = myDB.getCharacterAttacksId(selectedCharacterId);
+        intent.putExtra(ATTACKS_ID, id);
+        startActivity(intent);
     }
 }
