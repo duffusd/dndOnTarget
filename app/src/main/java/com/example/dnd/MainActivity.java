@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //AttackDiceDatabaseHelper attackDiceDbHelper;
     //AttackDatabaseHelper attackDbHelper;
 
-public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
 
     // created for the listview and showing the characters
