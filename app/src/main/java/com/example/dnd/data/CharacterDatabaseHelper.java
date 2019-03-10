@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.dnd.Character;
+
 public class CharacterDatabaseHelper extends SQLiteOpenHelper {
 
     //Constants for db name and version
@@ -33,19 +35,24 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public void addName(String name){
+    public boolean addName(String name){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CharacterContract.getNameColName(), name);
+        long result = -1; // initiating variable with -1
 
         try {
-            SQLiteDatabase db = getWritableDatabase();
-            ContentValues values = new ContentValues();
-            values.put(CharacterContract.getNameColName(), name);
-            db.insert(CharacterContract.getTableName(), null, values);
-            db.close();
-
-        } catch (SQLiteException e){
+            result = db.insert(CharacterContract.getTableName(), null, contentValues);
+        }catch(SQLiteException e){
             e.printStackTrace();
-            Log.e(ERROR_SQLite, "Adding a new character failed");
+            Log.e(ERROR_SQLite, "Inserting a new character name failed");
         }
+
+        if(result == -1){
+            return false;
+        }
+        else
+            return true;
     }
 
     public void updateName(String newName, int id){
@@ -108,5 +115,55 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
             Log.e(ERROR_SQLite, "findCharacter(): Couldn't find a character");
             return false;
         }
+    }
+
+    public String getCharacterIdByName(String name){
+
+        String sqlSelectCharacterId =
+                "SELECT " + CharacterContract.getIdColName() +
+                        " FROM " + CharacterContract.getTableName() +
+                        " WHERE " + CharacterContract.getNameColName() + "=" + "'" + name + "'";
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = null;
+
+        try{
+            c = db.rawQuery(sqlSelectCharacterId, null);
+        } catch(SQLiteException e){
+            e.printStackTrace();
+            Log.e(ERROR_SQLite, "getCharacterIdByName failed");
+        }
+
+        if (c != null){
+            c.moveToFirst();
+            Integer id = c.getInt(c.getColumnIndex(CharacterContract.getIdColName()));
+            return id.toString();
+        }
+        else
+            return "";
+
+    }
+
+    public Cursor getListContents(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor data = db.rawQuery("SELECT * FROM " + CharacterContract.getTableName(), null);
+        return data;
+    }
+
+    // Data-seeds method
+    public void addCharacterNames(){
+
+        SQLiteDatabase db = getWritableDatabase();
+        String characters[] = {"Claire", "Shaun", "Bob", "Leah"};
+
+        for (String character : characters){
+
+            ContentValues value = new ContentValues();
+            value.put(CharacterContract.getNameColName(), character);
+            db.insert(CharacterContract.getTableName(), null, value);
+        }
+
+        db.close();
+
     }
 }

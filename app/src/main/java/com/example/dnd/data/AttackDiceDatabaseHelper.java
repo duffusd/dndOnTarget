@@ -11,9 +11,11 @@ import android.util.Log;
 public class AttackDiceDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String ERROR_SQLite = "SQLite:AttackDice";
+    Context _context;
 
     public AttackDiceDatabaseHelper(Context context){
         super(context, AttackDiceContract.getDbName(), null, DatabaseContract.version);
+        _context = context;
     }
 
     @Override
@@ -28,13 +30,38 @@ public class AttackDiceDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public void addAttackDice(String attackDiceString){
+    public void addAttackDice(int attackId, int diceId){
+
         SQLiteDatabase db = getWritableDatabase();
         ContentValues newValue = new ContentValues();
-        newValue.put(AttackDiceContract.getDiceStringColName(), attackDiceString);
+
+        // Validate diceId
+        if (diceId >= 1 && diceId <= 6){
+            newValue.put(AttackDiceContract.getDiceIdColName(), diceId);
+        }
+        else{
+            Log.e(ERROR_SQLite, "Invalid diceId");
+            return;
+        }
+
+        // Validate attackId
+        AttackDatabaseHelper attackDbHelper = new AttackDatabaseHelper(_context);
+        Boolean validAttackId = attackDbHelper.findAttackById(attackId);
+
+        if(validAttackId){
+            newValue.put(AttackDiceContract.getAttackIdColName(), attackId);
+        }
+        else{
+            Log.e(ERROR_SQLite, "Invalid attackId");
+        }
+
+
+        // Now ready to insert
 
         try {
+
             db.insert(AttackDiceContract.getTableName(), null, newValue);
+
         } catch (SQLiteException e) {
             e.printStackTrace();
             Log.e(ERROR_SQLite, AttackDiceContract.getTableName() + ": Adding a new attack-dice failed");
@@ -44,63 +71,31 @@ public class AttackDiceDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void updateAttackDice(int id, String newAttackDice){
+    public void deleteAttackDice(int attackId, int diceId) {
+
+        DiceDatabaseHelper diceDbHelper = new DiceDatabaseHelper(_context);
+        AttackDatabaseHelper attackDbHelper = new AttackDatabaseHelper(_context);
+
+        Boolean diceIdExists = diceDbHelper.findDiceById(diceId);
+        Boolean attackIdExists = attackDbHelper.findAttackById(attackId);
 
         SQLiteDatabase db = getWritableDatabase();
-        ContentValues  newValue = new ContentValues();
-        newValue.put(AttackDiceContract.getDiceStringColName(), newAttackDice);
 
-        try {
-            db.update(AttackDiceContract.getTableName(), newValue,
-                    AttackDiceContract.getIdColName() + "=" + id, null);
-        } catch(SQLiteException e){
-            e.printStackTrace();
-            Log.e(ERROR_SQLite, "Updating the attack-dice string failed");
-        }
+        if (diceIdExists && attackIdExists){
+            try {
 
-        db.close();
-    }
-
-    public void deleteAttackDice(int id) {
-
-        SQLiteDatabase db = getWritableDatabase();
-        try {
-
-            db.delete(AttackDiceContract.getTableName(),
-                    AttackDiceContract.getIdColName() + "=" + id, null);
-        }catch(SQLiteException e){
-            e.printStackTrace();
-            Log.e(ERROR_SQLite, "Deleting an attack-dice failed");
-        }
-
-        db.close();
-    }
-
-
-    public boolean findAttackDiceById(int id){
-
-        SQLiteDatabase db = getReadableDatabase();
-        String selectAttackDiceByAttackDice =
-                "SELECT " + AttackDiceContract.getIdColName() + " FROM " + AttackDiceContract.getTableName() +
-                        " WHERE " + AttackDiceContract.getIdColName() + "=" + id;
-
-        try {
-
-            Cursor c = db.rawQuery(selectAttackDiceByAttackDice, null);
-
-            if (c != null && c.getCount() == 1) {
-                db.close();
-                return true;
+                db.delete(AttackDiceContract.getTableName(),
+                        AttackDiceContract.getAttackIdColName() + " =" + attackId + " AND " +
+                        AttackDiceContract.getDiceIdColName() + " = " + diceId,
+                        null);
+            }catch(SQLiteException e){
+                e.printStackTrace();
+                Log.e(ERROR_SQLite, "Deleting an attack-dice failed");
             }
-            else
-                db.close();
-                return false;
-
-        } catch (SQLiteException e) {
-            e.printStackTrace();
-            Log.e(ERROR_SQLite, "Can't find an attack-dice");
-            return false;
         }
+
+        db.close();
     }
+
 
 }
