@@ -33,27 +33,29 @@ public class CharacterAddEdit extends AppCompatActivity {
 
         setContentView(R.layout.activity_character_add_edit);
         myDB = new CharacterDatabaseHelper(this);
-        selectedCharacterName = MainActivity.sharedPreferences.getString(MainActivity.SharedPrefCharacterName, "");
+        selectedCharacterName = MainActivity.sharedPreferences.getString(MainActivity.SharedPrefCharacterName, null);
 
+        // get the buttons
+        deleteCharacterButton = findViewById(R.id.deleteCharacterButton);
         listAttack = findViewById(R.id.attackListView);
-
-        /* get the text field for a character name.
-         * If the user chose to edit the existing character, populate this field with that character's name
-         * and get its id
-         * */
-
+        btnAdd = findViewById(R.id.saveCharacterButton);
         editText =  findViewById(R.id.characterNameEditText);
 
-        if(!selectedCharacterName.isEmpty()){
+
+        /* If the user chose to edit the existing character, populate this field with that character's name
+          * and get its id * */
+
+        if(selectedCharacterName != null){
 
             editText.setText(selectedCharacterName);
             String id_str = myDB.getCharacterIdByName(selectedCharacterName);
             selectedCharacterId = Integer.parseInt(id_str);
         }
+        else
+            deleteCharacterButton.setEnabled(false);
 
 
-        // get Sava character button and set onClickLister
-        btnAdd = findViewById(R.id.saveCharacterButton);
+        // set onClickLister to Add button
         btnAdd.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,6 +94,7 @@ public class CharacterAddEdit extends AppCompatActivity {
 
 
         // Set onClickLister to delete character button
+
         deleteCharacterButton = findViewById(R.id.deleteCharacterButton);
         deleteCharacterButton.setOnClickListener(new OnClickListener() {
 
