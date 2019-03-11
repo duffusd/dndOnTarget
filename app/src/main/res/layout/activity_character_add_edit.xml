@@ -41,12 +41,12 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <android.support.v7.widget.AppCompatButton
-        android:id="@+id/addEditCharacterButton"
+        android:id="@+id/addEditAttackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
-        android:onClick="addEditAttack"
+        android:onClick="onClick"
         android:text="@string/AddEditAttackButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

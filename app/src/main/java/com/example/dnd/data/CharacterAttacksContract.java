@@ -2,7 +2,7 @@ package com.example.dnd.data;
 
 public class CharacterAttacksContract {
 
-    private static final String db_name = "characterAttacks.db";
+    private static final String db_name = "CharacterAttacks.db";
     private static final String table_name = "characterAttacksTable";
     private static final String characterId = "characterId";
     private static final String attackId = "attackId";
@@ -10,7 +10,7 @@ public class CharacterAttacksContract {
     // SQL to create a table
     private static final String TABLE_CHARACTER_ATTACKS_CREATE=
             "CREATE TABLE " + table_name + " (" +
-                    characterId + " INTEGER NOT NULL, " +
+                    characterId + " INTEGER, " +
                     attackId + " INTEGER NOT NULL, " +
                     "PRIMARY KEY (" + characterId + ", " + attackId + "), " +
                     "FOREIGN KEY (" + characterId + ") " +

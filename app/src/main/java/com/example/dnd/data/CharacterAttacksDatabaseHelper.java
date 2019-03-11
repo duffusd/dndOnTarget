@@ -34,7 +34,7 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addCharacterAttack(int characterId, int attackId){
+    public void addCharacterAttack(Integer characterId, Integer attackId){
 
         try {
 
@@ -42,22 +42,17 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
             AttackDatabaseHelper attackDbHelper = new AttackDatabaseHelper(_context);
             SQLiteDatabase db = getReadableDatabase();
 
-            boolean findCharacter = characterDbhelper.findCharacter(characterId);
             boolean findAttack = attackDbHelper.findAttackById(attackId);
 
-            if (findCharacter & findAttack){
+            if (findAttack){
 
                 ContentValues values = new ContentValues();
-                values.put(CharacterAttacksContract.getCharacterIdColName(), characterId);
+                if(characterId != null){
+                    values.put(CharacterAttacksContract.getCharacterIdColName(), characterId);
+                }
                 values.put(CharacterAttacksContract.getAttackIdColName(), attackId);
                 db.insert(CharacterAttacksContract.getTableName(), null, values);
             }
-            else if (!findCharacter)
-                Log.e(ERROR_SQLite, "Invalid characterID");
-            else if (!findAttack)
-                Log.e(ERROR_SQLite, "Invalid attackID");
-            else
-                Log.e(ERROR_SQLite, "Invalid CharacterID and AttackID");
 
             db.close();
 

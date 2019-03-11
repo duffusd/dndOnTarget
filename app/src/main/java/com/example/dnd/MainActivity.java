@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         // Set onClickLister to AddEdit Character button
-        addEditCharacterButton = findViewById(R.id.addEditCharacterButton);
+        addEditCharacterButton = findViewById(R.id.addEditAttackButton);
         addEditCharacterButton.setOnClickListener(this);
 
         // set up shared preferences for this app
@@ -105,8 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.addEditCharacterButton:
-                setContentView(R.layout.activity_character_add_edit);
+            case R.id.addEditAttackButton:
                 Intent intent = new Intent(this, CharacterAddEdit.class);
                 startActivity(intent);
         }
