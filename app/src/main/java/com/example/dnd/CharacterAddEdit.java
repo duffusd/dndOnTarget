@@ -1,5 +1,6 @@
 package com.example.dnd;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,11 +21,12 @@ public class CharacterAddEdit extends AppCompatActivity {
     private CharacterDatabaseHelper myDB;
     private Button btnAdd;
     private Button deleteCharacterButton;
-    private Button btnAddEditAttack;
+    private Button addEditAttackButton;
     private EditText editText;
     private String selectedCharacterName;
     private Integer selectedCharacterId;
     private ListView listAttack;
+    private Intent attackIntent;
 
 
     @Override
@@ -33,27 +35,31 @@ public class CharacterAddEdit extends AppCompatActivity {
 
         setContentView(R.layout.activity_character_add_edit);
         myDB = new CharacterDatabaseHelper(this);
-        selectedCharacterName = MainActivity.sharedPreferences.getString(MainActivity.SharedPrefCharacterName, "");
+        selectedCharacterName = MainActivity.sharedPreferences.getString(MainActivity.SharedPrefCharacterName, null);
+        attackIntent = new Intent(this, AttackAddEdit.class);
 
+        // get the buttons
+        deleteCharacterButton = findViewById(R.id.deleteCharacterButton);
+        addEditAttackButton = findViewById(R.id.addEditAttackButton);
         listAttack = findViewById(R.id.attackListView);
-
-        /* get the text field for a character name.
-         * If the user chose to edit the existing character, populate this field with that character's name
-         * and get its id
-         * */
-
+        btnAdd = findViewById(R.id.saveCharacterButton);
         editText =  findViewById(R.id.characterNameEditText);
 
-        if(!selectedCharacterName.isEmpty()){
+
+        /* If the user chose to edit the existing character, populate this field with that character's name
+          * and get its id * */
+
+        if(selectedCharacterName != null){
 
             editText.setText(selectedCharacterName);
             String id_str = myDB.getCharacterIdByName(selectedCharacterName);
             selectedCharacterId = Integer.parseInt(id_str);
         }
+        else
+            deleteCharacterButton.setEnabled(false);
 
 
-        // get Sava character button and set onClickLister
-        btnAdd = findViewById(R.id.saveCharacterButton);
+        // set onClickLister to Add button
         btnAdd.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +98,6 @@ public class CharacterAddEdit extends AppCompatActivity {
 
 
         // Set onClickLister to delete character button
-        deleteCharacterButton = findViewById(R.id.deleteCharacterButton);
         deleteCharacterButton.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -103,13 +108,26 @@ public class CharacterAddEdit extends AppCompatActivity {
                 MainActivity.clearSharedPreferences();
             }
         });
+
+        // Set onClickLister to add/edit attack button
+        addEditAttackButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(attackIntent);
+            }
+        });
+
+
+
     }
 
     // listener for add/edit attack button to start addEditAttack activity
     public void addEditAttack(View view) {
+        setContentView(R.layout.activity_attack_add_edit);
         Intent intent = new Intent(this, AttackAddEdit.class);
         int id = myDB.getCharacterAttacksId(selectedCharacterId);
         intent.putExtra(ATTACKS_ID, id);
         startActivity(intent);
     }
+
 }

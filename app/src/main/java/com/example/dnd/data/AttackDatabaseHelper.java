@@ -44,13 +44,15 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public void addAttack(String attackName, int hit, int damage, int diceId){
+    public int addAttack(String attackName, int hit, int damage, int diceId){
 
         SQLiteDatabase db = getWritableDatabase();
 
         // verify that attackDiceId exists in the AttackDice table
         DiceDatabaseHelper diceDbHelper = new DiceDatabaseHelper(_context);
         Boolean validDiceId = diceDbHelper.findDiceById(diceId);
+
+        Long newId = null;
 
             // now insert the new attack to attackTable
             try {
@@ -69,7 +71,8 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
                     newValue.put(AttackContract.getDiceIdColName(), -1);
                 }
 
-                db.insert(AttackContract.getTableName(), null, newValue);
+                newId = db.insert(AttackContract.getTableName(), null, newValue);
+
                 db.close();
 
             } catch (SQLiteException e){
@@ -77,6 +80,8 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
                 Log.e(ERROR_SQLite, AttackContract.getTableName() + ": Adding a new attack failed");
                 db.close();
             }
+
+            return newId.intValue();
     }
 
 
