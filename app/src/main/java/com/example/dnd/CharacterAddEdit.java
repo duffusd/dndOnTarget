@@ -2,6 +2,7 @@ package com.example.dnd;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -74,13 +75,19 @@ public class CharacterAddEdit extends AppCompatActivity {
                     }
                     else{
 
-                        boolean insertData = myDB.addName(newEntry);
+                        Integer newId = myDB.addName(newEntry);
 
-                        if(insertData){
-                            Toast.makeText(CharacterAddEdit.this, "" + newEntry + " Successfully Inserted!", Toast.LENGTH_LONG).show();
-                        }else {
+                        if(newId == -1){
                             Toast.makeText(CharacterAddEdit.this, "Something went wrong :(.", Toast.LENGTH_LONG).show();
+                        }else {
+                            Toast.makeText(CharacterAddEdit.this, "" + newEntry + " Successfully Inserted!", Toast.LENGTH_LONG).show();
                         }
+
+                        // Save the character ID and name in the shared preference
+                        SharedPreferences.Editor editor = MainActivity.sharedPreferences.edit();
+                        editor.putString(MainActivity.SharedPrefCharacterId, newId.toString());
+                        editor.putString(MainActivity.SharedPrefCharacterName, newEntry);
+                        editor.commit();
                     }
                 }
                 // Updating an existing character
@@ -89,10 +96,10 @@ public class CharacterAddEdit extends AppCompatActivity {
                     final String newName = editText.getText().toString().trim();
                     myDB.updateName(newName, selectedCharacterId);
                     Toast.makeText(CharacterAddEdit.this, "Updated " + newName, Toast.LENGTH_LONG).show();
-                }
 
-                // clear sharedpreferences
-                MainActivity.clearSharedPreferences();
+                    // clear sharedpreferences
+                    MainActivity.clearSharedPreferences();
+                }
             }
         });
 

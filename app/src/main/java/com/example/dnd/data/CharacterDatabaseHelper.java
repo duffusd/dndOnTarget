@@ -35,24 +35,21 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean addName(String name){
+    public Integer addName(String name){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(CharacterContract.getNameColName(), name);
-        long result = -1; // initiating variable with -1
+        Long result = null;
 
         try {
+            // if the insert goes wrong, it returns -1. Otherwise, it returns the new character ID
             result = db.insert(CharacterContract.getTableName(), null, contentValues);
         }catch(SQLiteException e){
             e.printStackTrace();
             Log.e(ERROR_SQLite, "Inserting a new character name failed");
         }
 
-        if(result == -1){
-            return false;
-        }
-        else
-            return true;
+       return result.intValue();
     }
 
     public void updateName(String newName, int id){
