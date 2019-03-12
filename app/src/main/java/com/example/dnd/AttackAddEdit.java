@@ -3,6 +3,7 @@ package com.example.dnd;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,8 +42,24 @@ public class AttackAddEdit extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Integer newAttackId = addAttack(); // add an attack and get a new attackID
-                Integer characterId = MainActivity.sharedPreferences.getInt(MainActivity.SharedPrefCharacterId, -1);
-                dbCharAttacks.addCharacterAttack(characterId == -1 ? null : characterId, newAttackId);
+                String characterId = MainActivity.sharedPreferences.getString(MainActivity.SharedPrefCharacterId, null);
+
+                /* Logging for the debug purpose in the future */
+                Log.d("AttackAddEdit: AttackID", newAttackId.toString());
+
+                if(characterId != null){
+
+                    Log.d("AttackAddEdit: CharacterID", characterId);
+                    dbCharAttacks.addCharacterAttack(Integer.parseInt(characterId), newAttackId);
+                    Toast.makeText(AttackAddEdit.this, String.format("Added a new attack for %s", MainActivity.sharedPreferences.getString(MainActivity.SharedPrefCharacterName, null)), Toast.LENGTH_LONG).show();
+
+                }
+                else {
+                    Toast.makeText(AttackAddEdit.this, "Added a new attack!", Toast.LENGTH_LONG).show();
+
+                }
+
+                MainActivity.clearSharedPreferences();
 
             }
         });
