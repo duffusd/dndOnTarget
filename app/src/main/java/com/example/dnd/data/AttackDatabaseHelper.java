@@ -44,13 +44,13 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public int addAttack(String attackName, int hit, int damage, int diceId){
+    public int addAttack(String attackName, Integer hit, Integer damage, Integer diceId){
 
         SQLiteDatabase db = getWritableDatabase();
 
         // verify that attackDiceId exists in the AttackDice table
         DiceDatabaseHelper diceDbHelper = new DiceDatabaseHelper(_context);
-        Boolean validDiceId = diceDbHelper.findDiceById(diceId);
+        //Boolean validDiceId = diceDbHelper.findDiceById(diceId);
 
         Long newId = null;
 
@@ -64,11 +64,11 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
                 newValue.put(AttackContract.getDamageModifierColName(), damage);
 
                 // inserting -1 if diceId is invalid
-                if(validDiceId) {
-                    newValue.put(AttackContract.getDiceIdColName(), diceId);
+                if(diceId == null) {
+                    newValue.put(AttackContract.getDiceIdColName(), -1);
                 }
                 else {
-                    newValue.put(AttackContract.getDiceIdColName(), -1);
+                    newValue.put(AttackContract.getDiceIdColName(), diceId);
                 }
 
                 newId = db.insert(AttackContract.getTableName(), null, newValue);

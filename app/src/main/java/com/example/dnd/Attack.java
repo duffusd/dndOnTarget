@@ -1,5 +1,12 @@
 package com.example.dnd;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteException;
+import android.util.Log;
+
+import com.example.dnd.data.AttackDatabaseHelper;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,18 +17,31 @@ import java.util.List;
  */
 
 public class Attack {
-    private long id;
+    private Integer id;
     private String name;
     private List<Die> dice;
+    private AttackDatabaseHelper dbHelper;
 
     private int modHit;
     private int modDamage;
 
+    Attack(Context context){
+        dice = new ArrayList<>();
+        dbHelper = new AttackDatabaseHelper(context);
+    }
+
+    Attack(Integer attackId){
+        dice = new ArrayList<>();
+        this.id = attackId;
+    }
+
     Attack(String name) {
+        dice = new ArrayList<>();
         this.name = name;
     }
 
-    Attack(String name, int modHit, int modDamage) {
+    Attack(String name, int modHit, int modDamage, int diceId) {
+        dice = new ArrayList<>();
         this.name = name;
         this.modHit = modHit;
         this.modDamage = modDamage;
@@ -45,9 +65,31 @@ public class Attack {
         return damage;
     }
 
+    public void addAttack(String attackName, Integer hitModifier, Integer damageModifier, Integer diceId){
+
+        Integer newRowId = null;
+        setName(attackName);
+        setModHit(hitModifier);
+        setModDamage(damageModifier);
+
+        try{
+
+            newRowId = dbHelper.addAttack(attackName, hitModifier, damageModifier, diceId);
+            dbHelper.close();
+
+        }catch(SQLiteException e){
+            e.printStackTrace();
+            Log.e("Attack", "addAttack method failed");
+        }
+        setId(newRowId);
+
+
+
+    }
+
     /********************************** GETTER AND SETTERS ***************************************/
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -63,7 +105,7 @@ public class Attack {
         return modDamage;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

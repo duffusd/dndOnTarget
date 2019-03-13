@@ -25,15 +25,14 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    //CharacterDatabaseHelper characterDbHelper;
-    //AttackDiceDatabaseHelper attackDiceDbHelper;
-    //AttackDatabaseHelper attackDbHelper;
-
     public static final String TAG = "MainActivity";
 
     // created for the listview and showing the characters
     CharacterDatabaseHelper myCharacterDB;
 
+
+    public static Character character;
+    public static Attack attack;
 
     private Button addEditCharacterButton;
 
@@ -48,6 +47,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // initiate the character and attack object
+        character = new Character(this);
+        attack = new Attack(this);
 
         // Set onClickLister to AddEdit Character button
         addEditCharacterButton = findViewById(R.id.addEditAttackButton);
@@ -89,9 +92,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 String selectedCharacter = (String)parent.getItemAtPosition(position);
                 String selectedCharacterId = myCharacterDB.getCharacterIdByName(selectedCharacter);
                 myCharacterDB.getCharacterIdByName(selectedCharacter);
+
+                character.setName(selectedCharacter);
+                character.setId(Integer.parseInt(selectedCharacterId));
 
                 // save the name of the selected character in shared preferences
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -116,6 +123,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.commit();
+    }
+
+    public static Character getCharacter(){
+        return character;
+    }
+
+    public static Attack getAttack(){
+        return attack;
     }
 
     public int roll(int AC) {
