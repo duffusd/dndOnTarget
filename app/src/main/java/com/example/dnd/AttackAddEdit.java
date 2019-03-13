@@ -78,4 +78,27 @@ public class AttackAddEdit extends AppCompatActivity {
 
     }
 
+<<<<<<< HEAD
+=======
+    private Integer addAttack(){
+
+        String newAttackName = nameAtk.getText().toString().trim();
+        String newHitModifier = hitModifier.getText().toString().trim();
+        String newDamageModifier = damageModifier.getText().toString().trim();
+
+        Integer newRowId = dbAttacks.addAttack(newAttackName, (newHitModifier.isEmpty() ? 0 : Integer.parseInt(newHitModifier)), (newDamageModifier.isEmpty() ? 0 : Integer.parseInt(newDamageModifier)), 2);
+        return newRowId;
+    }
+
+    private Integer addAttack(){
+
+        String newAttackName = nameAtk.getText().toString().trim();
+        String newHitModifier = hitModifier.getText().toString().trim();
+        String newDamageModifier = damageModifier.getText().toString().trim();
+
+        Integer newRowId = dbAttacks.addAttack(newAttackName, (newHitModifier.isEmpty() ? 0 : Integer.parseInt(newHitModifier)), (newDamageModifier.isEmpty() ? 0 : Integer.parseInt(newDamageModifier)), 2);
+        return newRowId;
+    }
+
+>>>>>>> 7c313d974a7338d2e681da6acb0d1054d6c482a8
 }
