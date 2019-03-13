@@ -102,6 +102,7 @@ public class CharacterAddEdit extends AppCompatActivity {
                     // clear sharedpreferences
                     //MainActivity.clearSharedPreferences();
                     MainActivity.getCharacter().clearCharacter();
+
                 }
             }
         });
