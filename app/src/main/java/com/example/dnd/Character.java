@@ -1,11 +1,28 @@
 package com.example.dnd;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteException;
+import android.util.Log;
+
+import com.example.dnd.data.CharacterDatabaseHelper;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Character {
-    private long id;
+
+    private Integer id;
     private String name;
     private List<Attack> attacks;
+    private CharacterDatabaseHelper dbHelper;
+
+
+    Character(Context context){
+        List<Attack> attacks = new ArrayList<>();
+        id = null;
+        name = null;
+        dbHelper = new CharacterDatabaseHelper(context);
+    }
 
     /**
      * This method will add attacks to the list {@link Character#attacks} without needing
@@ -32,9 +49,39 @@ public class Character {
         attacks.remove(attack);
     }
 
+
+    public void addNewCharacter(String newName){
+
+        setName(newName);
+        Integer newId = null;
+
+        try{
+            newId = dbHelper.addName(newName);
+
+        }catch(SQLiteException e){
+            e.printStackTrace();
+            Log.e("Character", "Adding a new character to characterTable failed");
+
+        }
+
+        setId(newId);
+
+    }
+
+    public void deleteCharacter(){
+
+        try{
+            dbHelper.deleteCharacter(id);
+
+        }catch(SQLiteException e){
+            e.printStackTrace();
+            Log.e("Character", "Deleting a character failed");
+        }
+
+    }
     /********************************** GETTER AND SETTERS ***************************************/
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -42,11 +89,18 @@ public class Character {
         return name;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void clearCharacter(){
+        id = null;
+        name = null;
+        if(attacks != null && !attacks.isEmpty())
+            attacks.clear();
     }
 }

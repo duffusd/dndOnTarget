@@ -41,17 +41,29 @@ public class AttackAddEdit extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Integer newAttackId = addAttack(); // add an attack and get a new attackID
-                String characterId = MainActivity.sharedPreferences.getString(MainActivity.SharedPrefCharacterId, null);
+
+                String newAttackName = nameAtk.getText().toString().trim();
+                String newHitModifier = hitModifier.getText().toString().trim();
+                String newDamageModifier = damageModifier.getText().toString().trim();
+
+
+                MainActivity.getAttack().addAttack(newAttackName,
+                        newHitModifier.isEmpty() ? 0 : Integer.parseInt(newHitModifier),
+                        newDamageModifier.isEmpty() ? 0 : Integer.parseInt(newDamageModifier),
+                        null);
+
+                //String characterId = MainActivity.sharedPreferences.getString(MainActivity.SharedPrefCharacterId, null);
 
                 /* Logging for the debug purpose in the future */
-                Log.d("AttackAddEdit: AttackID", newAttackId.toString());
+                Log.d("AttackAddEdit: AttackID", MainActivity.getAttack().getId().toString());
 
-                if(characterId != null){
 
-                    Log.d("AttackAddEdit: CharacterID", characterId);
-                    dbCharAttacks.addCharacterAttack(Integer.parseInt(characterId), newAttackId);
-                    Toast.makeText(AttackAddEdit.this, String.format("Added a new attack for %s", MainActivity.sharedPreferences.getString(MainActivity.SharedPrefCharacterName, null)), Toast.LENGTH_LONG).show();
+                if(MainActivity.getCharacter().getId() != null){
+
+                    Log.d("AttackAddEdit: CharacterID", MainActivity.getCharacter().getId().toString());
+                    dbCharAttacks.addCharacterAttack(MainActivity.getCharacter().getId(), MainActivity.attack.getId());
+
+                    Toast.makeText(AttackAddEdit.this, String.format("Added a new attack for %s", MainActivity.getCharacter().getName()), Toast.LENGTH_LONG).show();
 
                 }
                 else {
@@ -59,23 +71,11 @@ public class AttackAddEdit extends AppCompatActivity {
 
                 }
 
-                MainActivity.clearSharedPreferences();
+                //MainActivity.clearSharedPreferences();
 
             }
         });
 
     }
-
-    private Integer addAttack(){
-
-        String newAttackName = nameAtk.getText().toString().trim();
-        String newHitModifier = hitModifier.getText().toString().trim();
-        String newDamageModifier = damageModifier.getText().toString().trim();
-
-        Integer newRowId = dbAttacks.addAttack(newAttackName, (newHitModifier.isEmpty() ? 0 : Integer.parseInt(newHitModifier)), (newDamageModifier.isEmpty() ? 0 : Integer.parseInt(newDamageModifier)), 2);
-        return newRowId;
-    }
-
-
 
 }

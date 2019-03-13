@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -27,8 +28,7 @@ public class CharacterAddEdit extends AppCompatActivity {
     private String selectedCharacterName;
     private Integer selectedCharacterId;
     private ListView listAttack;
-    private Intent attackIntent;
-
+    //private Intent attackIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +36,9 @@ public class CharacterAddEdit extends AppCompatActivity {
 
         setContentView(R.layout.activity_character_add_edit);
         myDB = new CharacterDatabaseHelper(this);
-        selectedCharacterName = MainActivity.sharedPreferences.getString(MainActivity.SharedPrefCharacterName, null);
-        attackIntent = new Intent(this, AttackAddEdit.class);
+
+        //selectedCharacterName = MainActivity.sharedPreferences.getString(MainActivity.SharedPrefCharacterName, null);
+        //attackIntent = new Intent(this, AttackAddEdit.class);
 
         // get the buttons
         deleteCharacterButton = findViewById(R.id.deleteCharacterButton);
@@ -50,14 +51,15 @@ public class CharacterAddEdit extends AppCompatActivity {
         /* If the user chose to edit the existing character, populate this field with that character's name
           * and get its id * */
 
-        if(selectedCharacterName != null){
-
-            editText.setText(selectedCharacterName);
-            String id_str = myDB.getCharacterIdByName(selectedCharacterName);
-            selectedCharacterId = Integer.parseInt(id_str);
+        if(MainActivity.getCharacter().getName() != null){
+            editText.setText(MainActivity.getCharacter().getName());
+            //String id_str = myDB.getCharacterIdByName(selectedCharacterName);
+            //selectedCharacterId = Integer.parseInt(id_str);
         }
-        else
+        else {
             deleteCharacterButton.setEnabled(false);
+
+        }
 
 
         // set onClickLister to Add button
@@ -66,28 +68,28 @@ public class CharacterAddEdit extends AppCompatActivity {
             public void onClick(View v) {
 
                 // Adding a new character
-                if (selectedCharacterId == null) {
+                if (MainActivity.getCharacter().getId() == null) {
 
-                    final String newEntry = editText.getText().toString().trim();
+                    final String newName = editText.getText().toString().trim();
 
-                    if (newEntry.isEmpty() || newEntry.length() == 0){
+                    if (newName.isEmpty() || newName.length() == 0){
                         Toast.makeText(CharacterAddEdit.this, "You must put something in the text field!", Toast.LENGTH_LONG).show();
                     }
                     else{
 
-                        Integer newId = myDB.addName(newEntry);
+                        MainActivity.getCharacter().addNewCharacter(newName);
 
-                        if(newId == -1){
+                        if(MainActivity.getCharacter().getId() == -1){
                             Toast.makeText(CharacterAddEdit.this, "Something went wrong :(.", Toast.LENGTH_LONG).show();
                         }else {
-                            Toast.makeText(CharacterAddEdit.this, "" + newEntry + " Successfully Inserted!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(CharacterAddEdit.this, "" + newName + " Successfully Inserted!", Toast.LENGTH_LONG).show();
                         }
 
                         // Save the character ID and name in the shared preference
-                        SharedPreferences.Editor editor = MainActivity.sharedPreferences.edit();
-                        editor.putString(MainActivity.SharedPrefCharacterId, newId.toString());
-                        editor.putString(MainActivity.SharedPrefCharacterName, newEntry);
-                        editor.commit();
+                        //SharedPreferences.Editor editor = MainActivity.sharedPreferences.edit();
+                        //editor.putString(MainActivity.SharedPrefCharacterId, newId.toString());
+                        //editor.putString(MainActivity.SharedPrefCharacterName, newEntry);
+                        //editor.commit();
                     }
                 }
                 // Updating an existing character
@@ -98,7 +100,8 @@ public class CharacterAddEdit extends AppCompatActivity {
                     Toast.makeText(CharacterAddEdit.this, "Updated " + newName, Toast.LENGTH_LONG).show();
 
                     // clear sharedpreferences
-                    MainActivity.clearSharedPreferences();
+                    //MainActivity.clearSharedPreferences();
+                    MainActivity.getCharacter().clearCharacter();
                 }
             }
         });
@@ -110,9 +113,13 @@ public class CharacterAddEdit extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                myDB.deleteCharacter(selectedCharacterId);
-                Toast.makeText(CharacterAddEdit.this, "Deleted " + selectedCharacterName, Toast.LENGTH_LONG).show();
-                MainActivity.clearSharedPreferences();
+                // call deleteCharacter method in Character to delete the character
+                MainActivity.getCharacter().deleteCharacter();
+
+                Toast.makeText(CharacterAddEdit.this, String.format("Deleted %s", MainActivity.getCharacter().getName()), Toast.LENGTH_LONG).show();
+
+                //MainActivity.clearSharedPreferences();
+                MainActivity.getCharacter().clearCharacter();
             }
         });
 
@@ -120,6 +127,7 @@ public class CharacterAddEdit extends AppCompatActivity {
         addEditAttackButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent attackIntent = new Intent(CharacterAddEdit.this, AttackAddEdit.class);
                 startActivity(attackIntent);
             }
         });
