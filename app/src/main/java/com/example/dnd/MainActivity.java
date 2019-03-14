@@ -139,14 +139,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return attack;
     }
 
-    public static Character getCharacter(){
-        return character;
-    }
-
-    public static Attack getAttack(){
-        return attack;
-    }
-
     public int roll(int AC) {
         // get the text view from the View to get the user input
         EditText textAC = findViewById(R.id.targetACEditText);
