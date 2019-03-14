@@ -172,7 +172,7 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getListContents(){
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor data = db.rawQuery("SELECT * FROM " + CharacterContract.getTableName(), null);
         return data;
     }

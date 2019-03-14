@@ -2,6 +2,8 @@ package com.example.dnd.data;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -11,6 +13,12 @@ import android.util.Log;
 import com.example.dnd.Attack;
 
 import org.w3c.dom.CharacterData;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
 
@@ -62,6 +70,24 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public List<Integer> getAttackIdsByCharacterId(Integer characterId){
+
+        List<Integer> attacksId = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor data = db.rawQuery("SELECT " + CharacterAttacksContract.getAttackIdColName() +
+                " FROM " + CharacterAttacksContract.getTableName() +
+                " WHERE " + CharacterAttacksContract.getCharacterIdColName() + "=" + characterId, null);
+
+        while(data.getCount() != 0 && data.moveToNext()){
+            attacksId.add(data.getInt(0));
+        }
+
+        db.close();
+
+        return attacksId;
+    }
+
+
     public void deleteCharacterAttack(int characterId) {
 
         try {
@@ -77,4 +103,5 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
             Log.e(ERROR_SQLite, "Deleting a character-attack failed");
         }
     }
+
 }

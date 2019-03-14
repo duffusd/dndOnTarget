@@ -5,13 +5,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.dnd.data.AttackDatabaseHelper;
 import com.example.dnd.data.CharacterAttacksDatabaseHelper;
 import com.example.dnd.data.CharacterDatabaseHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AttackAddEdit extends AppCompatActivity {
 
@@ -23,6 +29,7 @@ public class AttackAddEdit extends AppCompatActivity {
     private EditText damageModifier;
     private String selectedAtkName;
     private Integer selectedAtkId;
+    private String tag = "AttackAddEdit";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,30 +44,29 @@ public class AttackAddEdit extends AppCompatActivity {
         dbCharAttacks = new CharacterAttacksDatabaseHelper(this);
 
 
-        // set onclick lister to save button
+        /**** set onclick lister to save button *****/
+
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+              
                 String newAttackName = nameAtk.getText().toString().trim();
                 String newHitModifier = hitModifier.getText().toString().trim();
                 String newDamageModifier = damageModifier.getText().toString().trim();
-
 
                 MainActivity.getAttack().addAttack(newAttackName,
                         newHitModifier.isEmpty() ? 0 : Integer.parseInt(newHitModifier),
                         newDamageModifier.isEmpty() ? 0 : Integer.parseInt(newDamageModifier),
                         null);
 
-                //String characterId = MainActivity.sharedPreferences.getString(MainActivity.SharedPrefCharacterId, null);
-
-                /* Logging for the debug purpose in the future */
-                Log.d("AttackAddEdit: AttackID", MainActivity.getAttack().getId().toString());
-
+                // Logging for debugging
+                Log.d(tag, String.format("AttackId: %s", MainActivity.getAttack().getId().toString()));
 
                 if(MainActivity.getCharacter().getId() != null){
 
-                    Log.d("AttackAddEdit: CharacterID", MainActivity.getCharacter().getId().toString());
+                    // Logging for debugging
+                    Log.d(tag, String.format("CharacterID: %s", MainActivity.getCharacter().getId()));
+
                     dbCharAttacks.addCharacterAttack(MainActivity.getCharacter().getId(), MainActivity.attack.getId());
 
                     Toast.makeText(AttackAddEdit.this, String.format("Added a new attack for %s", MainActivity.getCharacter().getName()), Toast.LENGTH_LONG).show();
@@ -70,9 +76,6 @@ public class AttackAddEdit extends AppCompatActivity {
                     Toast.makeText(AttackAddEdit.this, "Added a new attack!", Toast.LENGTH_LONG).show();
 
                 }
-
-              //MainActivity.clearSharedPreferences();
-
             }
         });
 

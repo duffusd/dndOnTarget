@@ -9,6 +9,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.ContactsContract;
 import android.util.Log;
 
+import com.example.dnd.Attack;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class AttackDatabaseHelper extends SQLiteOpenHelper {
 
     //Constants for db name and version
@@ -137,27 +142,54 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
 
     public Boolean findAttackById(int id) {
 
-
+        Cursor c = null;
+        SQLiteDatabase db = null;
         String sqlSelectAttackId =
                 "SELECT " + AttackContract.getIdColName() + " FROM " + AttackContract.getTableName() +
                         " WHERE " + AttackContract.getIdColName() + "=" + id;
         try {
 
-            SQLiteDatabase db = getWritableDatabase();
-            Cursor c = db.rawQuery(sqlSelectAttackId, null);
-
-            if (c != null && c.getCount() == 1) {
-                db.close();
-                return true;
-            }
-            else
-                db.close();
-                return false;
-
-        } catch (SQLiteException e) {
+            db = getWritableDatabase();
+            c = db.rawQuery(sqlSelectAttackId, null);
+        }catch(SQLiteException e) {
             e.printStackTrace();
             Log.e(ERROR_SQLite, "findAttackById(): Couldn't find a character");
+        }
+
+        if (c != null && c.getCount() == 1) {
+                db.close();
+                return true;
+        }
+        else{
+            db.close();
             return false;
         }
+    }
+
+
+    public Map<String, String> getAttackDetails(Integer attackId){
+
+        Map<String, String> row = new HashMap<>();
+
+        System.out.println("attackId: " + attackId);
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor data = db.rawQuery("SELECT * FROM " + AttackContract.getTableName() +
+                " WHERE " + AttackContract.getIdColName() + "=" + attackId, null);
+
+        if(data.getCount() ==0){
+            Log.d(ERROR_SQLite, "There should be only one attack returned");
+            Log.d(ERROR_SQLite, String.format("Number of Attack returned: %d", data.getCount()));
+        }
+
+        while(data.moveToNext()){
+
+            for (int i = 0; i < data.getColumnCount(); i++){
+                row.put(data.getColumnName(i), data.getString(i));
+            }
+
+        }
+
+        db.close();
+        return row;
     }
 }
