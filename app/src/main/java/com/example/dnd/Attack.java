@@ -40,7 +40,6 @@ public class Attack {
         modDamage = null;
     }
 
-
     //TODO: implement a rollHit() method somewhere here or in Activity and getHit() from here.
 
     /**
@@ -69,7 +68,7 @@ public class Attack {
         try{
 
             newRowId = dbHelper.addAttack(attackName, hitModifier, damageModifier, diceId);
-
+          
         }catch(SQLiteException e){
             e.printStackTrace();
             Log.e(tag, "addAttack method failed");
@@ -87,7 +86,6 @@ public class Attack {
             Log.e(tag, "deleteAttack method failed");
         }
     }
-
 
     /********************************** GETTER AND SETTERS ***************************************/
 

@@ -22,7 +22,6 @@ public class Character {
     private CharacterAttacksDatabaseHelper characterAttacksDbHelper;
     private String tag = "Character";
 
-
     Character(Context context){
         id = null;
         name = null;
@@ -56,7 +55,6 @@ public class Character {
         attacks.remove(attack);
     }
 
-
     public void addNewCharacter(String newName){
 
         setName(newName);
@@ -68,14 +66,13 @@ public class Character {
         }catch(SQLiteException e){
             e.printStackTrace();
             Log.e(tag, "Adding a new character to characterTable failed");
-
         }
 
         setId(newId);
 
     }
-
-    public void updateCharacter(String newName){
+  
+  public void updateCharacter(String newName){
 
         name = newName;
 
@@ -87,7 +84,7 @@ public class Character {
         }
     }
 
-    public void deleteCharacter(){
+  public void deleteCharacter(){
 
         try{
             dbHelper.deleteCharacter(id);
@@ -136,5 +133,4 @@ public class Character {
     public void setName(String name) {
         this.name = name;
     }
-
 }
