@@ -1,11 +1,14 @@
 package com.example.dnd;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
+import com.example.dnd.data.CharacterAttacksDatabaseHelper;
 import com.example.dnd.data.CharacterDatabaseHelper;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,15 +16,19 @@ public class Character {
 
     private Integer id;
     private String name;
+    private List<Integer> attackIds;
     private List<Attack> attacks;
     private CharacterDatabaseHelper dbHelper;
+    private CharacterAttacksDatabaseHelper characterAttacksDbHelper;
+    private String tag = "Character";
 
 
     Character(Context context){
-        List<Attack> attacks = new ArrayList<>();
         id = null;
         name = null;
         dbHelper = new CharacterDatabaseHelper(context);
+        characterAttacksDbHelper = new CharacterAttacksDatabaseHelper(context);
+        attacks = new ArrayList<>();
     }
 
     /**
@@ -32,14 +39,14 @@ public class Character {
      * @param attack the attack to be added to the list of attacks
      * @return trure if operation was successful
      */
-    public boolean addAttack(Attack attack) {
+    /* public boolean addAttack(Attack attack) {
         attacks.add(attack);
 
 
         return true; //TODO: figure out if bool return is necessary
-    }
+    } */
 
-    /**
+        /**
      * This method removes attacks from the list {@link Character#attacks} without needing to access
      * the member variable.
      *
@@ -60,12 +67,24 @@ public class Character {
 
         }catch(SQLiteException e){
             e.printStackTrace();
-            Log.e("Character", "Adding a new character to characterTable failed");
+            Log.e(tag, "Adding a new character to characterTable failed");
 
         }
 
         setId(newId);
 
+    }
+
+    public void updateCharacter(String newName){
+
+        name = newName;
+
+        try{
+            dbHelper.updateName(name, id);
+        } catch(SQLiteException e){
+            e.printStackTrace();
+            Log.e(tag, "UpdateCharacter failed");
+        }
     }
 
     public void deleteCharacter(){
@@ -75,10 +94,29 @@ public class Character {
 
         }catch(SQLiteException e){
             e.printStackTrace();
-            Log.e("Character", "Deleting a character failed");
+            Log.e(tag, "Deleting a character failed");
         }
 
     }
+
+    public List<Integer> getAttackIdsForCharacter(){
+        attackIds = new ArrayList<>();
+        attackIds = characterAttacksDbHelper.getAttackIdsByCharacterId(id);
+        return attackIds;
+    }
+
+
+    public void clearCharacter(){
+        id = null;
+        name = null;
+        if(attacks != null && !attacks.isEmpty())
+            attacks.clear();
+    }
+
+    public void addAttack(Attack attack){
+        attacks.add(attack);
+    }
+
     /********************************** GETTER AND SETTERS ***************************************/
 
     public Integer getId() {
@@ -89,6 +127,8 @@ public class Character {
         return name;
     }
 
+    public List<Attack> getAttacks() { return attacks; }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -97,10 +137,4 @@ public class Character {
         this.name = name;
     }
 
-    public void clearCharacter(){
-        id = null;
-        name = null;
-        if(attacks != null && !attacks.isEmpty())
-            attacks.clear();
-    }
 }

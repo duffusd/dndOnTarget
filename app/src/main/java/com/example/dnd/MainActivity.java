@@ -36,11 +36,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button addEditCharacterButton;
 
+    /*
     public static final String SharedPrefs = "CharacterPref";
     public static final String SharedPrefCharacterName = "characterNameKey";
     public static final String SharedPrefCharacterId = "characterId";
-
     public static SharedPreferences sharedPreferences;
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +57,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         addEditCharacterButton = findViewById(R.id.addEditAttackButton);
         addEditCharacterButton.setOnClickListener(this);
 
-        // set up shared preferences for this app
+        /* set up shared preferences for this app
         sharedPreferences = getSharedPreferences(SharedPrefs, Context.MODE_PRIVATE);
-        clearSharedPreferences(); // clear existing shared preferences
+        clearSharedPreferences(); // clear existing shared preferences */
 
         // Insert dice numbers to diceTable if the table is empty
         DiceDatabaseHelper diceDbHelper = new DiceDatabaseHelper(this);
@@ -93,18 +94,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                // get a character name from the clicked item
                 String selectedCharacter = (String)parent.getItemAtPosition(position);
+
+                // get a character's id
                 String selectedCharacterId = myCharacterDB.getCharacterIdByName(selectedCharacter);
-                myCharacterDB.getCharacterIdByName(selectedCharacter);
 
                 character.setName(selectedCharacter);
                 character.setId(Integer.parseInt(selectedCharacterId));
 
-                // save the name of the selected character in shared preferences
+                /* save the name of the selected character in shared preferences
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(SharedPrefCharacterName, selectedCharacter);
                 editor.putString(SharedPrefCharacterId, selectedCharacterId);
                 editor.commit();
+                */
             }
         });
     }
@@ -119,11 +123,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    /*
     public static void clearSharedPreferences(){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.commit();
     }
+    */
 
     public static Character getCharacter(){
         return character;

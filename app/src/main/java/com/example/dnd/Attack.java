@@ -1,13 +1,21 @@
 package com.example.dnd;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
+import com.example.dnd.data.AttackContract;
 import com.example.dnd.data.AttackDatabaseHelper;
+import com.example.dnd.data.CharacterAttacksContract;
+import com.example.dnd.data.CharacterContract;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <h>Attack Class</h>
@@ -21,31 +29,17 @@ public class Attack {
     private String name;
     private List<Die> dice;
     private AttackDatabaseHelper dbHelper;
-
-    private int modHit;
-    private int modDamage;
+    private Integer modHit;
+    private Integer modDamage;
+    private String tag = "Attack";
 
     Attack(Context context){
         dice = new ArrayList<>();
         dbHelper = new AttackDatabaseHelper(context);
+        modHit = null;
+        modDamage = null;
     }
 
-    Attack(Integer attackId){
-        dice = new ArrayList<>();
-        this.id = attackId;
-    }
-
-    Attack(String name) {
-        dice = new ArrayList<>();
-        this.name = name;
-    }
-
-    Attack(String name, int modHit, int modDamage, int diceId) {
-        dice = new ArrayList<>();
-        this.name = name;
-        this.modHit = modHit;
-        this.modDamage = modDamage;
-    }
 
     //TODO: implement a rollHit() method somewhere here or in Activity and getHit() from here.
 
@@ -75,17 +69,25 @@ public class Attack {
         try{
 
             newRowId = dbHelper.addAttack(attackName, hitModifier, damageModifier, diceId);
-            dbHelper.close();
 
         }catch(SQLiteException e){
             e.printStackTrace();
-            Log.e("Attack", "addAttack method failed");
+            Log.e(tag, "addAttack method failed");
         }
         setId(newRowId);
 
-
-
     }
+
+    public void deleteAttack(Integer attackId){
+
+        try{
+            dbHelper.deleteAttack(attackId);
+        }catch (SQLiteException e){
+            e.printStackTrace();
+            Log.e(tag, "deleteAttack method failed");
+        }
+    }
+
 
     /********************************** GETTER AND SETTERS ***************************************/
 
@@ -120,5 +122,14 @@ public class Attack {
     public void setModDamage(int modDamage) {
         this.modDamage = modDamage;
     }
+
+    public void setAttack(Integer id){
+        Map<String, String> attack = dbHelper.getAttackDetails(id);
+        this.id = id;
+        name = attack.get(AttackContract.getAttackNameColName());
+        modDamage = Integer.parseInt(attack.get(AttackContract.getDamageModifierColName()));
+        modHit = Integer.parseInt(attack.get(AttackContract.getHitModifierColName()));
+    }
+
 
 }
