@@ -139,8 +139,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return attack;
     }
 
-    public static void setAttack(Attack attck){
-        attack = attck;
+    public static void setAttack(Attack newAttack){
+        attack = newAttack;
 
     }
 
