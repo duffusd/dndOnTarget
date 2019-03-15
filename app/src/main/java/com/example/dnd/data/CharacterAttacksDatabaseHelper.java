@@ -88,7 +88,7 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public void deleteCharacterAttack(int characterId) {
+    public void deleteCharacter(int characterId) {
 
         try {
 
@@ -100,8 +100,23 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
 
         } catch (SQLiteException e) {
             e.printStackTrace();
-            Log.e(ERROR_SQLite, "Deleting a character-attack failed");
+            Log.e(ERROR_SQLite, "Deleting a character failed");
         }
     }
 
+    public void deleteAttack(int attackId) {
+
+        try {
+
+            SQLiteDatabase db = getWritableDatabase();
+            db.delete(CharacterAttacksContract.getTableName(),
+                    CharacterAttacksContract.getAttackIdColName() + "=" + attackId,
+                    null);
+            db.close();
+
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            Log.e(ERROR_SQLite, "Deleting an attack failed");
+        }
+    }
 }

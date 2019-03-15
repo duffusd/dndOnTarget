@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -31,9 +32,7 @@ public class CharacterAddEdit extends AppCompatActivity {
     private Button deleteCharacterButton;
     private Button addEditAttackButton;
     private EditText editText;
-    private String selectedCharacterName;
-    private Integer selectedCharacterId;
-    private ListView listAttack;
+    private String tag;
     //private Intent attackIntent;
 
     @Override
@@ -45,9 +44,9 @@ public class CharacterAddEdit extends AppCompatActivity {
         // get the buttons
         deleteCharacterButton = findViewById(R.id.deleteCharacterButton);
         addEditAttackButton = findViewById(R.id.addEditAttackButton);
-        listAttack = findViewById(R.id.attackListView);
         btnAdd = findViewById(R.id.saveCharacterButton);
         editText =  findViewById(R.id.characterNameEditText);
+        tag = "CharacterAddEdit";
 
 
         /** If the user chose to edit the existing character, populate this field with that
@@ -60,9 +59,12 @@ public class CharacterAddEdit extends AppCompatActivity {
             deleteCharacterButton.setEnabled(false);
             addEditAttackButton.setEnabled(false);
         }
-
+      
 
         /***** display attacks for a character ********/
+
+        // clear attacks of the character object
+        MainActivity.getCharacter().clearAttacks();
 
         // Get attackIds for the character
         List<Integer> attackIds = MainActivity.getCharacter().getAttackIdsForCharacter();
@@ -70,6 +72,7 @@ public class CharacterAddEdit extends AppCompatActivity {
         // Create an attack object for each attackIds, then add it to the attack list of the character object
         if(attackIds.size() > 0){
             for (int i = 0; i < attackIds.size(); i++){
+                System.out.println("HERE: " + attackIds.get(i));
                 Attack attack = new Attack(this);
                 attack.setAttack(attackIds.get(i));
                 MainActivity.getCharacter().addAttack(attack);
@@ -90,6 +93,41 @@ public class CharacterAddEdit extends AppCompatActivity {
             }
         }
 
+        ListView attackListView = findViewById(R.id.attackListView);
+        List<String> attackNames = new ArrayList<>();
+        ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, attackNames);
+
+        if (MainActivity.getCharacter().getAttacks().size() == 0){
+            Toast.makeText(CharacterAddEdit.this, "No attacks available", Toast.LENGTH_LONG).show();
+        }
+        else{
+            for (Attack attack: MainActivity.getCharacter().getAttacks()){
+                attackNames.add(attack.getName());
+                attackListView.setAdapter(listAdapter);
+            }
+        }
+
+
+        // Set OnItemClickLister to attacks' listView
+        attackListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                // get the name of attack from the clicked item
+                String attackName = (String)parent.getItemAtPosition(position);
+
+                // create an attack object
+
+                for (Attack attack : MainActivity.getCharacter().getAttacks()){
+                    if(attack.getName() == attackName){
+                        MainActivity.setAttack(attack);
+                    }
+                }
+
+            }
+        });
+
+
         // set onClickLister to Add button
         btnAdd.setOnClickListener(new OnClickListener() {
             @Override
@@ -104,7 +142,6 @@ public class CharacterAddEdit extends AppCompatActivity {
                         Toast.makeText(CharacterAddEdit.this, "You must put something in the text field!", Toast.LENGTH_LONG).show();
                     }
                     else{
-
                         MainActivity.getCharacter().addNewCharacter(newName);
 
                         if(MainActivity.getCharacter().getId() == -1){
