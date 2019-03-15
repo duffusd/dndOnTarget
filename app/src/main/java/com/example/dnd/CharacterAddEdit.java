@@ -58,7 +58,6 @@ public class CharacterAddEdit extends AppCompatActivity {
         else {
             deleteCharacterButton.setEnabled(false);
             addEditAttackButton.setEnabled(false);
-
         }
 
 
@@ -137,6 +136,7 @@ public class CharacterAddEdit extends AppCompatActivity {
                         }else {
                             Toast.makeText(CharacterAddEdit.this, "" + newName + " Successfully Inserted!", Toast.LENGTH_LONG).show();
                         }
+
                     }
                 }
                 // Updating an existing character
@@ -147,7 +147,6 @@ public class CharacterAddEdit extends AppCompatActivity {
                     Toast.makeText(CharacterAddEdit.this, String.format("Updated %s", MainActivity.getCharacter().getName()), Toast.LENGTH_LONG).show();
 
                     MainActivity.getCharacter().clearCharacter();
-
                 }
             }
         });

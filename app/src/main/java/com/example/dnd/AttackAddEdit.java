@@ -62,7 +62,7 @@ public class AttackAddEdit extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+              
                 String newAttackName = nameAtk.getText().toString().trim();
                 String newHitModifier = hitModifier.getText().toString().trim();
                 String newDamageModifier = damageModifier.getText().toString().trim();

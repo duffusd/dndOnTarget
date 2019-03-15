@@ -139,8 +139,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return attack;
     }
 
+<<<<<<< HEAD
     public static void setAttack(Attack attck){
         attack = attck;
+=======
+    public static Character getCharacter(){
+        return character;
+    }
+
+    public static Attack getAttack(){
+        return attack;
+>>>>>>> 8b897c9f11d2e59a8e33ff5d318b36842581e51a
     }
 
     public int roll(int AC) {
