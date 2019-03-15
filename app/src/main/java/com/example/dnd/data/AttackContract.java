@@ -15,7 +15,7 @@ public class AttackContract implements BaseColumns {
     private static final String SQL_CREATE_TABLE_ATTACKS=
             "CREATE TABLE " + table_name + " (" +
                     _id + " INTEGER PRIMARY KEY, " +
-                    attackName + " TEXT NOT NULL UNIQUE, " +
+                    attackName + " TEXT NOT NULL, " +
                     dice_id + " INTEGER," +
                     hitModifier + " INTEGER," +
                     damageModifier + " INTEGER " +

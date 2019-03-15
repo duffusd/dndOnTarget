@@ -10,6 +10,7 @@ import android.util.Log;
 import com.example.dnd.data.AttackContract;
 import com.example.dnd.data.AttackDatabaseHelper;
 import com.example.dnd.data.CharacterAttacksContract;
+import com.example.dnd.data.CharacterAttacksDatabaseHelper;
 import com.example.dnd.data.CharacterContract;
 
 import java.util.ArrayList;
@@ -32,12 +33,14 @@ public class Attack {
     private Integer modHit;
     private Integer modDamage;
     private String tag = "Attack";
+    private Context context;
 
     Attack(Context context){
         dice = new ArrayList<>();
         dbHelper = new AttackDatabaseHelper(context);
         modHit = null;
         modDamage = null;
+        this.context = context;
     }
 
 
@@ -78,10 +81,44 @@ public class Attack {
 
     }
 
+    public void updateName(String newName){
+        try{
+            dbHelper.updateName(id, newName);
+        }catch (SQLiteException e){
+            e.printStackTrace();
+            Log.e(tag, "Updating an attack name failed");
+        }
+
+        name = newName;
+    }
+
+    public void updateHidModifier(Integer hit){
+
+        try{
+            dbHelper.updateHitModifier(id, hit);
+        } catch(SQLiteException e){
+            e.printStackTrace();
+            Log.e(tag, "Updating hit modifier failed");
+        }
+    }
+
+    public void updateDamageModifier(Integer damage){
+
+        try{
+            dbHelper.updateDamageModifier(id, damage);
+        }catch (SQLiteException e){
+            e.printStackTrace();
+            Log.e(tag, "Updating damage modifier failed");
+        }
+    }
+
     public void deleteAttack(Integer attackId){
 
         try{
             dbHelper.deleteAttack(attackId);
+            CharacterAttacksDatabaseHelper charAttackDbHelper = new CharacterAttacksDatabaseHelper(context);
+            charAttackDbHelper.deleteAttack(attackId);
+
         }catch (SQLiteException e){
             e.printStackTrace();
             Log.e(tag, "deleteAttack method failed");
@@ -99,11 +136,9 @@ public class Attack {
         return name;
     }
 
-    public int getModHit() {
-        return modHit;
-    }
+    public Integer getModHit() { return modHit; }
 
-    public int getModDamage() {
+    public Integer getModDamage() {
         return modDamage;
     }
 

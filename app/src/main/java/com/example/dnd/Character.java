@@ -21,6 +21,7 @@ public class Character {
     private CharacterDatabaseHelper dbHelper;
     private CharacterAttacksDatabaseHelper characterAttacksDbHelper;
     private String tag = "Character";
+    private Context context;
 
 
     Character(Context context){
@@ -29,6 +30,7 @@ public class Character {
         dbHelper = new CharacterDatabaseHelper(context);
         characterAttacksDbHelper = new CharacterAttacksDatabaseHelper(context);
         attacks = new ArrayList<>();
+        this.context = context;
     }
 
     /**
@@ -91,6 +93,8 @@ public class Character {
 
         try{
             dbHelper.deleteCharacter(id);
+            CharacterAttacksDatabaseHelper charAttackDbHelper = new CharacterAttacksDatabaseHelper(context);
+            //charAttackDbHelper.deleteCharacter(id);
 
         }catch(SQLiteException e){
             e.printStackTrace();
@@ -111,6 +115,10 @@ public class Character {
         name = null;
         if(attacks != null && !attacks.isEmpty())
             attacks.clear();
+    }
+
+    public void clearAttacks(){
+        attacks.clear();
     }
 
     public void addAttack(Attack attack){

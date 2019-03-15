@@ -89,14 +89,32 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
             return newId.intValue();
     }
 
+    public void updateName(int id, String newName){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues newValue = new ContentValues();
+        newValue.put(AttackContract.getAttackNameColName(), newName);
+
+        try{
+
+            db.update(AttackContract.getTableName(), newValue,
+                    AttackContract.getIdColName() + "=" + id, null);
+            db.close();
+
+        } catch(SQLiteException e){
+            e.printStackTrace();
+            Log.e(ERROR_SQLite, "Attack table: Updating an attack name failed");
+        }
+    }
+
 
     public void updateHitModifier(int id, int newNumber){
 
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues  newValue = new ContentValues();
+        newValue.put(AttackContract.getHitModifierColName(), newNumber);
+
         try {
 
-            SQLiteDatabase db = getWritableDatabase();
-            ContentValues  newValue = new ContentValues();
-            newValue.put(AttackContract.getHitModifierColName(), newNumber);
             db.update(AttackContract.getTableName(), newValue,
                     AttackContract.getIdColName() + "=" + id, null);
             db.close();

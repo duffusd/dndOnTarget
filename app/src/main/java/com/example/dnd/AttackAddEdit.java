@@ -24,11 +24,10 @@ public class AttackAddEdit extends AppCompatActivity {
     private AttackDatabaseHelper dbAttacks;
     private CharacterAttacksDatabaseHelper dbCharAttacks;
     private Button btnSave;
+    private Button btnDelete;
     private EditText nameAtk;
     private EditText hitModifier;
     private EditText damageModifier;
-    private String selectedAtkName;
-    private Integer selectedAtkId;
     private String tag = "AttackAddEdit";
 
     @Override
@@ -38,10 +37,24 @@ public class AttackAddEdit extends AppCompatActivity {
         setContentView(R.layout.activity_attack_add_edit);
         dbAttacks = new AttackDatabaseHelper(this);
         btnSave = findViewById(R.id.attackSaveButton);
+        btnDelete = findViewById(R.id.deleteAttackButton);
         nameAtk = findViewById(R.id.attackNameEditText);
         hitModifier = findViewById(R.id.hitModEditText);
         damageModifier = findViewById(R.id.damageModifierText);
         dbCharAttacks = new CharacterAttacksDatabaseHelper(this);
+
+
+        // Set the field values if the attack was selected to edit in the previous activity
+        if(MainActivity.getAttack().getId() != null){
+
+            nameAtk.setText(MainActivity.getAttack().getName());
+            hitModifier.setText(MainActivity.getAttack().getModHit().toString());
+            damageModifier.setText(MainActivity.getAttack().getModDamage().toString());
+
+        } else {
+
+            btnDelete.setEnabled(false);
+        }
 
 
         /**** set onclick lister to save button *****/
@@ -54,28 +67,55 @@ public class AttackAddEdit extends AppCompatActivity {
                 String newHitModifier = hitModifier.getText().toString().trim();
                 String newDamageModifier = damageModifier.getText().toString().trim();
 
-                MainActivity.getAttack().addAttack(newAttackName,
-                        newHitModifier.isEmpty() ? 0 : Integer.parseInt(newHitModifier),
-                        newDamageModifier.isEmpty() ? 0 : Integer.parseInt(newDamageModifier),
-                        null);
+                // add a new attack
+                if(MainActivity.getAttack().getId() == null){
 
-                // Logging for debugging
-                Log.d(tag, String.format("AttackId: %s", MainActivity.getAttack().getId().toString()));
+                    MainActivity.getAttack().addAttack(newAttackName,
+                            newHitModifier.isEmpty() ? 0 : Integer.parseInt(newHitModifier),
+                            newDamageModifier.isEmpty() ? 0 : Integer.parseInt(newDamageModifier),
+                            null);
 
-                if(MainActivity.getCharacter().getId() != null){
-
-                    // Logging for debugging
-                    Log.d(tag, String.format("CharacterID: %s", MainActivity.getCharacter().getId()));
-
+                    // add a new attack to CharacterAttack table
                     dbCharAttacks.addCharacterAttack(MainActivity.getCharacter().getId(), MainActivity.attack.getId());
 
-                    Toast.makeText(AttackAddEdit.this, String.format("Added a new attack for %s", MainActivity.getCharacter().getName()), Toast.LENGTH_LONG).show();
+                    Toast.makeText(AttackAddEdit.this, String.format("Added a new attack for %s",
+                            MainActivity.getCharacter().getName()), Toast.LENGTH_LONG).show();
 
                 }
+                // update a selected attack
                 else {
-                    Toast.makeText(AttackAddEdit.this, "Added a new attack!", Toast.LENGTH_LONG).show();
+
+                    // update name
+                    if(newAttackName != MainActivity.getAttack().getName()){
+                        MainActivity.getAttack().updateName(newAttackName);
+                    }
+
+                    // update hit modifier
+                    if(Integer.parseInt(newHitModifier) != MainActivity.getAttack().getModHit()){
+                        MainActivity.getAttack().updateHidModifier(Integer.parseInt(newHitModifier));
+                    }
+
+                    // update damage modifier
+                    if(Integer.parseInt(newDamageModifier) != MainActivity.getAttack().getModDamage()){
+                        MainActivity.getAttack().updateDamageModifier(Integer.parseInt(newDamageModifier));
+                    }
+
+                    Toast.makeText(AttackAddEdit.this, String.format("Updated %s",
+                            MainActivity.getAttack().getName()), Toast.LENGTH_LONG).show();
 
                 }
+
+            }
+        });
+
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                MainActivity.getAttack().deleteAttack(MainActivity.getAttack().getId());
+
+
             }
         });
 
