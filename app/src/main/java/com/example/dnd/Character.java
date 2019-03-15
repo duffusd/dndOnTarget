@@ -75,7 +75,7 @@ public class Character {
     }
   
   public void updateCharacter(String newName){
-
+    
         name = newName;
 
         try{
@@ -117,7 +117,7 @@ public class Character {
     public void clearAttacks(){
         attacks.clear();
     }
-
+  
     public void addAttack(Attack attack){
         attacks.add(attack);
     }

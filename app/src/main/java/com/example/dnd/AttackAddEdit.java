@@ -56,7 +56,6 @@ public class AttackAddEdit extends AppCompatActivity {
             btnDelete.setEnabled(false);
         }
 
-
         /**** set onclick lister to save button *****/
 
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +65,7 @@ public class AttackAddEdit extends AppCompatActivity {
                 String newAttackName = nameAtk.getText().toString().trim();
                 String newHitModifier = hitModifier.getText().toString().trim();
                 String newDamageModifier = damageModifier.getText().toString().trim();
+
 
                 // add a new attack
                 if(MainActivity.getAttack().getId() == null){
@@ -114,7 +114,6 @@ public class AttackAddEdit extends AppCompatActivity {
             public void onClick(View v) {
 
                 MainActivity.getAttack().deleteAttack(MainActivity.getAttack().getId());
-
 
             }
         });

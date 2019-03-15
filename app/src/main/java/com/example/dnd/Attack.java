@@ -117,7 +117,6 @@ public class Attack {
             dbHelper.deleteAttack(attackId);
             CharacterAttacksDatabaseHelper charAttackDbHelper = new CharacterAttacksDatabaseHelper(context);
             charAttackDbHelper.deleteAttack(attackId);
-
         }catch (SQLiteException e){
             e.printStackTrace();
             Log.e(tag, "deleteAttack method failed");

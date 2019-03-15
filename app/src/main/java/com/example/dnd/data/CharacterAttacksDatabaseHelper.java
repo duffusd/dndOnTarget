@@ -119,5 +119,4 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
             Log.e(ERROR_SQLite, "Deleting an attack failed");
         }
     }
-
 }
