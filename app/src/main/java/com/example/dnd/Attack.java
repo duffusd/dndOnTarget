@@ -123,6 +123,13 @@ public class Attack {
         }
     }
 
+    public void clear(){
+        setId(null);
+        setName(null);
+        setModDamage(null);
+        setModHit(null);
+    }
+
     /********************************** GETTER AND SETTERS ***************************************/
 
     public Integer getId() {
@@ -147,11 +154,11 @@ public class Attack {
         this.name = name;
     }
 
-    public void setModHit(int modHit) {
+    public void setModHit(Integer modHit) {
         this.modHit = modHit;
     }
 
-    public void setModDamage(int modDamage) {
+    public void setModDamage(Integer modDamage) {
         this.modDamage = modDamage;
     }
 

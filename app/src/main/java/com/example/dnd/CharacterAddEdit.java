@@ -5,9 +5,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
@@ -18,6 +22,8 @@ import android.view.View;
 import android.widget.Button;
 
 import android.widget.EditText;
+
+import com.example.dnd.data.AttackDatabaseHelper;
 import com.example.dnd.data.CharacterDatabaseHelper;
 
 import java.util.ArrayList;
@@ -72,27 +78,36 @@ public class CharacterAddEdit extends AppCompatActivity {
         // Create an attack object for each attackIds, then add it to the attack list of the character object
         if(attackIds.size() > 0){
             for (int i = 0; i < attackIds.size(); i++){
-                System.out.println("HERE: " + attackIds.get(i));
                 Attack attack = new Attack(this);
                 attack.setAttack(attackIds.get(i));
                 MainActivity.getCharacter().addAttack(attack);
             }
         }
 
-        ListView attackListView = findViewById(R.id.attackListView);
-        List<String> attackNames = new ArrayList<>();
-        ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, attackNames);
 
-        if (MainActivity.getCharacter().getAttacks().size() == 0){
-            Toast.makeText(CharacterAddEdit.this, "No attacks available", Toast.LENGTH_LONG).show();
-        }
-        else{
-            for (Attack attack: MainActivity.getCharacter().getAttacks()){
-                attackNames.add(attack.getName());
-                attackListView.setAdapter(listAdapter);
+        ListView attackListView = findViewById(R.id.attack_list_view);
+        AttacksListAdapter adapter = new AttacksListAdapter(this, R.layout.attack_list_adapter, MainActivity.getCharacter().getAttacks());
+
+        LayoutInflater inflater = getLayoutInflater();
+        ViewGroup header = (ViewGroup)inflater.inflate(R.layout.attacks_list_header, attackListView, false);
+        attackListView.addHeaderView(header, null, false);
+
+        attackListView.setAdapter(adapter);
+
+
+        /********* set onClick lister for attackListView *******/
+
+        attackListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                // get a character name from the clicked item
+                Attack selectedAttack = (Attack)parent.getItemAtPosition(position);
+                MainActivity.setAttack(selectedAttack);
             }
-        }
+        });
 
+/*
         ListView attackListView = findViewById(R.id.attackListView);
         List<String> attackNames = new ArrayList<>();
         ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, attackNames);
@@ -125,7 +140,10 @@ public class CharacterAddEdit extends AppCompatActivity {
                 }
 
             }
+
         });
+
+        */
 
 
         // set onClickLister to Add button

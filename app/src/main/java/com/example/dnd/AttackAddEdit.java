@@ -1,5 +1,6 @@
 package com.example.dnd;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -104,6 +105,11 @@ public class AttackAddEdit extends AppCompatActivity {
                             MainActivity.getAttack().getName()), Toast.LENGTH_LONG).show();
 
                 }
+
+                // go back to character addd/edit activity
+                MainActivity.getAttack().clear();
+                Intent intent = new Intent(AttackAddEdit.this, CharacterAddEdit.class);
+                startActivity(intent);
 
             }
         });

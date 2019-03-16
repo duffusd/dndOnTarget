@@ -32,6 +32,15 @@ public class Character {
         this.context = context;
     }
 
+    Character(Context context, Integer id, String name){
+        this.id = id;
+        this.name = name;
+        dbHelper = new CharacterDatabaseHelper(context);
+        characterAttacksDbHelper = new CharacterAttacksDatabaseHelper(context);
+        attacks = new ArrayList<>();
+        this.context = context;
+    }
+
     /**
      * This method will add attacks to the list {@link Character#attacks} without needing
      * to access the member variable, as this method will access it within the class.

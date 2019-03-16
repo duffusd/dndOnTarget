@@ -17,11 +17,13 @@ import android.widget.Toast;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.example.dnd.data.CharacterContract;
 import com.example.dnd.data.CharacterDatabaseHelper;
 import com.example.dnd.data.DiceContract;
 import com.example.dnd.data.DiceDatabaseHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -29,19 +31,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // created for the listview and showing the characters
     CharacterDatabaseHelper myCharacterDB;
-
+    List<String> characters;
 
     public static Character character;
     public static Attack attack;
-
     private Button addEditCharacterButton;
-
-    /*
-    public static final String SharedPrefs = "CharacterPref";
-    public static final String SharedPrefCharacterName = "characterNameKey";
-    public static final String SharedPrefCharacterId = "characterId";
-    public static SharedPreferences sharedPreferences;
-    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +51,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         addEditCharacterButton = findViewById(R.id.addEditAttackButton);
         addEditCharacterButton.setOnClickListener(this);
 
-        /* set up shared preferences for this app
-        sharedPreferences = getSharedPreferences(SharedPrefs, Context.MODE_PRIVATE);
-        clearSharedPreferences(); // clear existing shared preferences */
 
         // Insert dice numbers to diceTable if the table is empty
         DiceDatabaseHelper diceDbHelper = new DiceDatabaseHelper(this);
@@ -72,11 +63,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             diceDbHelper.insertNumbers();
         }
 
+
         //populate an ArrayList<String> from the database and then view it
         ListView listView = findViewById(R.id.listView);
         myCharacterDB = new CharacterDatabaseHelper(this);
-        ArrayList<String> theList = new ArrayList<>();
-        ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, theList);
+        characters = new ArrayList<>();
+        ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, characters);
 
         Cursor data = myCharacterDB.getListContents();
 
@@ -84,7 +76,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, "There are no contents in this list!",Toast.LENGTH_LONG).show();
         }else{
             while(data.moveToNext()){
-                theList.add(data.getString(1));
+
+                // create a new character object from the data (Cursor)
+                String characterName = data.getString(data.getColumnIndex(CharacterContract.getNameColName()));
+
+                // add a new character object to characters list
+                characters.add(characterName);
                 listView.setAdapter(listAdapter);
             }
         }
@@ -103,12 +100,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 character.setName(selectedCharacter);
                 character.setId(Integer.parseInt(selectedCharacterId));
 
-                /* save the name of the selected character in shared preferences
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(SharedPrefCharacterName, selectedCharacter);
-                editor.putString(SharedPrefCharacterId, selectedCharacterId);
-                editor.commit();
-                */
             }
         });
     }
@@ -122,14 +113,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
-
-    /*
-    public static void clearSharedPreferences(){
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.commit();
-    }
-    */
 
     public static Character getCharacter(){
         return character;

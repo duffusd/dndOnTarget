@@ -188,8 +188,6 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
     public Map<String, String> getAttackDetails(Integer attackId){
 
         Map<String, String> row = new HashMap<>();
-
-        System.out.println("attackId: " + attackId);
         SQLiteDatabase db = getReadableDatabase();
         Cursor data = db.rawQuery("SELECT * FROM " + AttackContract.getTableName() +
                 " WHERE " + AttackContract.getIdColName() + "=" + attackId, null);
