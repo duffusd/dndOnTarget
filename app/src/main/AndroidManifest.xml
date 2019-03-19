@@ -9,14 +9,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Roller"></activity>
-        <activity android:name=".AttackAddEdit"
-            android:parentActivityName=".CharacterAddEdit"/>
-        <activity android:name=".CharacterAddEdit"
-            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".SelectAttack"></activity>
+        <activity android:name=".Roller" />
+        <activity
+            android:name=".AttackAddEdit"
+            android:parentActivityName=".CharacterAddEdit" />
+        <activity
+            android:name=".CharacterAddEdit"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

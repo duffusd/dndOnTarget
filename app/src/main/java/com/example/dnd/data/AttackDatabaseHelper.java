@@ -210,4 +210,10 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return row;
     }
+
+    public Cursor getAttackContents(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor data = (Cursor) db.rawQuery("SELECT * FROM " + AttackContract.getTableName(), null);
+        return data;
+    }
 }
