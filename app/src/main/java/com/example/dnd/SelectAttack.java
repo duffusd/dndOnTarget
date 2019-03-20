@@ -15,7 +15,6 @@ import java.util.List;
 
 public class SelectAttack extends AppCompatActivity {
 
-    CharacterDatabaseHelper myCharacterDB;
     AttackDatabaseHelper myAttackDB;
 
     private List<Model> mModelList;
@@ -36,31 +35,18 @@ public class SelectAttack extends AppCompatActivity {
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
 
-        List<Integer> attackIds = MainActivity.getCharacter().getAttackIdsForCharacter();
-
-        // Create an attack object for each attackIds, then add it to the attack list of the character object
-        if(attackIds.size() > 0){
-            for (int i = 0; i < attackIds.size(); i++){
-                System.out.println("HERE: " + attackIds.get(i));
-                Attack attack = new Attack(this);
-                attack.setAttack(attackIds.get(i));
-                MainActivity.getCharacter().addAttack(attack);
-            }
-        }
-
-
-
 
     }
 
-    //recycleview multi select
+    /**
+     * getListData gets the list of all of the Attacks from selected Character
+     * @return
+     */
     private List<Model> getListData() {
-        //populate an ArrayList<String> from the database and then view it
-
-        //Attacks
+        List<Integer> attackIds = MainActivity.getCharacter().getAttackIdsForCharacter();
         myAttackDB = new AttackDatabaseHelper(this);
         mModelList = new ArrayList<>();
-        Cursor dataAttack = myAttackDB.getAttackContents();
+        Cursor dataAttack = (Cursor) myAttackDB.getAttackContents(attackIds);
 
         if(dataAttack.getCount() == 0){
             Toast.makeText(this, "There are no contents in this list!",Toast.LENGTH_LONG).show();
