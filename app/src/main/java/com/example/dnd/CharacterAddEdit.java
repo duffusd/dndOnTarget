@@ -72,7 +72,6 @@ public class CharacterAddEdit extends AppCompatActivity {
 
         /***** display attacks for a character ********/
 
-        /*
         // clear attacks in the character object
         MainActivity.getCharacter().clearAttacks();
 
@@ -86,12 +85,12 @@ public class CharacterAddEdit extends AppCompatActivity {
                 attack.setAttack(attackIds.get(i));
                 MainActivity.getCharacter().addAttack(attack);
             }
-            */
+        }
 
         // only display attacks list if the character was selected to edit in the previous step
         if(MainActivity.getCharacter().getId() != null){
 
-            ListView attackListView = findViewById(R.id.attack_list_view);
+            ListView attackListView = findViewById(R.id.attackListView);
             AttacksListAdapter adapter = new AttacksListAdapter(this, R.layout.attack_list_adapter, MainActivity.getCharacter().getAttacks());
 
             LayoutInflater inflater = getLayoutInflater();
@@ -148,11 +147,9 @@ public class CharacterAddEdit extends AppCompatActivity {
                 }
 
             }
-
         });
 
         */
-
 
         // set onClickLister to Add button
         btnAdd.setOnClickListener(new OnClickListener() {
@@ -173,6 +170,7 @@ public class CharacterAddEdit extends AppCompatActivity {
 
                         if(newId == -1){
 
+                            MainActivity.getCharacter().addNewCharacter(newName);
                             Toast.makeText(CharacterAddEdit.this, "Something went wrong :(.", Toast.LENGTH_LONG).show();
 
                         }else {

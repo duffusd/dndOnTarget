@@ -6,6 +6,7 @@ public class CharacterAttacksContract {
     private static final String table_name = "characterAttacksTable";
     private static final String characterId = "characterId";
     private static final String attackId = "attackId";
+    private static final String attackName = "attackName";
 
     // SQL to create a table
     private static final String TABLE_CHARACTER_ATTACKS_CREATE=
@@ -58,4 +59,5 @@ public class CharacterAttacksContract {
      * @author Atsuko Takanabe
      */
     public static String getAttackIdColName() { return attackId; }
+    public static String getAttackName() { return attackName; }
 }

@@ -11,8 +11,13 @@ import android.util.Log;
 
 import com.example.dnd.Attack;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 /**
@@ -121,7 +126,6 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
         newValue.put(AttackContract.getAttackNameColName(), newName);
 
         try{
-
             db.update(AttackContract.getTableName(), newValue,
                     AttackContract.getIdColName() + "=" + id, null);
             db.close();
@@ -273,5 +277,52 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
 
         db.close();
         return row;
+    }
+
+    public Cursor getAttackContents(List<Integer> attackIds){
+        // converts int list into a string
+        String listString = attackIds.toString();
+        String idList = listString.toString();
+        // changes it from a [] to a comma separated list
+        String csv = idList.substring(1, idList.length() - 1).replace(", ", ",");
+        Log.e("DB", "get Attack contents is running " + csv);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor data = (Cursor) db.rawQuery("SELECT * FROM " + AttackContract.getTableName() + " WHERE " + AttackContract.getIdColName() + " in (" + csv + ")", null);
+        return data;
+    }
+
+    public List<Integer> getAttackIdsByCharacterId(Integer characterId){
+
+        List<Integer> attacksId = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor data = db.rawQuery("SELECT " + CharacterAttacksContract.getAttackIdColName() +
+                " FROM " + CharacterAttacksContract.getTableName() +
+                " WHERE " + CharacterAttacksContract.getCharacterIdColName() + "=" + characterId, null);
+
+        while(data.getCount() != 0 && data.moveToNext()){
+            attacksId.add(data.getInt(0));
+        }
+
+        db.close();
+
+        return attacksId;
+    }
+
+    public List<Integer> getAttackNamesByCharacterId(Integer characterId){
+
+        List<Integer> attacksId = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor data = db.rawQuery("SELECT " + AttackContract.getAttackNameColName() +
+                " FROM " + CharacterAttacksContract.getTableName() +
+                " WHERE " + CharacterAttacksContract.getCharacterIdColName() + "=" + characterId, null);
+
+        while(data.getCount() != 0 && data.moveToNext()){
+            attacksId.add(data.getInt(0));
+        }
+
+        db.close();
+
+        return attacksId;
     }
 }

@@ -37,6 +37,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static Attack attack;
     private Button addEditCharacterButton;
     private Button rollAttackButton;
+    private Button attackButton;
+
+    /*
+    public static final String SharedPrefs = "CharacterPref";
+    public static final String SharedPrefCharacterName = "characterNameKey";
+    public static final String SharedPrefCharacterId = "characterId";
+    public static SharedPreferences sharedPreferences;
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +60,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         addEditCharacterButton = findViewById(R.id.addEditAttackButton);
         addEditCharacterButton.setOnClickListener(this);
 
-        // Set onClickLister to Roll Attack button
-        rollAttackButton = findViewById(R.id.rollAttackButton);
-        rollAttackButton.setOnClickListener(this);
+        attackButton = findViewById(R.id.rollAttackbtn);
+        attackButton.setOnClickListener(this);
+
+        /* set up shared preferences for this app
+        sharedPreferences = getSharedPreferences(SharedPrefs, Context.MODE_PRIVATE);
+        clearSharedPreferences(); // clear existing shared preferences */
 
         // Insert dice numbers to diceTable if the table is empty
         DiceDatabaseHelper diceDbHelper = new DiceDatabaseHelper(this);
@@ -115,20 +126,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                 }
+
+                /* save the name of the selected character in shared preferences
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(SharedPrefCharacterName, selectedCharacter);
+                editor.putString(SharedPrefCharacterId, selectedCharacterId);
+                editor.commit();
+                */
             }
+
         });
+
+
+
     }
+
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.addEditAttackButton:
+                Log.e("Add Attack Button", "Going to CharacterAddEdit ");
                 Intent intent = new Intent(this, CharacterAddEdit.class);
                 startActivity(intent);
                 break;
-            case R.id.rollAttackButton:
-                Intent rollIntent = new Intent(this, Roller.class);
-                startActivity(rollIntent);
+            case R.id.rollAttackbtn:
+                Log.e("Select Attack Button", "Going to SelectAttack ");
+                Intent attackButton = new Intent(this, SelectAttack.class);
+                startActivity(attackButton);
                 break;
         }
 
@@ -157,9 +182,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      *  @author Atsuko Critchfield (Takanabe)
      *  @return void
      */
-    public static void setAttack(Attack attck){
-        attack = attck;
-
+    public static void setAttack(Attack newAttack){
+        attack = newAttack;
     }
 
     public int roll(int AC) {

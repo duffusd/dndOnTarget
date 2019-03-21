@@ -102,7 +102,9 @@ public class AttackAddEdit extends AppCompatActivity {
 
                     // update hit modifier
                     if(Integer.parseInt(newHitModifier) != MainActivity.getAttack().getModHit()){
+
                         MainActivity.getAttack().updateHitModifier(Integer.parseInt(newHitModifier));
+
                     }
 
                     // update damage modifier
@@ -119,6 +121,15 @@ public class AttackAddEdit extends AppCompatActivity {
                 MainActivity.getAttack().clear();
                 Intent intent = new Intent(AttackAddEdit.this, CharacterAddEdit.class);
                 startActivity(intent);
+            }
+        });
+
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                MainActivity.getAttack().deleteAttack(MainActivity.getAttack().getId());
 
             }
         });

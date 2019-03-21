@@ -44,6 +44,7 @@ public class Attack {
         modDamage = null;
         this.context = context;
         diceId = null;
+
     }
 
     //TODO: implement a rollHit() method somewhere here or in Activity and getHit() from here.
@@ -132,6 +133,7 @@ public class Attack {
      * @exception SQLiteException
      * @author Atsuko Takanabe
      */
+
     public void updateDamageModifier(Integer damage){
 
         try{

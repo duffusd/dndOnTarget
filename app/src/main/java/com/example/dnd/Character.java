@@ -150,6 +150,10 @@ public class Character {
         attacks.add(attack);
     }
 
+    public void clearAttacks(){
+        attacks.clear();
+    }
+
 
     public Integer getId() {
         return id;
