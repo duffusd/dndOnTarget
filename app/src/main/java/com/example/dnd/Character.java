@@ -1,14 +1,12 @@
 package com.example.dnd;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 import com.example.dnd.data.CharacterAttacksDatabaseHelper;
 import com.example.dnd.data.CharacterDatabaseHelper;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +21,12 @@ public class Character {
     private String tag = "Character";
     private Context context;
 
+
+    /**
+     * Character constructor
+     *
+     * @param context
+     */
     Character(Context context){
         id = null;
         name = null;
@@ -32,43 +36,29 @@ public class Character {
         this.context = context;
     }
 
-    Character(Context context, Integer id, String name){
-        this.id = id;
-        this.name = name;
-        dbHelper = new CharacterDatabaseHelper(context);
-        characterAttacksDbHelper = new CharacterAttacksDatabaseHelper(context);
-        attacks = new ArrayList<>();
-        this.context = context;
-    }
 
     /**
-     * This method will add attacks to the list {@link Character#attacks} without needing
-     * to access the member variable, as this method will access it within the class.
-     *
-     * Must have an {@link Attack} class object passed in to the parameter field.
-     * @param attack the attack to be added to the list of attacks
-     * @return trure if operation was successful
-     */
-    /* public boolean addAttack(Attack attack) {
-        attacks.add(attack);
-
-
-        return true; //TODO: figure out if bool return is necessary
-    } */
-
-        /**
      * This method removes attacks from the list {@link Character#attacks} without needing to access
      * the member variable.
      *
      * @param attack attack object to be removed from the list
+     * @author Justin Parry
      */
     public void removeAttack(Attack attack) {
         attacks.remove(attack);
     }
 
-    public void addNewCharacter(String newName){
 
-        setName(newName);
+    /**
+     * Adds a new character to the backend database table
+     *
+     * @param newName The name of the new character
+     * @return The new Character ID of the newly added character. If the procedure fails, it returns -1
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
+    public Integer addNewCharacter(String newName){
+
         Integer newId = null;
 
         try{
@@ -76,14 +66,23 @@ public class Character {
 
         }catch(SQLiteException e){
             e.printStackTrace();
+            newId = -1;
             Log.e(tag, "Adding a new character to characterTable failed");
         }
 
-        setId(newId);
+        return newId;
 
     }
+
+    /**
+     * Updates a selected character's name
+     *
+     * @param newName The new name for a character
+     * @reutrn void
+     * @author Atsuko Takanabe
+     */
   
-  public void updateCharacter(String newName){
+    public void updateCharacter(String newName){
     
         name = newName;
 
@@ -95,12 +94,20 @@ public class Character {
         }
     }
 
-  public void deleteCharacter(){
+    /**
+     * Deletes the character from the backend character table.
+     *
+     * All the attacks associted with the character get deleted as well
+     *
+     * @author Atsuko Takanabe
+     * @exception SQLiteException
+     */
+    public void deleteCharacter(){
 
         try{
             dbHelper.deleteCharacter(id);
             CharacterAttacksDatabaseHelper charAttackDbHelper = new CharacterAttacksDatabaseHelper(context);
-            //charAttackDbHelper.deleteCharacter(id);
+            charAttackDbHelper.deleteCharacter(id);
 
         }catch(SQLiteException e){
             e.printStackTrace();
@@ -109,13 +116,23 @@ public class Character {
 
     }
 
+    /**
+     * Gets the attack IDs associted with the character
+     *
+     * @return List of Attack IDs associted with the character
+     * @author Atsuko Takanabe
+     */
     public List<Integer> getAttackIdsForCharacter(){
         attackIds = new ArrayList<>();
         attackIds = characterAttacksDbHelper.getAttackIdsByCharacterId(id);
         return attackIds;
     }
 
-
+    /**
+     * Sets the id and name of the character to null, and clears attacks' list
+     *
+     * @author Atsuko Takanabe
+     */
     public void clearCharacter(){
         id = null;
         name = null;
@@ -123,15 +140,16 @@ public class Character {
             attacks.clear();
     }
 
-    public void clearAttacks(){
-        attacks.clear();
-    }
-  
+    /**
+     * Adds an attack to attacks' list
+     *
+     * @param attack attack to add to attacks' list
+     * @author Atsuko Takanabe
+     */
     public void addAttack(Attack attack){
         attacks.add(attack);
     }
 
-    /********************************** GETTER AND SETTERS ***************************************/
 
     public Integer getId() {
         return id;
@@ -141,7 +159,9 @@ public class Character {
         return name;
     }
 
+
     public List<Attack> getAttacks() { return attacks; }
+
 
     public void setId(Integer id) {
         this.id = id;

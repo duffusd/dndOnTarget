@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static Character character;
     public static Attack attack;
     private Button addEditCharacterButton;
+    private Button rollAttackButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // initiate the character and attack object
+        // instantiate the character and attack object
         character = new Character(this);
         attack = new Attack(this);
 
@@ -51,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         addEditCharacterButton = findViewById(R.id.addEditAttackButton);
         addEditCharacterButton.setOnClickListener(this);
 
+        // Set onClickLister to Roll Attack button
+        rollAttackButton = findViewById(R.id.rollAttackButton);
+        rollAttackButton.setOnClickListener(this);
 
         // Insert dice numbers to diceTable if the table is empty
         DiceDatabaseHelper diceDbHelper = new DiceDatabaseHelper(this);
@@ -62,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (result == 0){
             diceDbHelper.insertNumbers();
         }
-
 
         //populate an ArrayList<String> from the database and then view it
         ListView listView = findViewById(R.id.listView);
@@ -77,10 +80,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else{
             while(data.moveToNext()){
 
-                // create a new character object from the data (Cursor)
+                // Create a new character name object from the data (Cursor)
                 String characterName = data.getString(data.getColumnIndex(CharacterContract.getNameColName()));
 
-                // add a new character object to characters list
+                // add a new character name to characters list
                 characters.add(characterName);
                 listView.setAdapter(listAdapter);
             }
@@ -92,14 +95,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 // get a character name from the clicked item
-                String selectedCharacter = (String)parent.getItemAtPosition(position);
+                String selectedCharacter = (String) parent.getItemAtPosition(position);
 
                 // get a character's id
-                String selectedCharacterId = myCharacterDB.getCharacterIdByName(selectedCharacter);
+                Integer selectedCharacterId = myCharacterDB.getCharacterIdByName(selectedCharacter);
 
                 character.setName(selectedCharacter);
-                character.setId(Integer.parseInt(selectedCharacterId));
+                character.setId(selectedCharacterId);
 
+                // Get attackIds for the character
+                List<Integer> attackIds = character.getAttackIdsForCharacter();
+
+                // Create an attack object for each attackIds, then add it to the attack list of the character object
+                if (attackIds.size() > 0) {
+                    for (int i = 0; i < attackIds.size(); i++) {
+                        Attack attack = new Attack(MainActivity.this);
+                        attack.setAttack(attackIds.get(i));
+                        character.addAttack(attack);
+                    }
+
+                }
             }
         });
     }
@@ -110,18 +125,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.addEditAttackButton:
                 Intent intent = new Intent(this, CharacterAddEdit.class);
                 startActivity(intent);
+                break;
+            case R.id.rollAttackButton:
+                Intent rollIntent = new Intent(this, Roller.class);
+                startActivity(rollIntent);
+                break;
         }
 
     }
 
+    /**
+     *  Returns the Character object
+     *  @author Atsuko Critchfield (Takanabe)
+     *  @return character
+     */
     public static Character getCharacter(){
         return character;
     }
 
+    /**
+     *  Returns the Attack object
+     *  @author Atsuko Critchfield (Takanabe)
+     *  @return attack
+     */
     public static Attack getAttack(){
         return attack;
     }
 
+    /**
+     *  Set the Attack object
+     *  @author Atsuko Critchfield (Takanabe)
+     *  @return void
+     */
     public static void setAttack(Attack attck){
         attack = attck;
 

@@ -30,11 +30,12 @@ public class AttacksListAdapter extends ArrayAdapter<Attack> {
         TextView attackName = contentView.findViewById(R.id.attackNameText);
         TextView hitMod = contentView.findViewById(R.id.attackHitModText);
         TextView damageMod = contentView.findViewById(R.id.attackDamageModText);
-        //TextView dice = contentView.findViewById(R.id.attackDiceText);
+        TextView dice = contentView.findViewById(R.id.attackDiceText);
 
         attackName.setText(attack.getName());
         hitMod.setText(attack.getModHit().toString());
         damageMod.setText(attack.getModDamage().toString());
+
 
         return contentView;
 

@@ -8,14 +8,22 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.example.dnd.Character;
-
+/**
+ * <h>CharacterDatabaseHelper</h>
+ *
+ * CharacterDatabaseHelper is a helper class which enables accessing and maintaining the database
+ * table used for storing character information
+ */
 public class CharacterDatabaseHelper extends SQLiteOpenHelper {
 
     //Constants for db name and version
     private static final String ERROR_SQLite = "SQLite:Characters";
 
 
+    /**
+     * Non-default constructor
+     * @param context
+     */
     public CharacterDatabaseHelper(Context context) {
         super(context, CharacterContract.getDbName(), null, DatabaseContract.version);
         SQLiteDatabase db = getWritableDatabase();
@@ -35,6 +43,14 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    /**
+     * Adds a new character to the database table.
+     *
+     * @param name Name of the new character
+     * @return New CharacterID. If the procedure fails, it returns -1
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
     public Integer addName(String name){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -52,6 +68,15 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
        return result.intValue();
     }
 
+
+    /**
+     * Updates the name of the existing character
+     *
+     * @param newName New character name to update with
+     * @param id CharacterID of which character name to update
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
     public void updateName(String newName, int id){
 
         try {
@@ -70,6 +95,14 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+
+    /**
+     * Deletes the specific character from the database table
+     *
+     * @param id CharacterID to delete
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
     public void deleteCharacter(int id){
 
         try {
@@ -87,6 +120,7 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    /*
     public boolean findCharacter(int id){
 
         try{
@@ -113,7 +147,9 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
             return false;
         }
     }
+*/
 
+    /*
     // get the id of the CharacterAttacks column with character id
     public int getCharacterAttacksId(int id) {
 
@@ -143,8 +179,18 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
                 return -1;
             }
     }
+    */
 
-    public String getCharacterIdByName(String name){
+
+    /**
+     * Returns the CharacterID of the character
+     *
+     * @param name Name of the character of which ID to enquire
+     * @return CharacterID
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
+    public Integer getCharacterIdByName(String name){
 
         String sqlSelectCharacterId =
                 "SELECT " + CharacterContract.getIdColName() +
@@ -164,33 +210,23 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
         if (c != null){
             c.moveToFirst();
             Integer id = c.getInt(c.getColumnIndex(CharacterContract.getIdColName()));
-            return id.toString();
+            return id;
         }
         else
-            return "";
+            return null;
 
     }
 
+    /**
+     * Returns all the characters in the database table
+     *
+     * @return Cursor that contains the data from the SQL query
+     * @author Aaron Lee
+     */
     public Cursor getListContents(){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor data = db.rawQuery("SELECT * FROM " + CharacterContract.getTableName(), null);
         return data;
     }
 
-    // Data-seeds method
-    public void addCharacterNames(){
-
-        SQLiteDatabase db = getWritableDatabase();
-        String characters[] = {"Claire", "Shaun", "Bob", "Leah"};
-
-        for (String character : characters){
-
-            ContentValues value = new ContentValues();
-            value.put(CharacterContract.getNameColName(), character);
-            db.insert(CharacterContract.getTableName(), null, value);
-        }
-
-        db.close();
-
-    }
 }

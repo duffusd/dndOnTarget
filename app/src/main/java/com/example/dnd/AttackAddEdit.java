@@ -19,6 +19,7 @@ import com.example.dnd.data.CharacterDatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class AttackAddEdit extends AppCompatActivity {
 
@@ -37,12 +38,13 @@ public class AttackAddEdit extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attack_add_edit);
         dbAttacks = new AttackDatabaseHelper(this);
+        dbCharAttacks = new CharacterAttacksDatabaseHelper(this);
+
         btnSave = findViewById(R.id.attackSaveButton);
         btnDelete = findViewById(R.id.deleteAttackButton);
         nameAtk = findViewById(R.id.attackNameEditText);
         hitModifier = findViewById(R.id.hitModEditText);
         damageModifier = findViewById(R.id.damageModifierText);
-        dbCharAttacks = new CharacterAttacksDatabaseHelper(this);
 
 
         // Set the field values if the attack was selected to edit in the previous activity
@@ -67,17 +69,24 @@ public class AttackAddEdit extends AppCompatActivity {
                 String newHitModifier = hitModifier.getText().toString().trim();
                 String newDamageModifier = damageModifier.getText().toString().trim();
 
+                // delete this when dice is implemented
+                Integer diceId = new Random().nextInt(5);
+
 
                 // add a new attack
                 if(MainActivity.getAttack().getId() == null){
 
-                    MainActivity.getAttack().addAttack(newAttackName,
+                    Integer newId = MainActivity.getAttack().addAttack(newAttackName,
                             newHitModifier.isEmpty() ? 0 : Integer.parseInt(newHitModifier),
-                            newDamageModifier.isEmpty() ? 0 : Integer.parseInt(newDamageModifier),
-                            null);
+                            newDamageModifier.isEmpty() ? 0 : Integer.parseInt(newDamageModifier), diceId);
 
-                    // add a new attack to CharacterAttack table
-                    dbCharAttacks.addCharacterAttack(MainActivity.getCharacter().getId(), MainActivity.attack.getId());
+                    // create a new attack object and add it to attacks array list of the selected character object
+                    Attack newAttack = new Attack(AttackAddEdit.this);
+                    newAttack.setAttack(newId);
+                    MainActivity.getCharacter().addAttack(newAttack);
+
+                    // Also, add a new attack to CharacterAttack table
+                    dbCharAttacks.addCharacterAttack(MainActivity.getCharacter().getId(), newId);
 
                     Toast.makeText(AttackAddEdit.this, String.format("Added a new attack for %s",
                             MainActivity.getCharacter().getName()), Toast.LENGTH_LONG).show();
@@ -93,7 +102,7 @@ public class AttackAddEdit extends AppCompatActivity {
 
                     // update hit modifier
                     if(Integer.parseInt(newHitModifier) != MainActivity.getAttack().getModHit()){
-                        MainActivity.getAttack().updateHidModifier(Integer.parseInt(newHitModifier));
+                        MainActivity.getAttack().updateHitModifier(Integer.parseInt(newHitModifier));
                     }
 
                     // update damage modifier
@@ -120,9 +129,15 @@ public class AttackAddEdit extends AppCompatActivity {
             public void onClick(View v) {
 
                 MainActivity.getAttack().deleteAttack(MainActivity.getAttack().getId());
+                MainActivity.getCharacter().removeAttack(MainActivity.getAttack());
+                Toast.makeText(AttackAddEdit.this, String.format("Deleted %s", MainActivity.getAttack().getName()), Toast.LENGTH_LONG).show();
 
+                // clear the text and attack object
+                nameAtk.setText(null);
+                hitModifier.setText(null);
+                damageModifier.setText(null);
+                MainActivity.getAttack().clear();
             }
         });
-
     }
 }
