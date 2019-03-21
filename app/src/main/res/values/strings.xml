@@ -4,6 +4,6 @@
     <string name="DelCharacter">Delete Character</string>
     <string name="AddEditAttackButton">Add/Edit Attack</string>
     <string name="AddEditCharacter">Add/Edit Character</string>
-    <string name="Roller">Roll Attack</string>
+    <string name="Roller">Select Attacks</string>
     <string name="self_destruct">self_destruct</string>
 </resources>
