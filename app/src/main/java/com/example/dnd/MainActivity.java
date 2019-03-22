@@ -22,6 +22,8 @@ import com.example.dnd.data.CharacterDatabaseHelper;
 import com.example.dnd.data.DiceContract;
 import com.example.dnd.data.DiceDatabaseHelper;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +38,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static Character character;
     public static Attack attack;
     private Button addEditCharacterButton;
-    private Button rollAttackButton;
     private Button attackButton;
+    private EditText targetACText;
+
+
+
+    public static final String targetAcSharedPreference = "TargetAcSharedPref";
+    public static final String targetAC = "TargetAC";
+    public static SharedPreferences sharedPreferences;
 
     /*
     public static final String SharedPrefs = "CharacterPref";
@@ -52,20 +60,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // set up shared preferences for this app
+        sharedPreferences = getSharedPreferences(targetAcSharedPreference, Context.MODE_PRIVATE);
+        //clearSharedPreferences(); // clear existing shared preferences
+
         // instantiate the character and attack object
         character = new Character(this);
         attack = new Attack(this);
 
-        // Set onClickLister to AddEdit Character button
+        // get buttons and set OnClickLister
         addEditCharacterButton = findViewById(R.id.addEditAttackButton);
-        addEditCharacterButton.setOnClickListener(this);
-
         attackButton = findViewById(R.id.rollAttackbtn);
+
+        addEditCharacterButton.setOnClickListener(this);
         attackButton.setOnClickListener(this);
 
-        /* set up shared preferences for this app
-        sharedPreferences = getSharedPreferences(SharedPrefs, Context.MODE_PRIVATE);
-        clearSharedPreferences(); // clear existing shared preferences */
+        // get targetAC textfield
+        targetACText = findViewById(R.id.targetACEditText);
+
 
         // Insert dice numbers to diceTable if the table is empty
         DiceDatabaseHelper diceDbHelper = new DiceDatabaseHelper(this);
@@ -153,8 +165,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.rollAttackbtn:
                 Log.e("Select Attack Button", "Going to SelectAttack ");
+
+                // create the new intend
                 Intent attackButton = new Intent(this, SelectAttack.class);
                 startActivity(attackButton);
+
+                // set up targetAC shared preference and get the value
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(targetAC, targetACText.getText().toString());
+                editor.commit();
                 break;
         }
 
