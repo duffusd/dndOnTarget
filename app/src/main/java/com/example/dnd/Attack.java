@@ -30,6 +30,9 @@ public class Attack {
     private Integer id;
     private String name;
     private List<Die> dice;
+    // TODO: simplify List<Die> to int with sides since each attack only has one die for attack and hit
+    private Integer sides;
+    private Integer numDice;
     private AttackDatabaseHelper dbHelper;
     private Integer modHit;
     private Integer modDamage;
@@ -39,6 +42,8 @@ public class Attack {
 
     Attack(Context context){
         dice = new ArrayList<>();
+        sides = 0;
+        numDice = 0;
         dbHelper = new AttackDatabaseHelper(context);
         modHit = null;
         modDamage = null;
@@ -65,7 +70,6 @@ public class Attack {
         return damage;
     }
 
-
     /**
      * Adds a new attack to the backend database
      *
@@ -78,8 +82,8 @@ public class Attack {
      * @author Atsuko Takanabe
      */
     public Integer addAttack(String attackName, Integer hitModifier, Integer damageModifier, Integer diceId){
-
-        Integer newRowId = null;
+      
+      Integer newRowId = null;
 
         try{
 
@@ -192,6 +196,10 @@ public class Attack {
 
     public Integer getDiceId() { return diceId; }
 
+    public Integer getSides() { return sides; }
+
+    public Integer getNumDice() { return numDice; }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -207,6 +215,10 @@ public class Attack {
     public void setModDamage(Integer modDamage) {
         this.modDamage = modDamage;
     }
+
+    public void setSides(int sides) { this.sides = sides; }
+
+    public void setNumDice(int numDice) { this.numDice = numDice; }
 
     public void setDiceId(Integer diceId) { this.diceId = diceId; }
 
