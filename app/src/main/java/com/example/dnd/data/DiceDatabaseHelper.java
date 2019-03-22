@@ -8,12 +8,24 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.example.dnd.R;
 
+/**
+ * <h>DiceDatabaseHelper</h>
+ *
+ * DiceDatabaseHelper is a helper class that enables accessing and maintaining the database table
+ * used for Dice
+ *
+ */
 public class DiceDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String ERROR_SQLite = "SQLite:Dice";
 
+
+    /**
+     * Non-default constructor
+     *
+     * @param context
+     */
     public DiceDatabaseHelper(Context context){
         super(context, DiceContract.getDbName(), null, DatabaseContract.version);
     }
@@ -25,7 +37,22 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(DiceContract.getSqlCreateTable());
     }
 
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+        db.execSQL("DROP TABLE IF EXISTS " + DiceContract.getTableName());
+        onCreate(db);
+
+    }
+
+
+    /**
+     * Inserts Dice numbers (4, 6, 8, 10, 12, 20) in the database table used for Dice
+     *
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     *
+     */
     public void insertNumbers(){
 
         int diceNumbers[] = {4, 6, 8, 10, 12, 20};
@@ -54,13 +81,7 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-        db.execSQL("DROP TABLE IF EXISTS " + DiceContract.getTableName());
-        onCreate(db);
-
-    }
+    /*
 
     public Boolean findDiceById(int diceId) {
 
@@ -69,7 +90,6 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
        }
        else
            return false;
-
     }
 
     public Boolean findDiceByNumber(int number){
@@ -102,4 +122,5 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
         return nums;
 
     }
+    */
 }

@@ -11,16 +11,27 @@ import android.util.Log;
 
 import com.example.dnd.Attack;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+
+/**
+ * <h>AttackDatabaseHelper</h>
+ *
+ * AttackDatabaseHelper is a helper class that retrieves or modifies the attributes of attacks in
+ * the backend database
+ */
 public class AttackDatabaseHelper extends SQLiteOpenHelper {
 
     //Constants for db name and version
     private static final String ERROR_SQLite = "SQLite:Attacks";
     private Context _context;
 
-    // non-default constructor
     public AttackDatabaseHelper(Context context){
         super(context, AttackContract.getDbName(), null, DatabaseContract.version);
         SQLiteDatabase db = getWritableDatabase();
@@ -49,7 +60,18 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public int addAttack(String attackName, Integer hit, Integer damage, Long diceId){
+    /**
+     * Add a new attack to the table in the database.
+     *
+     * @param attackName Name of the new attack
+     * @param hit Number of hit modifier of the new attack
+     * @param damage Number of damage modifier of the new attack
+     * @param diceId Dice ID of the new attack. Inserts -1 if dice ID is null
+     * @exception SQLiteException
+     * @return The ID of the newly inserted attack
+     * @author Atsuko Takanabe
+     */
+    public int addAttack(String attackName, Integer hit, Integer damage, Integer diceId){
 
         SQLiteDatabase db = getWritableDatabase();
 
@@ -68,7 +90,6 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
                 newValue.put(AttackContract.getHitModifierColName(), hit);
                 newValue.put(AttackContract.getDamageModifierColName(), damage);
 
-                // inserting -1 if diceId is invalid
                 if(diceId == null) {
                     newValue.put(AttackContract.getDiceIdColName(), -1);
                 }
@@ -81,6 +102,7 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
                 db.close();
 
             } catch (SQLiteException e){
+
                 e.printStackTrace();
                 Log.e(ERROR_SQLite, AttackContract.getTableName() + ": Adding a new attack failed");
                 db.close();
@@ -89,13 +111,21 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
             return newId.intValue();
     }
 
+    /**
+     * Updates the name of an existing attack
+     *
+     * @param id Attack ID of the attack to update
+     * @param newName New attack name to update with
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
     public void updateName(int id, String newName){
+
         SQLiteDatabase db = getWritableDatabase();
         ContentValues newValue = new ContentValues();
         newValue.put(AttackContract.getAttackNameColName(), newName);
 
         try{
-
             db.update(AttackContract.getTableName(), newValue,
                     AttackContract.getIdColName() + "=" + id, null);
             db.close();
@@ -106,7 +136,14 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-
+    /**
+     * Updates the value of hit modifier of an existing attack
+     *
+     * @param id Attack ID of the attack to update
+     * @param newNumber New value of the hit modifier
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
     public void updateHitModifier(int id, int newNumber){
 
         SQLiteDatabase db = getWritableDatabase();
@@ -125,6 +162,14 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Updates the value of damage modifier of an existing attack
+     *
+     * @param id Attack ID of an attack to udpate
+     * @param newNumber New value of the damage modifier
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
     public void updateDamageModifier(int id, int newNumber){
 
         try {
@@ -142,6 +187,14 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+
+    /**
+     * Deletes an existing attack from the database table
+     *
+     * @param id Attack ID of an attack to delete
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
     public void deleteAttack(int id) {
 
         try {
@@ -158,6 +211,14 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Looks for an attack by attack ID and returns true if it is found; false otherwise
+     *
+     * @param id Attack ID of the attack to find in the database table
+     * @return True if attack is found; false otherwise
+     * @author Atsuko Takanabe
+     * @exception SQLiteException
+     */
     public Boolean findAttackById(int id) {
 
         Cursor c = null;
@@ -169,9 +230,10 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
 
             db = getWritableDatabase();
             c = db.rawQuery(sqlSelectAttackId, null);
+
         }catch(SQLiteException e) {
             e.printStackTrace();
-            Log.e(ERROR_SQLite, "findAttackById(): Couldn't find a character");
+            Log.e(ERROR_SQLite, "findAttackById(): Something went wrong");
         }
 
         if (c != null && c.getCount() == 1) {
@@ -185,11 +247,17 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    /**
+     * Queries the attack table by Attack ID and returns the particular attack's attributes - name,
+     * hit modifier, damage modifier, and dice ID
+     *
+     * @param attackId Attack ID of the attack to get attributes of
+     * @return Attack's name, hit modifier, damage modifier, and dice ID in the Map where key is
+     * the column name and value is the column value
+     */
     public Map<String, String> getAttackDetails(Integer attackId){
 
         Map<String, String> row = new HashMap<>();
-
-        System.out.println("attackId: " + attackId);
         SQLiteDatabase db = getReadableDatabase();
         Cursor data = db.rawQuery("SELECT * FROM " + AttackContract.getTableName() +
                 " WHERE " + AttackContract.getIdColName() + "=" + attackId, null);
@@ -209,5 +277,52 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
 
         db.close();
         return row;
+    }
+
+    public Cursor getAttackContents(List<Integer> attackIds){
+        // converts int list into a string
+        String listString = attackIds.toString();
+        String idList = listString.toString();
+        // changes it from a [] to a comma separated list
+        String csv = idList.substring(1, idList.length() - 1).replace(", ", ",");
+        Log.e("DB", "get Attack contents is running " + csv);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor data = (Cursor) db.rawQuery("SELECT * FROM " + AttackContract.getTableName() + " WHERE " + AttackContract.getIdColName() + " in (" + csv + ")", null);
+        return data;
+    }
+
+    public List<Integer> getAttackIdsByCharacterId(Integer characterId){
+
+        List<Integer> attacksId = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor data = db.rawQuery("SELECT " + CharacterAttacksContract.getAttackIdColName() +
+                " FROM " + CharacterAttacksContract.getTableName() +
+                " WHERE " + CharacterAttacksContract.getCharacterIdColName() + "=" + characterId, null);
+
+        while(data.getCount() != 0 && data.moveToNext()){
+            attacksId.add(data.getInt(0));
+        }
+
+        db.close();
+
+        return attacksId;
+    }
+
+    public List<Integer> getAttackNamesByCharacterId(Integer characterId){
+
+        List<Integer> attacksId = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor data = db.rawQuery("SELECT " + AttackContract.getAttackNameColName() +
+                " FROM " + CharacterAttacksContract.getTableName() +
+                " WHERE " + CharacterAttacksContract.getCharacterIdColName() + "=" + characterId, null);
+
+        while(data.getCount() != 0 && data.moveToNext()){
+            attacksId.add(data.getInt(0));
+        }
+
+        db.close();
+
+        return attacksId;
     }
 }
