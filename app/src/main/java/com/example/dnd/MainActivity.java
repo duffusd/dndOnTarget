@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 editor.putString(SharedPrefCharacterId, selectedCharacterId);
                 editor.commit();
                 */
+
             }
 
         });

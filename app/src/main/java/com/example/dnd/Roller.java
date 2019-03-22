@@ -15,7 +15,6 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_roller);
 
-
         backButton = findViewById(R.id.BackButton);
         backButton.setOnClickListener(Roller.this);
 
@@ -34,5 +33,22 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
 
         }
 
+        goHome();
+
+    }
+
+
+    /**
+     * Sends user Home after they are finished with attacking
+     */
+    private void goHome() {
+        Button goToRollerButton = findViewById(R.id.finishedButton);
+        goToRollerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Roller.this, MainActivity.class));
+
+            }
+        });
     }
 }
