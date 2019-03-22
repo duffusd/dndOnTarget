@@ -101,6 +101,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
+
           <entry key="JAVA" value="28" />
           <entry key="XML" value="19" />
         </counts>
@@ -212,6 +213,11 @@
         <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
+  </component>
+  <component name="GithubProjectSettings">
+    <option name="CREATE_PULL_REQUEST_DEFAULT_BRANCH" value="master" />
+    <option name="CREATE_PULL_REQUEST_DEFAULT_REPO_USER" value="duffusd" />
+    <option name="CREATE_PULL_REQUEST_DEFAULT_REPO_NAME" value="dndOnTarget" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -420,7 +426,11 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="sharepreferences now saves the targetAC from MainActivity xml" />
-    <option name="LAST_COMMIT_MESSAGE" value="sharepreferences now saves the targetAC from MainActivity xml" />
+    <MESSAGE value="renamed attck to newAttack" />
+    <MESSAGE value="fixed bugs to get it working and updated the add/edit attack activity to handle input from user" />
+    <MESSAGE value="changed the layout of add/edit attack to be more clear" />
+    <MESSAGE value="finished the add/edit attack" />
+    <option name="LAST_COMMIT_MESSAGE" value="finished the add/edit attack" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/dnd/Attack.java">

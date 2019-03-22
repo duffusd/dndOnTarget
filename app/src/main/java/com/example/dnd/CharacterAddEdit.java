@@ -113,6 +113,19 @@ public class CharacterAddEdit extends AppCompatActivity {
 
         }
 
+//        ListView attackListView = findViewById(R.id.attackListView);
+//        List<String> attackNames = new ArrayList<>();
+//        ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, attackNames);
+//
+//        if (MainActivity.getCharacter().getAttacks().size() == 0){
+//            Toast.makeText(CharacterAddEdit.this, "No attacks available", Toast.LENGTH_LONG).show();
+//        }
+//        else{
+//            for (Attack attack: MainActivity.getCharacter().getAttacks()){
+//                attackNames.add(attack.getName());
+//                attackListView.setAdapter(listAdapter);
+//            }
+//        }
         //}
 /*
         ListView attackListView = findViewById(R.id.attackListView);

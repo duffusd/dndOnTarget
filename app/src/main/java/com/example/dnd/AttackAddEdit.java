@@ -4,33 +4,48 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.dnd.data.AttackDatabaseHelper;
 import com.example.dnd.data.CharacterAttacksDatabaseHelper;
 import com.example.dnd.data.CharacterDatabaseHelper;
+import com.example.dnd.data.DiceContract;
+import com.example.dnd.data.DiceDatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class AttackAddEdit extends AppCompatActivity {
+public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private AttackDatabaseHelper dbAttacks;
     private CharacterAttacksDatabaseHelper dbCharAttacks;
+    private DiceDatabaseHelper dbDice;
     private Button btnSave;
     private Button btnDelete;
     private EditText nameAtk;
     private EditText hitModifier;
     private EditText damageModifier;
+    private EditText numDice;
     private String tag = "AttackAddEdit";
+    private String dieType;
+    private Long dieId = null;
+    private RecyclerView list;
+    private Spinner spinner;
+    private ArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +54,26 @@ public class AttackAddEdit extends AppCompatActivity {
         setContentView(R.layout.activity_attack_add_edit);
         dbAttacks = new AttackDatabaseHelper(this);
         dbCharAttacks = new CharacterAttacksDatabaseHelper(this);
+        dbDice = new DiceDatabaseHelper(this);
 
         btnSave = findViewById(R.id.attackSaveButton);
         btnDelete = findViewById(R.id.deleteAttackButton);
         nameAtk = findViewById(R.id.attackNameEditText);
         hitModifier = findViewById(R.id.hitModEditText);
         damageModifier = findViewById(R.id.damageModifierText);
+        numDice = findViewById(R.id.numberOfDice);
+        spinner = findViewById(R.id.spinner);
+        adapter = ArrayAdapter.createFromResource(this
+                , R.array.diceType_array
+                , android.R.layout.simple_spinner_item);
 
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(adapter);
+
+
+        spinner.setOnItemSelectedListener(this);
+        spinner.setSelection(6);
 
         // Set the field values if the attack was selected to edit in the previous activity
         if(MainActivity.getAttack().getId() != null){
@@ -53,6 +81,7 @@ public class AttackAddEdit extends AppCompatActivity {
             nameAtk.setText(MainActivity.getAttack().getName());
             hitModifier.setText(MainActivity.getAttack().getModHit().toString());
             damageModifier.setText(MainActivity.getAttack().getModDamage().toString());
+            numDice.setText(MainActivity.getAttack().getNumDice().toString());
 
         } else {
 
@@ -68,17 +97,19 @@ public class AttackAddEdit extends AppCompatActivity {
                 String newAttackName = nameAtk.getText().toString().trim();
                 String newHitModifier = hitModifier.getText().toString().trim();
                 String newDamageModifier = damageModifier.getText().toString().trim();
+                String newDiceString = numDice.getText().toString().trim() + "d" + dieType.trim();
 
                 // delete this when dice is implemented
                 Integer diceId = new Random().nextInt(5);
-
 
                 // add a new attack
                 if(MainActivity.getAttack().getId() == null){
 
                     Integer newId = MainActivity.getAttack().addAttack(newAttackName,
                             newHitModifier.isEmpty() ? 0 : Integer.parseInt(newHitModifier),
-                            newDamageModifier.isEmpty() ? 0 : Integer.parseInt(newDamageModifier), diceId);
+                            newDamageModifier.isEmpty() ? 0 : Integer.parseInt(newDamageModifier),
+                            dieId == null ? -1 : dieId);
+
 
                     // create a new attack object and add it to attacks array list of the selected character object
                     Attack newAttack = new Attack(AttackAddEdit.this);
@@ -102,8 +133,6 @@ public class AttackAddEdit extends AppCompatActivity {
 
                     // update hit modifier
                     if(Integer.parseInt(newHitModifier) != MainActivity.getAttack().getModHit()){
-
-                        MainActivity.getAttack().updateHitModifier(Integer.parseInt(newHitModifier));
 
                     }
 
@@ -134,6 +163,22 @@ public class AttackAddEdit extends AppCompatActivity {
             }
         });
 
+
+    }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        Log.i(tag,"Item was selected in Spinner");
+        if (i < 6) {
+            dieType = adapterView.getSelectedItem().toString();
+            dieId = adapterView.getSelectedItemId();
+        }
+        Log.d(tag,"Item at position is: " + dieId);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
