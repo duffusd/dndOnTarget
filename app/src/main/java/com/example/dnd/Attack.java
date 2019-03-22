@@ -29,6 +29,9 @@ public class Attack {
     private Integer id;
     private String name;
     private List<Die> dice;
+    // TODO: simplify List<Die> to int with sides since each attack only has one die for attack and hit
+    private int sides;
+    private int numDice;
     private AttackDatabaseHelper dbHelper;
     private Integer modHit;
     private Integer modDamage;
@@ -37,6 +40,8 @@ public class Attack {
 
     Attack(Context context){
         dice = new ArrayList<>();
+        sides = 0;
+        numDice = 0;
         dbHelper = new AttackDatabaseHelper(context);
         modHit = null;
         modDamage = null;
@@ -91,7 +96,7 @@ public class Attack {
         name = newName;
     }
 
-    public void updateHidModifier(Integer hit){
+    public void updateHitModifier(Integer hit){
 
         try{
             dbHelper.updateHitModifier(id, hit);

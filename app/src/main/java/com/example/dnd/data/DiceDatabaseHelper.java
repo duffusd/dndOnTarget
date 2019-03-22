@@ -87,4 +87,19 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
         }
 
     }
+
+    public Cursor getNumbers() {
+        SQLiteDatabase db = getWritableDatabase();
+
+        String[] projection = { DiceContract.getIdColName(), DiceContract.getNumberColName() }; // only want the numbers column
+        Cursor nums = db.query(DiceContract.getTableName(),
+                projection, // projection is the numbers column
+                null,
+                null,
+                null,
+                null,
+                null);
+        return nums;
+
+    }
 }

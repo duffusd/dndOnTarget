@@ -6,4 +6,14 @@
     <string name="AddEditCharacter">Add/Edit Character</string>
     <string name="Roller">Roll Attack</string>
     <string name="self_destruct">self_destruct</string>
+    <string name="numberOfDiceInputHint">How many dice?</string>
+    <string name="dice">d</string>
+    <string-array name="diceType_array">
+        <item>4</item>
+        <item>6</item>
+        <item>8</item>
+        <item>10</item>
+        <item>12</item>
+        <item>20</item>
+    </string-array>
 </resources>

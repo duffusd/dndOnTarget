@@ -3,18 +3,24 @@ package com.example.dnd;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.dnd.data.AttackDatabaseHelper;
 import com.example.dnd.data.CharacterAttacksDatabaseHelper;
 import com.example.dnd.data.CharacterDatabaseHelper;
+import com.example.dnd.data.DiceContract;
+import com.example.dnd.data.DiceDatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +29,16 @@ public class AttackAddEdit extends AppCompatActivity {
 
     private AttackDatabaseHelper dbAttacks;
     private CharacterAttacksDatabaseHelper dbCharAttacks;
+    private DiceDatabaseHelper dbDice;
     private Button btnSave;
     private Button btnDelete;
     private EditText nameAtk;
     private EditText hitModifier;
     private EditText damageModifier;
     private String tag = "AttackAddEdit";
+    private RecyclerView list;
+    private Spinner spinner;
+    private ArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +46,21 @@ public class AttackAddEdit extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attack_add_edit);
         dbAttacks = new AttackDatabaseHelper(this);
+        dbCharAttacks = new CharacterAttacksDatabaseHelper(this);
+        dbDice = new DiceDatabaseHelper(this);
         btnSave = findViewById(R.id.attackSaveButton);
         btnDelete = findViewById(R.id.deleteAttackButton);
         nameAtk = findViewById(R.id.attackNameEditText);
         hitModifier = findViewById(R.id.hitModEditText);
         damageModifier = findViewById(R.id.damageModifierText);
-        dbCharAttacks = new CharacterAttacksDatabaseHelper(this);
+        spinner = findViewById(R.id.spinner);
+        adapter = ArrayAdapter.createFromResource(this
+                , R.array.diceType_array
+                , android.R.layout.simple_spinner_item);
 
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner.setAdapter(adapter);
 
         // Set the field values if the attack was selected to edit in the previous activity
         if(MainActivity.getAttack().getId() != null){
@@ -92,7 +110,7 @@ public class AttackAddEdit extends AppCompatActivity {
 
                     // update hit modifier
                     if(Integer.parseInt(newHitModifier) != MainActivity.getAttack().getModHit()){
-                        MainActivity.getAttack().updateHidModifier(Integer.parseInt(newHitModifier));
+                        MainActivity.getAttack().updateHitModifier(Integer.parseInt(newHitModifier));
                     }
 
                     // update damage modifier
@@ -117,6 +135,7 @@ public class AttackAddEdit extends AppCompatActivity {
 
             }
         });
+
 
     }
 }
