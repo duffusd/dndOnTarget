@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * <h>Attack Class</h>
@@ -24,7 +26,6 @@ import java.util.Map;
  * This entity will contain the information and characteristics of an attack.
  *
  */
-
 public class Attack {
     private Integer id;
     private String name;
@@ -34,6 +35,7 @@ public class Attack {
     private Integer modDamage;
     private String tag = "Attack";
     private Context context;
+    private Integer diceId;
 
     Attack(Context context){
         dice = new ArrayList<>();
@@ -41,6 +43,8 @@ public class Attack {
         modHit = null;
         modDamage = null;
         this.context = context;
+        diceId = null;
+
     }
 
     //TODO: implement a rollHit() method somewhere here or in Activity and getHit() from here.
@@ -61,12 +65,21 @@ public class Attack {
         return damage;
     }
 
-    public void addAttack(String attackName, Integer hitModifier, Integer damageModifier, Integer diceId){
+
+    /**
+     * Adds a new attack to the backend database
+     *
+     * @param attackName New attack name
+     * @param hitModifier Hit modifier value of the new attack
+     * @param damageModifier Damage modifier value of the new attack
+     * @param diceId Dice ID for the new attack
+     * @return The Attack ID of the newly created attack
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
+    public Integer addAttack(String attackName, Integer hitModifier, Integer damageModifier, Integer diceId){
 
         Integer newRowId = null;
-        setName(attackName);
-        setModHit(hitModifier);
-        setModDamage(damageModifier);
 
         try{
 
@@ -76,10 +89,17 @@ public class Attack {
             e.printStackTrace();
             Log.e(tag, "addAttack method failed");
         }
-        setId(newRowId);
 
+        return newRowId;
     }
 
+    /**
+     * Updates the name of the existing attack
+     *
+     * @param newName The new name to update with
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
     public void updateName(String newName){
         try{
             dbHelper.updateName(id, newName);
@@ -91,7 +111,12 @@ public class Attack {
         name = newName;
     }
 
-    public void updateHidModifier(Integer hit){
+    /**
+     * Updates the value of hit modifier of the existing attack
+     *
+     * @param hit New hitModifier value
+     */
+    public void updateHitModifier(Integer hit){
 
         try{
             dbHelper.updateHitModifier(id, hit);
@@ -100,6 +125,14 @@ public class Attack {
             Log.e(tag, "Updating hit modifier failed");
         }
     }
+
+    /**
+     * Updates the value of damage modifier of the existing attack
+     *
+     * @param damage New value for damage
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
 
     public void updateDamageModifier(Integer damage){
 
@@ -111,6 +144,13 @@ public class Attack {
         }
     }
 
+    /**
+     * Deletes an attack from the attack table and character-attack table
+     *
+     * @param attackId Attack ID to delete
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
     public void deleteAttack(Integer attackId){
 
         try{
@@ -121,6 +161,19 @@ public class Attack {
             e.printStackTrace();
             Log.e(tag, "deleteAttack method failed");
         }
+    }
+
+    /**
+     * Sets the attributes of attack object to null
+     *
+     * @author Atsuko Takanabe
+     */
+    public void clear(){
+        setId(null);
+        setName(null);
+        setModDamage(null);
+        setModHit(null);
+        setDiceId(null);
     }
 
     /********************************** GETTER AND SETTERS ***************************************/
@@ -135,9 +188,9 @@ public class Attack {
 
     public Integer getModHit() { return modHit; }
 
-    public Integer getModDamage() {
-        return modDamage;
-    }
+    public Integer getModDamage() { return modDamage; }
+
+    public Integer getDiceId() { return diceId; }
 
     public void setId(Integer id) {
         this.id = id;
@@ -147,20 +200,30 @@ public class Attack {
         this.name = name;
     }
 
-    public void setModHit(int modHit) {
+    public void setModHit(Integer modHit) {
         this.modHit = modHit;
     }
 
-    public void setModDamage(int modDamage) {
+    public void setModDamage(Integer modDamage) {
         this.modDamage = modDamage;
     }
 
+    public void setDiceId(Integer diceId) { this.diceId = diceId; }
+
+    /**
+     * Using the attack ID, it inquires the database and gets the rest of the attack's attribute,
+     * then sets them in the object
+     *
+     * @param id Attack ID
+     * @author Atsuko Takanabe
+     */
     public void setAttack(Integer id){
         Map<String, String> attack = dbHelper.getAttackDetails(id);
         this.id = id;
         name = attack.get(AttackContract.getAttackNameColName());
         modDamage = Integer.parseInt(attack.get(AttackContract.getDamageModifierColName()));
         modHit = Integer.parseInt(attack.get(AttackContract.getHitModifierColName()));
+        diceId = Integer.parseInt(attack.get(AttackContract.getDiceIdColName()));
     }
 
 

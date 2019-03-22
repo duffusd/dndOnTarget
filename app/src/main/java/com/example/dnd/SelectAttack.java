@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ public class SelectAttack extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_attack);
 
+        //mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView = findViewById(R.id.recycler_view);
         mAdapter = new com.example.dnd.RecyclerViewAdapter(getListData());
         LinearLayoutManager manager = new LinearLayoutManager(SelectAttack.this);
@@ -63,7 +65,6 @@ public class SelectAttack extends AppCompatActivity {
             }
         });
 
-
     }
 
     /**
@@ -77,6 +78,12 @@ public class SelectAttack extends AppCompatActivity {
         mModelList = new ArrayList<>();
         Cursor dataAttack = (Cursor) myAttackDB.getAttackContents(attackIds);
 
+/*        if(dataAttack.getCount() == 0){
+            Toast.makeText(this, "There are no contents in this list!",Toast.LENGTH_LONG).show();
+        }else{
+            while(dataAttack.moveToNext()){
+                mModelList.add(new Model(dataAttack.getString(1)));
+*/
         if (dataAttack.getCount() == 0) {
             Toast.makeText(this, "There are no contents in this list!", Toast.LENGTH_LONG).show();
         } else {
@@ -94,6 +101,7 @@ public class SelectAttack extends AppCompatActivity {
 
         return mModelList;
     }
+
 
     public static List<Integer> getAttackIdsList() {
         return attackIds;

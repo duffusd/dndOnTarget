@@ -20,11 +20,21 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+/**
+ * <h>CharacterAttacksDatabaseHelper</h>
+ *
+ * CharacterAttacksDatabaseHelper is a helper class for accessing and maintaining the CharacterAttacks table
+ * in the backend database
+ */
 public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String ERROR_SQLite = "SQLite:characterAttacks";
     Context _context;
 
+    /**
+     * Non-default constructor
+     * @param context
+     */
     public CharacterAttacksDatabaseHelper(Context context){
         super(context, CharacterAttacksContract.getDbName(), null, DatabaseContract.version);
         _context = context;
@@ -42,6 +52,14 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /**
+     * Adds a character and its attack in the database table
+     *
+     * @param characterId
+     * @param attackId
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
     public void addCharacterAttack(Integer characterId, Integer attackId){
 
         try {
@@ -70,6 +88,13 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Returns all the attack IDs associated with the character ID
+     *
+     * @param characterId CharacterID of which attacks to enquire in the database table
+     * @return List of attackIDs associated with the character
+     * @author Atsuko Takanabe
+     */
     public List<Integer> getAttackIdsByCharacterId(Integer characterId){
 
         List<Integer> attacksId = new ArrayList<>();
@@ -87,7 +112,13 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
         return attacksId;
     }
 
-
+    /**
+     * Deletes the character and its attacks in the database table
+     *
+     * @param characterId
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
     public void deleteCharacter(int characterId) {
 
         try {
@@ -104,6 +135,13 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Deletes the attack from the database table
+     *
+     * @param attackId AttackID to delete
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
     public void deleteAttack(int attackId) {
 
         try {

@@ -17,11 +17,13 @@ import android.widget.Toast;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.example.dnd.data.CharacterContract;
 import com.example.dnd.data.CharacterDatabaseHelper;
 import com.example.dnd.data.DiceContract;
 import com.example.dnd.data.DiceDatabaseHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -29,12 +31,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // created for the listview and showing the characters
     CharacterDatabaseHelper myCharacterDB;
-
+    List<String> characters;
 
     public static Character character;
     public static Attack attack;
-
     private Button addEditCharacterButton;
+    private Button rollAttackButton;
     private Button attackButton;
 
     /*
@@ -50,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // initiate the character and attack object
+        // instantiate the character and attack object
         character = new Character(this);
         attack = new Attack(this);
 
@@ -79,8 +81,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //populate an ArrayList<String> from the database and then view it
         ListView listView = findViewById(R.id.listView);
         myCharacterDB = new CharacterDatabaseHelper(this);
-        ArrayList<String> theList = new ArrayList<>();
-        ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, theList);
+        characters = new ArrayList<>();
+        ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, characters);
 
         Cursor data = myCharacterDB.getListContents();
 
@@ -88,7 +90,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, "There are no contents in this list!",Toast.LENGTH_LONG).show();
         }else{
             while(data.moveToNext()){
-                theList.add(data.getString(1));
+
+                // Create a new character name object from the data (Cursor)
+                String characterName = data.getString(data.getColumnIndex(CharacterContract.getNameColName()));
+
+                // add a new character name to characters list
+                characters.add(characterName);
                 listView.setAdapter(listAdapter);
             }
         }
@@ -99,13 +106,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 // get a character name from the clicked item
-                String selectedCharacter = (String)parent.getItemAtPosition(position);
+                String selectedCharacter = (String) parent.getItemAtPosition(position);
 
                 // get a character's id
-                String selectedCharacterId = myCharacterDB.getCharacterIdByName(selectedCharacter);
+                Integer selectedCharacterId = myCharacterDB.getCharacterIdByName(selectedCharacter);
 
                 character.setName(selectedCharacter);
-                character.setId(Integer.parseInt(selectedCharacterId));
+                character.setId(selectedCharacterId);
+
+                // Get attackIds for the character
+                List<Integer> attackIds = character.getAttackIdsForCharacter();
+
+                // Create an attack object for each attackIds, then add it to the attack list of the character object
+                if (attackIds.size() > 0) {
+                    for (int i = 0; i < attackIds.size(); i++) {
+                        Attack attack = new Attack(MainActivity.this);
+                        attack.setAttack(attackIds.get(i));
+                        character.addAttack(attack);
+                    }
+
+                }
 
                 /* save the name of the selected character in shared preferences
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -136,32 +156,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent attackButton = new Intent(this, SelectAttack.class);
                 startActivity(attackButton);
                 break;
-
-
         }
 
     }
 
-
-    /*
-    public static void clearSharedPreferences(){
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.commit();
-    }
-    */
-
+    /**
+     *  Returns the Character object
+     *  @author Atsuko Critchfield (Takanabe)
+     *  @return character
+     */
     public static Character getCharacter(){
         return character;
     }
 
+    /**
+     *  Returns the Attack object
+     *  @author Atsuko Critchfield (Takanabe)
+     *  @return attack
+     */
     public static Attack getAttack(){
         return attack;
     }
 
+    /**
+     *  Set the Attack object
+     *  @author Atsuko Critchfield (Takanabe)
+     *  @return void
+     */
     public static void setAttack(Attack newAttack){
         attack = newAttack;
-
     }
 
     public int roll(int AC) {

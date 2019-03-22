@@ -7,20 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
-
-
-
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
 
     private List<Model> mModelList;
 
     public static List<String> attackStringList = new ArrayList<String>();
-
-
 
     public RecyclerViewAdapter(List<Model> modelList) {
         mModelList = modelList;
@@ -41,8 +35,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 holder.textView.setText(attack.getName());
             }
         }
-
-
 
         holder.textView.setText(model.getText());
         holder.view.setBackgroundColor(model.isSelected() ? Color.LTGRAY : Color.DKGRAY);

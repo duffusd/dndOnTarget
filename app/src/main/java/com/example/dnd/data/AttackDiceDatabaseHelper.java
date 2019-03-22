@@ -2,17 +2,27 @@ package com.example.dnd.data;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ *<h>AttackDiceDatabaseHelper</h?
+ * AttackDiceDatabaseHelper is a helper class which enables accessing and maintaining the AttackDice
+ * table
+ *
+ * @author Atsuko Takanabe
+ */
 public class AttackDiceDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String ERROR_SQLite = "SQLite:AttackDice";
     Context _context;
 
+    /**
+     * Non-default constructor
+     * @param context
+     */
     public AttackDiceDatabaseHelper(Context context){
         super(context, AttackDiceContract.getDbName(), null, DatabaseContract.version);
         _context = context;
@@ -30,6 +40,13 @@ public class AttackDiceDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    /**
+     * Adds AttackID and DiceID to the database table
+     *
+     * @param attackId
+     * @param diceId
+     * @exception SQLiteException
+     */
     public void addAttackDice(int attackId, int diceId){
 
         SQLiteDatabase db = getWritableDatabase();
@@ -71,17 +88,24 @@ public class AttackDiceDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    /**
+     * Deletes the AttackID and DiceID from the database table
+     *
+     * @param attackId
+     * @param diceId
+     * @exception SQLiteException
+     */
     public void deleteAttackDice(int attackId, int diceId) {
 
-        DiceDatabaseHelper diceDbHelper = new DiceDatabaseHelper(_context);
+        //DiceDatabaseHelper diceDbHelper = new DiceDatabaseHelper(_context);
         AttackDatabaseHelper attackDbHelper = new AttackDatabaseHelper(_context);
 
-        Boolean diceIdExists = diceDbHelper.findDiceById(diceId);
+        //Boolean diceIdExists = diceDbHelper.findDiceById(diceId);
         Boolean attackIdExists = attackDbHelper.findAttackById(attackId);
 
         SQLiteDatabase db = getWritableDatabase();
 
-        if (diceIdExists && attackIdExists){
+        if (attackIdExists){
             try {
 
                 db.delete(AttackDiceContract.getTableName(),
@@ -96,6 +120,4 @@ public class AttackDiceDatabaseHelper extends SQLiteOpenHelper {
 
         db.close();
     }
-
-
 }
