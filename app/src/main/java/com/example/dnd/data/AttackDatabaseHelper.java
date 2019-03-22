@@ -49,7 +49,7 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public int addAttack(String attackName, Integer hit, Integer damage, Integer diceId){
+    public int addAttack(String attackName, Integer hit, Integer damage, Long diceId){
 
         SQLiteDatabase db = getWritableDatabase();
 

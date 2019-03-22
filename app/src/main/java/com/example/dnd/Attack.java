@@ -30,8 +30,8 @@ public class Attack {
     private String name;
     private List<Die> dice;
     // TODO: simplify List<Die> to int with sides since each attack only has one die for attack and hit
-    private int sides;
-    private int numDice;
+    private Integer sides;
+    private Integer numDice;
     private AttackDatabaseHelper dbHelper;
     private Integer modHit;
     private Integer modDamage;
@@ -66,7 +66,7 @@ public class Attack {
         return damage;
     }
 
-    public void addAttack(String attackName, Integer hitModifier, Integer damageModifier, Integer diceId){
+    public void addAttack(String attackName, Integer hitModifier, Integer damageModifier, Long diceId){
 
         Integer newRowId = null;
         setName(attackName);
@@ -144,6 +144,10 @@ public class Attack {
         return modDamage;
     }
 
+    public Integer getSides() { return sides; }
+
+    public Integer getNumDice() { return numDice; }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -159,6 +163,10 @@ public class Attack {
     public void setModDamage(int modDamage) {
         this.modDamage = modDamage;
     }
+
+    public void setSides(int sides) { this.sides = sides; }
+
+    public void setNumDice(int numDice) { this.numDice = numDice; }
 
     public void setAttack(Integer id){
         Map<String, String> attack = dbHelper.getAttackDetails(id);
