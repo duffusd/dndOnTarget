@@ -42,7 +42,7 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
      * Sends user Home after they are finished with attacking
      */
     private void goHome() {
-        Button goToRollerButton = findViewById(R.id.finishedButton);
+        Button goToRollerButton = findViewById(R.id.BackButton);
         goToRollerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
