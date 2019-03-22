@@ -36,7 +36,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             }
         }
 
-        holder.textView.setText(model.getText());
+        //holder.textView.setText(model.getText());
         holder.view.setBackgroundColor(model.isSelected() ? Color.LTGRAY : Color.DKGRAY);
         holder.textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,8 +44,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 model.setSelected(!model.isSelected());
                 holder.view.setBackgroundColor(model.isSelected() ? Color.LTGRAY : Color.DKGRAY);
 
-                SelectAttack.getAttackIdsList().add(Integer.parseInt(model.getText()));
+                SelectAttack.getAttackIdsForRoll().add(Integer.parseInt(model.getText()));
 
+                /*
                 if(model.isSelected()){
 
                     attackStringList.add(model.getText());
@@ -59,6 +60,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         Log.e(" List Items", "Item that is in the List " + z);
                     }
                 }
+                */
 
             }
         });
