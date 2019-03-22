@@ -100,7 +100,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                 String newDiceString = numDice.getText().toString().trim() + "d" + dieType.trim();
 
                 // delete this when dice is implemented
-                Integer diceId = new Random().nextInt(5);
+                //Integer diceId = new Random().nextInt(5);
 
                 // add a new attack
                 if(MainActivity.getAttack().getId() == null){

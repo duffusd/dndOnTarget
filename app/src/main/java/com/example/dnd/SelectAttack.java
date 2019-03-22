@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.Toast;
 import android.view.View;
 import android.widget.Button;
@@ -26,14 +27,13 @@ public class SelectAttack extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private Button attackButton;
-    public static List<Integer> attackIds = new ArrayList<>();  // new attackID list to store selected attack's ID
+    public static List<Integer> attackIdsForRoll = new ArrayList<>();  // new list to store selected attack's ID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_attack);
 
-        //mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView = findViewById(R.id.recycler_view);
         mAdapter = new com.example.dnd.RecyclerViewAdapter(getListData());
         LinearLayoutManager manager = new LinearLayoutManager(SelectAttack.this);
@@ -42,9 +42,6 @@ public class SelectAttack extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
         goToRoller();
-
-
-
     }
 
 
@@ -56,9 +53,11 @@ public class SelectAttack extends AppCompatActivity {
         goToRollerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<String> attackStringList = RecyclerViewAdapter.attackStringList;
-                System.out.println("Number of attacks selected for Roll: " + attackIds.size());  // checking the size of attackIds list
-                ArrayList<String> myList = new ArrayList<String>();
+
+                Log.d("Number of attacks selected for Roll Attack: ", String.valueOf(attackIdsForRoll.size()));
+
+                //List<String> attackStringList = RecyclerViewAdapter.attackStringList;
+                //ArrayList<String> myList = new ArrayList<String>();
                 startActivity(new Intent(SelectAttack.this, Roller.class));
 
 
@@ -85,14 +84,9 @@ public class SelectAttack extends AppCompatActivity {
                 mModelList.add(new Model(dataAttack.getString(1)));
 */
         if (dataAttack.getCount() == 0) {
-            Toast.makeText(this, "There are no contents in this list!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, String.format("There are no attacks for %s!", MainActivity.getCharacter().getName()), Toast.LENGTH_LONG).show();
         } else {
             while (dataAttack.moveToNext()) {
-
-
-                /******** Modified this line of code to store attackIds *******************************
-                 *
-                 */
 
                 mModelList.add(new Model(dataAttack.getString(dataAttack.getColumnIndex(AttackContract.getIdColName()))));
             }
@@ -103,7 +97,7 @@ public class SelectAttack extends AppCompatActivity {
     }
 
 
-    public static List<Integer> getAttackIdsList() {
-        return attackIds;
+    public static List<Integer> getAttackIdsForRoll() {
+        return attackIdsForRoll;
     }
 }
