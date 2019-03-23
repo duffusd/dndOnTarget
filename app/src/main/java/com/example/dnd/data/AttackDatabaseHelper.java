@@ -183,7 +183,6 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-
     /**
      * Updates the number of die for the existing attack
      *
@@ -210,8 +209,8 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
         }
 
     }
-
-
+  
+  
     /**
      * Updates the diceID for the existing attack
      *
@@ -235,7 +234,7 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
         }
 
     }
-
+  
     /**
      * Deletes an existing attack from the database table
      *
