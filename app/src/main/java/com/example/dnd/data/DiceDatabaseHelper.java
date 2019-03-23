@@ -100,8 +100,9 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
             Log.e(ERROR_SQLite, "getDieNumber() failed");
         }
 
-        if (data != null) {
 
+        if (data != null) {
+            
             while (data.moveToNext()) {
 
                 dieNumber = Integer.parseInt(data.getString(data.getColumnIndex(DiceContract.getNumberColName())));

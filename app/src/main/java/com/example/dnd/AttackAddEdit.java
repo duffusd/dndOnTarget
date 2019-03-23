@@ -79,7 +79,9 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
             nameAtk.setText(MainActivity.getAttack().getName());
             hitModifier.setText(MainActivity.getAttack().getModHit().toString());
             damageModifier.setText(MainActivity.getAttack().getModDamage().toString());
-            numDice.setText(MainActivity.getAttack().getNumDice().toString());
+            numDice.setText(MainActivity.getAttack().getNumOfDice().toString());
+
+
 
         } else {
 
@@ -95,10 +97,9 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                 String newAttackName = nameAtk.getText().toString().trim();
                 String newHitModifier = hitModifier.getText().toString().trim();
                 String newDamageModifier = damageModifier.getText().toString().trim();
+                String newNumOfDice = numDice.getText().toString().trim();
                 String newDiceString = numDice.getText().toString().trim() + "d" + dieType.trim();
 
-                // delete this when dice is implemented
-                //Integer diceId = new Random().nextInt(5);
 
                 // add a new attack
                 if(MainActivity.getAttack().getId() == null){
@@ -106,7 +107,8 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                     Integer newId = MainActivity.getAttack().addAttack(newAttackName,
                             newHitModifier.isEmpty() ? 0 : Integer.parseInt(newHitModifier),
                             newDamageModifier.isEmpty() ? 0 : Integer.parseInt(newDamageModifier),
-                            dieId == null ? -1 : Integer.parseInt(dieId.toString()) + 1);
+                            dieId == null ? -1 : Math.addExact(Integer.parseInt(dieId.toString()), 1),
+                            newNumOfDice.isEmpty() ? 0 : Integer.parseInt(newNumOfDice));
 
 
                     // create a new attack object and add it to attacks array list of the selected character object

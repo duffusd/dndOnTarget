@@ -25,8 +25,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Die {
 
     Context context;
-    private int dieId;
-    private int sides;
+    private Integer dieId;
+    private Integer sides;
     private DiceDatabaseHelper diceDbHelper;
 
     /*
@@ -50,16 +50,15 @@ public class Die {
 
 
     /**
-     * The roll method will generate a random number with a range max dictated by the
+     * Generates a random number with a range max dictated by the
      * {@link Die#sides} member. Uses
      * @return integer result of the number generation
      * @since 1.0
+     * @author Justin Parry
      */
-    public int roll() {
-        if (sides != 0)
-            return ThreadLocalRandom.current().nextInt(1,sides + 1);
-        else
-            return -1;
+    public Integer rollDamage() {
+        return ThreadLocalRandom.current().nextInt(1,sides + 1);
+
     }
 
     /********************************** GETTER AND SETTERS ***************************************/
@@ -72,7 +71,7 @@ public class Die {
         return sides;
     }
 
-    public int getDieId() { return dieId; }
+    public Integer getDieId() { return dieId; }
 
     public void setDieId(int dieId) { this.dieId = dieId; }
 }

@@ -10,31 +10,40 @@
         android:id="@+id/attackNameText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="25"
-        android:textSize="14sp" />
+        android:layout_weight="20"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/attackHitModText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="25"
+        android:layout_weight="20"
         android:textAlignment="center"
-        android:textSize="14sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/attackDamageModText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="25"
+        android:layout_weight="20"
         android:textAlignment="center"
-        android:textSize="14sp" />
+        android:textSize="12sp" />
 
 
     <TextView
         android:id="@+id/attackDiceText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="25"
+        android:layout_weight="20"
         android:textAlignment="center"
-        android:textSize="14sp" />
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/attackNumOfDiceText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="20"
+        android:textAlignment="center"
+        android:textSize="12sp" />
+
 </LinearLayout>
