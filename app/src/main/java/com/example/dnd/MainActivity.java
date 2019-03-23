@@ -57,9 +57,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected  void onStart(){
         super.onStart();
+
+      // insert rows to Dice table if it hasn't been populated yet
         DiceDatabaseHelper dbHelper = new DiceDatabaseHelper(this);
-        if(dbHelper.getReadableDatabase() == null){
-            dbHelper.insertNumbers();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor data = db.rawQuery("SELECT Count(*) FROM " + DiceContract.getTableName(), null);
+
+        while(data.moveToNext()){
+
+            Integer numOfRows = data.getInt(0);
+
+            if(!numOfRows.equals(6))
+                dbHelper.insertNumbers();
         }
     }
 

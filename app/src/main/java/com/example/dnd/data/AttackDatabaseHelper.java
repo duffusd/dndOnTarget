@@ -67,11 +67,12 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
      * @param hit Number of hit modifier of the new attack
      * @param damage Number of damage modifier of the new attack
      * @param diceId Dice ID of the new attack. Inserts -1 if dice ID is null
+     * @param numOfDie Number of dice for the new attack
      * @exception SQLiteException
      * @return The ID of the newly inserted attack
      * @author Atsuko Takanabe
      */
-    public int addAttack(String attackName, Integer hit, Integer damage, Integer diceId){
+    public int addAttack(String attackName, Integer hit, Integer damage, Integer diceId, Integer numOfDie){
 
         SQLiteDatabase db = getWritableDatabase();
 
@@ -89,13 +90,8 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
                 newValue.put(AttackContract.getAttackNameColName(), attackName);
                 newValue.put(AttackContract.getHitModifierColName(), hit);
                 newValue.put(AttackContract.getDamageModifierColName(), damage);
-
-                if(diceId == null) {
-                    newValue.put(AttackContract.getDiceIdColName(), -1);
-                }
-                else {
-                    newValue.put(AttackContract.getDiceIdColName(), diceId);
-                }
+                newValue.put(AttackContract.getNumOfDieColName(), numOfDie);
+                newValue.put(AttackContract.getDiceIdColName(), diceId);
 
                 newId = db.insert(AttackContract.getTableName(), null, newValue);
 
@@ -183,8 +179,52 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
 
         } catch(SQLiteException e){
             e.printStackTrace();
-            Log.e(ERROR_SQLite, "Attacks table: Updating a damage modifier failed");
+            Log.e(ERROR_SQLite, "Updating a damage modifier failed");
         }
+    }
+
+    public void updateNumOfDie(int id, int newNumber){
+
+        try {
+
+            SQLiteDatabase db = getWritableDatabase();
+            ContentValues newValue = new ContentValues();
+            newValue.put(AttackContract.getNumOfDieColName(), newNumber);
+            db.update(AttackContract.getTableName(), newValue,
+                    AttackContract.getIdColName() + "=" + id, null);
+            db.close();
+
+        } catch(SQLiteException e){
+
+            e.printStackTrace();
+            Log.e(ERROR_SQLite, "Updating the number of die failed");
+        }
+
+    }
+
+
+    /**
+     * Updates the diceID for the existing attack
+     *
+     * @param id
+     * @param newDiceId
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
+    public void updateDiceId(int id, int newDiceId){
+
+        try{
+            SQLiteDatabase db = getWritableDatabase();
+            ContentValues newValue = new ContentValues();
+            newValue.put(AttackContract.getDiceIdColName(), newDiceId);
+            db.update(AttackContract.getTableName(), newValue, AttackContract.getIdColName() + "=" + id, null);
+            db.close();
+
+        } catch(SQLiteException e){
+            e.printStackTrace();
+            Log.e(ERROR_SQLite, "Attacks table: Updating a diceID failed");
+        }
+
     }
 
 
@@ -317,6 +357,8 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
         return data;
     }
 
+
+    /*
     public List<Integer> getAttackIdsByCharacterId(Integer characterId){
 
         List<Integer> attacksId = new ArrayList<>();
@@ -350,4 +392,5 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
 
         return attacksId;
     }
+    */
 }

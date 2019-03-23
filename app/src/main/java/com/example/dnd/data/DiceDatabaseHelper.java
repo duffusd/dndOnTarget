@@ -101,7 +101,7 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
         }
 
         if (data != null) {
-
+ 
             while (data.moveToNext()) {
 
                 dieNumber = Integer.parseInt(data.getString(data.getColumnIndex(DiceContract.getNumberColName())));
