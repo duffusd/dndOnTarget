@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -39,7 +38,7 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
         // set up back button
         backButton = findViewById(R.id.BackButton);
         backButton.setOnClickListener(Roller.this);
-
+        attacksForRoll = new ArrayList<>();
 
         // generate a list of attacks for roll
         for (Integer attackId : SelectAttack.getAttackIdsForRoll()){
@@ -52,6 +51,16 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
             SelectAttack.getAttackIdsForRoll().clear();
         }
 
+        // generate a list of attacks for roll
+        for (Integer attackId : SelectAttack.getAttackIdsForRoll()){
+
+            Attack newAttack = new Attack(Roller.this);
+            newAttack.setAttack(attackId);
+            attacksForRoll.add(newAttack);
+
+            // clear attack IDs list
+            SelectAttack.getAttackIdsForRoll().clear();
+        }
 
         // Roll for each attack
 

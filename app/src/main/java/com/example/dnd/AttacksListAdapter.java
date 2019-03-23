@@ -39,7 +39,6 @@ public class AttacksListAdapter extends ArrayAdapter<Attack> {
         dice.setText(attack.getDie().getSides().toString());
         numDice.setText(attack.getNumOfDice().toString());
 
-
         return contentView;
 
 

@@ -71,20 +71,39 @@ public class Attack {
     }
 
 
+    public boolean rollHit(Integer targetAC){
+
+        // get die number from the database
+        //DiceDatabaseHelper dbHelper = new DiceDatabaseHelper(context);
+        //Integer dieNumber = dbHelper.getDieNumber(diceId);
+
+        int hit = die.roll();
+        Log.d(tag, String.format("hit number: %d", hit));
+
+        if(targetAC >= hit){
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+
     /**
      * This method will roll each of the dice in {@link Attack#dice} and add the damage modifier
      * {@link Attack#modDamage} to the sum of the dice rolls.
      *
      * @return The sum of the dice roll and the damage modifier
-     * @author , Justin Parry, Atsuko Takanabe
+     * @author Justin Parry, Atsuko Takanabe
      */
-    public Integer rollDamage() {
-
+    public int rollDamage() {
+                 
         Integer damage = die.rollDamage();
         Log.i(tag, String.format("Damage: %d, Damage modifier: %d", damage, modDamage));
 
         return Math.addExact(damage, modDamage);
     }
+
 
 
     /**
@@ -253,6 +272,8 @@ public class Attack {
     //public Integer getSides() { return sides; }
 
     public Integer getNumOfDice() { return numOfDice; }
+
+    public Die getDie() { return die; }
 
     public Die getDie() { return die; }
 

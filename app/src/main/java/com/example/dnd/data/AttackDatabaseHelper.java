@@ -229,6 +229,31 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
 
 
     /**
+     * Updates the diceID for the existing attack
+     *
+     * @param id
+     * @param newDiceId
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
+    public void updateDiceId(int id, int newDiceId){
+
+        try{
+            SQLiteDatabase db = getWritableDatabase();
+            ContentValues newValue = new ContentValues();
+            newValue.put(AttackContract.getDiceIdColName(), newDiceId);
+            db.update(AttackContract.getTableName(), newValue, AttackContract.getIdColName() + "=" + id, null);
+            db.close();
+
+        } catch(SQLiteException e){
+            e.printStackTrace();
+            Log.e(ERROR_SQLite, "Attacks table: Updating a diceID failed");
+        }
+
+    }
+
+
+    /**
      * Deletes an existing attack from the database table
      *
      * @param id Attack ID of an attack to delete

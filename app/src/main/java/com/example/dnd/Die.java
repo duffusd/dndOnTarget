@@ -70,8 +70,7 @@ public class Die {
     public Integer getSides() {
         return sides;
     }
-
+  
     public Integer getDieId() { return dieId; }
-
     public void setDieId(int dieId) { this.dieId = dieId; }
 }
