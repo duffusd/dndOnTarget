@@ -54,7 +54,6 @@ public class Attack {
         die = null;
     }
 
-
     /**
      * Generates a random number with a range between 1 and 20
      *
@@ -68,24 +67,6 @@ public class Attack {
         return hit;
 
         //return Math.addExact(hit, modHit);
-    }
-
-
-    public boolean rollHit(Integer targetAC){
-
-        // get die number from the database
-        //DiceDatabaseHelper dbHelper = new DiceDatabaseHelper(context);
-        //Integer dieNumber = dbHelper.getDieNumber(diceId);
-
-        int hit = die.roll();
-        Log.d(tag, String.format("hit number: %d", hit));
-
-        if(targetAC >= hit){
-            return true;
-        } else {
-            return false;
-        }
-
     }
 
 
@@ -272,8 +253,6 @@ public class Attack {
     //public Integer getSides() { return sides; }
 
     public Integer getNumOfDice() { return numOfDice; }
-
-    public Die getDie() { return die; }
 
     public Die getDie() { return die; }
 
