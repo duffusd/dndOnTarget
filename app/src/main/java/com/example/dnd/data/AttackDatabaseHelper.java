@@ -184,6 +184,34 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * Updates the number of die for the existing attack
+     *
+     * @param attackId AttackID
+     * @param newNumber
+     * @exception  SQLiteException
+     * @author Atsuko Takanabe
+     */
+    public void updateNumOfDie(int attackId, int newNumber){
+
+        try {
+
+            SQLiteDatabase db = getWritableDatabase();
+            ContentValues newValue = new ContentValues();
+            newValue.put(AttackContract.getNumOfDieColName(), newNumber);
+            db.update(AttackContract.getTableName(), newValue,
+                    AttackContract.getIdColName() + "=" + attackId, null);
+            db.close();
+
+        } catch(SQLiteException e){
+
+            e.printStackTrace();
+            Log.e(ERROR_SQLite, "Updating the number of die failed");
+        }
+
+    }
+  
+  
+    /**
      * Updates the diceID for the existing attack
      *
      * @param id
@@ -206,26 +234,7 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
         }
 
     }
-
-    public void updateNumOfDie(int id, int newNumber){
-
-        try {
-
-            SQLiteDatabase db = getWritableDatabase();
-            ContentValues newValue = new ContentValues();
-            newValue.put(AttackContract.getNumOfDieColName(), newNumber);
-            db.update(AttackContract.getTableName(), newValue,
-                    AttackContract.getIdColName() + "=" + id, null);
-            db.close();
-
-        } catch(SQLiteException e){
-
-            e.printStackTrace();
-            Log.e(ERROR_SQLite, "Updating the number of die failed");
-        }
-
-    }
-
+  
     /**
      * Deletes an existing attack from the database table
      *

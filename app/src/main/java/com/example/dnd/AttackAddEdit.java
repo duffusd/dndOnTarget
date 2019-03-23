@@ -98,7 +98,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                 String newHitModifier = hitModifier.getText().toString().trim();
                 String newDamageModifier = damageModifier.getText().toString().trim();
                 String newNumOfDice = numDice.getText().toString().trim();
-                String newDiceString = numDice.getText().toString().trim() + "d" + dieType.trim();
+                //String newDiceString = numDice.getText().toString().trim() + "d" + dieType.trim();
 
 
                 // add a new attack
@@ -123,7 +123,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                             MainActivity.getCharacter().getName()), Toast.LENGTH_LONG).show();
 
                 }
-                // update a selected attack
+                // update the selected attack
                 else {
 
                     // update name
@@ -147,6 +147,12 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
 
                         MainActivity.getAttack().updateDiceID(Integer.parseInt(dieId.toString()) + 1);
                         System.out.println("Updated diceID");
+
+                    }
+
+                    // update the number of die
+                    if(Integer.parseInt(newNumOfDice) != MainActivity.getAttack().getNumOfDice()) {
+                        MainActivity.getAttack().updateNumOfDie(Integer.parseInt(newNumOfDice));
 
                     }
 
