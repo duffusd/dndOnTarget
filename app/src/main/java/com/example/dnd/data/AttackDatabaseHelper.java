@@ -183,26 +183,6 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void updateNumOfDie(int id, int newNumber){
-
-        try {
-
-            SQLiteDatabase db = getWritableDatabase();
-            ContentValues newValue = new ContentValues();
-            newValue.put(AttackContract.getNumOfDieColName(), newNumber);
-            db.update(AttackContract.getTableName(), newValue,
-                    AttackContract.getIdColName() + "=" + id, null);
-            db.close();
-
-        } catch(SQLiteException e){
-
-            e.printStackTrace();
-            Log.e(ERROR_SQLite, "Updating the number of die failed");
-        }
-
-    }
-
-
     /**
      * Updates the diceID for the existing attack
      *
