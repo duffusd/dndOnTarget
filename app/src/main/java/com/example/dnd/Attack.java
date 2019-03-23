@@ -12,6 +12,7 @@ import com.example.dnd.data.AttackDatabaseHelper;
 import com.example.dnd.data.CharacterAttacksContract;
 import com.example.dnd.data.CharacterAttacksDatabaseHelper;
 import com.example.dnd.data.CharacterContract;
+import com.example.dnd.data.DiceDatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,9 +30,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Attack {
     private Integer id;
     private String name;
-    private List<Die> dice;
+    //private List<Die> dice;
     // TODO: simplify List<Die> to int with sides since each attack only has one die for attack and hit
-    private Integer sides;
+    //private Integer sides;
+    private Die die;
     private Integer numDice;
     private AttackDatabaseHelper dbHelper;
     private Integer modHit;
@@ -41,25 +43,42 @@ public class Attack {
     private Integer diceId;
 
     Attack(Context context){
-        dice = new ArrayList<>();
-        sides = 0;
-        numDice = 0;
+        //dice = new ArrayList<>();
+        //sides = 0;
         dbHelper = new AttackDatabaseHelper(context);
+        this.context = context;
+        numDice = 0;
         modHit = null;
         modDamage = null;
-        this.context = context;
         diceId = null;
-
     }
 
     //TODO: implement a rollHit() method somewhere here or in Activity and getHit() from here.
+
+    public boolean rollHit(Integer targetAC){
+
+        // get die number from the database
+        //DiceDatabaseHelper dbHelper = new DiceDatabaseHelper(context);
+        //Integer dieNumber = dbHelper.getDieNumber(diceId);
+
+        int hit = die.roll();
+        Log.d(tag, String.format("hit number: %d", hit));
+
+        if(targetAC >= hit){
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
 
     /**
      * This method will roll each of the dice in {@link Attack#dice} and add the damage modifier
      * {@link Attack#modDamage} to the sum of the dice rolls.
      *
      * @return the sum of the dice rolls and the damage modifier
-     */
+     *
     public int rollDamage() {
         int damage = modDamage;
 
@@ -69,6 +88,7 @@ public class Attack {
 
         return damage;
     }
+*/
 
     /**
      * Adds a new attack to the backend database
@@ -148,6 +168,24 @@ public class Attack {
         }
     }
 
+
+    /**
+     * Updates the diceID of the existing attack
+     *
+     * @param diceId New dieId
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
+    public void updateDiceID(Integer diceId){
+
+        try{
+            dbHelper.updateDamageModifier(id, diceId);
+        }catch (SQLiteException e){
+            e.printStackTrace();
+            Log.e(tag, "Updating diceID failed");
+        }
+    }
+
     /**
      * Deletes an attack from the attack table and character-attack table
      *
@@ -196,9 +234,11 @@ public class Attack {
 
     public Integer getDiceId() { return diceId; }
 
-    public Integer getSides() { return sides; }
+    //public Integer getSides() { return sides; }
 
     public Integer getNumDice() { return numDice; }
+
+    public Die getDie() { return die; }
 
     public void setId(Integer id) {
         this.id = id;
@@ -216,9 +256,9 @@ public class Attack {
         this.modDamage = modDamage;
     }
 
-    public void setSides(int sides) { this.sides = sides; }
+    //public void setSides(int sides) { this.sides = sides; }
 
-    public void setNumDice(int numDice) { this.numDice = numDice; }
+    //public void setNumDice(int numDice) { this.numDice = numDice; }
 
     public void setDiceId(Integer diceId) { this.diceId = diceId; }
 
@@ -236,6 +276,7 @@ public class Attack {
         modDamage = Integer.parseInt(attack.get(AttackContract.getDamageModifierColName()));
         modHit = Integer.parseInt(attack.get(AttackContract.getHitModifierColName()));
         diceId = Integer.parseInt(attack.get(AttackContract.getDiceIdColName()));
+        die = new Die(context, diceId);
     }
 
 

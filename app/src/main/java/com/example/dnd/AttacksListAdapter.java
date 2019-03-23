@@ -35,6 +35,7 @@ public class AttacksListAdapter extends ArrayAdapter<Attack> {
         attackName.setText(attack.getName());
         hitMod.setText(attack.getModHit().toString());
         damageMod.setText(attack.getModDamage().toString());
+        dice.setText(attack.getDie().getSides().toString());
 
 
         return contentView;
