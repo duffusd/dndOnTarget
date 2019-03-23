@@ -12,11 +12,12 @@ import java.util.List;
  *
  */
 
+
 public class AttackGroup {
     private long id; // If we do end up saving them
     private String name;
     private List<Attack> attacks;
-    private Die d20 = new Die(20);
+    //private Die d20 = new Die(20);
 
     /**
      * This method will add attacks to the list {@link Character#attacks} without needing
@@ -45,6 +46,7 @@ public class AttackGroup {
 
     //TODO: Figure out implentation for roll w/o targetAC
 
+    /*
     public int roll(int targetAC) {
         int damageTotal = 0;
         for (Attack atk : attacks) {
@@ -58,6 +60,7 @@ public class AttackGroup {
 
         return damageTotal;
     }
+    */
 
     /********************************** GETTER AND SETTERS ***************************************/
 

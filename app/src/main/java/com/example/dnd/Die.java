@@ -16,18 +16,38 @@
 
 package com.example.dnd;
 
+import android.content.Context;
+
+import com.example.dnd.data.DiceDatabaseHelper;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Die {
-    private int sides;
 
+    Context context;
+    private int dieId;
+    private int sides;
+    private DiceDatabaseHelper diceDbHelper;
+
+    /*
     Die() {
         sides = 0;
     }
+    */
 
-    Die(int sides) {
-        this.sides = sides;
+
+    /**
+     * Non-default constructor 
+     * @param context
+     * @param diceId
+     */
+    Die(Context context, Integer diceId){
+        this.context = context;
+        diceDbHelper = new DiceDatabaseHelper(context);
+        this.dieId = diceId;
+        sides = diceDbHelper.getDieNumber(dieId);
     }
+
 
     /**
      * The roll method will generate a random number with a range max dictated by the
@@ -48,7 +68,11 @@ public class Die {
         this.sides = sides;
     }
 
-    public int getSides() {
+    public Integer getSides() {
         return sides;
     }
+
+    public int getDieId() { return dieId; }
+
+    public void setDieId(int dieId) { this.dieId = dieId; }
 }

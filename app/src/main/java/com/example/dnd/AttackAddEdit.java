@@ -66,9 +66,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
         adapter = ArrayAdapter.createFromResource(this
                 , R.array.diceType_array
                 , android.R.layout.simple_spinner_item);
-
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         spinner.setAdapter(adapter);
 
 
@@ -108,7 +106,8 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                     Integer newId = MainActivity.getAttack().addAttack(newAttackName,
                             newHitModifier.isEmpty() ? 0 : Integer.parseInt(newHitModifier),
                             newDamageModifier.isEmpty() ? 0 : Integer.parseInt(newDamageModifier),
-                            dieId == null ? -1 : Integer.parseInt(dieId.toString()));
+                            dieId == null ? -1 : Integer.parseInt(dieId.toString()) + 1);
+
 
                     // create a new attack object and add it to attacks array list of the selected character object
                     Attack newAttack = new Attack(AttackAddEdit.this);
@@ -132,12 +131,21 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
 
                     // update hit modifier
                     if(Integer.parseInt(newHitModifier) != MainActivity.getAttack().getModHit()){
+                        MainActivity.getAttack().updateHitModifier(Integer.parseInt(newHitModifier));
 
                     }
 
                     // update damage modifier
                     if(Integer.parseInt(newDamageModifier) != MainActivity.getAttack().getModDamage()){
                         MainActivity.getAttack().updateDamageModifier(Integer.parseInt(newDamageModifier));
+                    }
+
+                    // update dice ID
+                    if(Integer.parseInt(dieId.toString()) != MainActivity.getAttack().getDiceId()) {
+
+                        MainActivity.getAttack().updateDiceID(Integer.parseInt(dieId.toString()) + 1);
+                        System.out.println("Updated diceID");
+
                     }
 
                     Toast.makeText(AttackAddEdit.this, String.format("Updated %s",

@@ -22,6 +22,8 @@ import com.example.dnd.data.CharacterDatabaseHelper;
 import com.example.dnd.data.DiceContract;
 import com.example.dnd.data.DiceDatabaseHelper;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +38,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static Character character;
     public static Attack attack;
     private Button addEditCharacterButton;
-    private Button rollAttackButton;
     private Button attackButton;
+    private EditText targetACText;
+
+
+
+    public static final String targetAcSharedPreference = "TargetAcSharedPref";
+    public static final String targetAC = "TargetAC";
+    public static SharedPreferences sharedPreferences;
 
     /*
     public static final String SharedPrefs = "CharacterPref";
@@ -47,25 +55,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     */
 
     @Override
+    protected  void onStart(){
+        super.onStart();
+        DiceDatabaseHelper dbHelper = new DiceDatabaseHelper(this);
+        if(dbHelper.getReadableDatabase() == null){
+            dbHelper.insertNumbers();
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // set up shared preferences for this app
+        sharedPreferences = getSharedPreferences(targetAcSharedPreference, Context.MODE_PRIVATE);
+        //clearSharedPreferences(); // clear existing shared preferences
+
         // instantiate the character and attack object
         character = new Character(this);
         attack = new Attack(this);
 
-        // Set onClickLister to AddEdit Character button
+        // get buttons and set OnClickLister
         addEditCharacterButton = findViewById(R.id.addEditAttackButton);
-        addEditCharacterButton.setOnClickListener(this);
-
         attackButton = findViewById(R.id.rollAttackbtn);
+
+        addEditCharacterButton.setOnClickListener(this);
         attackButton.setOnClickListener(this);
 
-        /* set up shared preferences for this app
-        sharedPreferences = getSharedPreferences(SharedPrefs, Context.MODE_PRIVATE);
-        clearSharedPreferences(); // clear existing shared preferences */
+        // get targetAC textfield
+        targetACText = findViewById(R.id.targetACEditText);
+
+        /*
 
         // Insert dice numbers to diceTable if the table is empty
         DiceDatabaseHelper diceDbHelper = new DiceDatabaseHelper(this);
@@ -74,9 +96,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Cursor cursor = diceDb.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = \"" +
                 DiceContract.getTableName() + "\"", null);
         int result = cursor.getCount();
+
         if (result == 0){
             diceDbHelper.insertNumbers();
         }
+
+        */
 
         //populate an ArrayList<String> from the database and then view it
         ListView listView = findViewById(R.id.listView);
@@ -127,13 +152,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 }
 
-                /* save the name of the selected character in shared preferences
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(SharedPrefCharacterName, selectedCharacter);
-                editor.putString(SharedPrefCharacterId, selectedCharacterId);
-                editor.commit();
-                */
-
             }
 
         });
@@ -153,9 +171,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.rollAttackbtn:
                 Log.e("Select Attack Button", "Going to SelectAttack ");
-                Intent attackButton = new Intent(this, SelectAttack.class);
-                startActivity(attackButton);
-                break;
+
+                // set up targetAC shared preference and get the value
+
+                String targetACString = targetACText.getText().toString().trim();
+
+                // first, make sure targetAC is not empty
+
+                if(targetACString.isEmpty()){
+
+                    Toast.makeText(this, "What is the target AC?", Toast.LENGTH_LONG).show();
+                    break;
+
+                } else {
+
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    Integer targetAcNum = null;
+
+                    try {
+
+                        // if this fails, the value for targetAC is wrong
+                        targetAcNum = Integer.parseInt(targetACString);
+
+                    } catch (Exception e){
+                        Toast.makeText(this, "Invalid targetAC", Toast.LENGTH_LONG).show();
+                        break;
+                    }
+
+                    editor.putInt(targetAC, targetAcNum);
+                    editor.commit();
+
+                    // create the new intend
+                    Intent attackButton = new Intent(this, SelectAttack.class);
+                    startActivity(attackButton);
+
+                    break;
+                }
+
         }
 
     }

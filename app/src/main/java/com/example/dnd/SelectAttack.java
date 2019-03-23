@@ -26,7 +26,6 @@ public class SelectAttack extends AppCompatActivity {
     private List<Model> mModelList;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private Button attackButton;
     public static List<Integer> attackIdsForRoll = new ArrayList<>();  // new list to store selected attack's ID
 
     @Override

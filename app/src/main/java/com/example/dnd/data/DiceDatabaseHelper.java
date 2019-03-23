@@ -57,27 +57,58 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
 
         int diceNumbers[] = {4, 6, 8, 10, 12, 20};
         SQLiteDatabase db = getWritableDatabase();
+        ContentValues numberContent = new ContentValues();
 
-        for (int number : diceNumbers){
+        for (int number : diceNumbers) {
 
-            ContentValues value = new ContentValues();
-            value.put(DiceContract.getNumberColName(), number);
-
-            String findDiceNum = "SELECT " + DiceContract.getNumberColName() + " FROM " +
-                    DiceContract.getTableName() + " WHERE " + DiceContract.getNumberColName() + "=" + number;
+            //ContentValues value = new ContentValues();
+            numberContent.put(DiceContract.getNumberColName(), number);
 
             try{
-                Cursor c = db.rawQuery(findDiceNum, null);
-                if (c.getCount() == 0) {
-                    db.insert(DiceContract.getTableName(), null, value);
-                }
-            } catch (SQLiteException e){
+                db.insert(DiceContract.getTableName(), null, numberContent);
+            }catch(SQLiteException e){
                 e.printStackTrace();
                 Log.e(ERROR_SQLite, "Inserting a dice number failed");
             }
         }
 
         db.close();
+    }
+
+    /**
+     * Returns the number of sides of a die
+     *
+     * @param dieId
+     * @return number of sides of a die
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
+    public Integer getDieNumber(Integer dieId) {
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor data = null;
+        Integer dieNumber = null;
+
+        try {
+
+            String sql = "SELECT " + DiceContract.getNumberColName() + " FROM " + DiceContract.getTableName()
+                    + " WHERE " + DiceContract.getIdColName() + "=" + dieId;
+            data = db.rawQuery(sql, null);
+
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+            Log.e(ERROR_SQLite, "getDieNumber() failed");
+        }
+
+        if (data != null) {
+
+            while (data.moveToNext()) {
+
+                dieNumber = Integer.parseInt(data.getString(data.getColumnIndex(DiceContract.getNumberColName())));
+            }
+        }
+
+        return dieNumber;
     }
 
 
