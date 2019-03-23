@@ -54,7 +54,6 @@ public class Attack {
         die = null;
     }
 
-
     /**
      * Generates a random number with a range between 1 and 20
      *
