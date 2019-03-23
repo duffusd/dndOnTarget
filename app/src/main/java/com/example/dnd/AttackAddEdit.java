@@ -108,6 +108,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                             newDamageModifier.isEmpty() ? 0 : Integer.parseInt(newDamageModifier),
                             dieId == null ? -1 : Integer.parseInt(dieId.toString()) + 1);
 
+
                     // create a new attack object and add it to attacks array list of the selected character object
                     Attack newAttack = new Attack(AttackAddEdit.this);
                     newAttack.setAttack(newId);
