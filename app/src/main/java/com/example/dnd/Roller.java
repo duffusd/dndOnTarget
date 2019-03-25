@@ -18,11 +18,17 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <h>Roller</h>
+ *
+ * This class is used for rolling the attacks for the game and displaying the result
+ */
 public class Roller extends AppCompatActivity implements View.OnClickListener {
 
     private TextView targetAcText;
     private Integer targetAcNum;
     private Button backButton;
+    private RollResultListAdapter adapter;
     public static List<RollResult> attackRollResults;
 
 
@@ -31,8 +37,13 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_roller);
 
-        // this list is used to store the roll result from each attack
+        // First create the List and the ArrayAdapter
         attackRollResults = new ArrayList<>();
+        adapter = new RollResultListAdapter(this, R.layout.roll_attacks_list_view, attackRollResults);
+
+        // Now connect the ArrayAdapter to the ListView
+        ListView resultView = findViewById(R.id.attack_roll_result);
+        resultView.setAdapter(adapter);
 
         // display targetAC
         targetAcNum = MainActivity.sharedPreferences.getInt(MainActivity.targetAC, 0);
@@ -43,20 +54,15 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
         backButton = findViewById(R.id.BackButton);
         backButton.setOnClickListener(Roller.this);
 
-        // create attacks for roll
-        //generateAttacks();
+    }
 
-        // Roll for each attack
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+
+        // Roll attacks
         rollAttacks();
-
-        // display result
-        ListView resultView = findViewById(R.id.attack_roll_result);
-        RollResultListAdapter adapter = new RollResultListAdapter(this, R.layout.roll_attacks_list_view, attackRollResults);
-
-        //LayoutInflater inflater = getLayoutInflater();
-        //ViewGroup header = (ViewGroup) inflater.inflate(R.layout.roll_attacks_list_header, resultView, false);
-        //resultView.addHeaderView(header, null, false);
-        resultView.setAdapter(adapter);
 
     }
 
@@ -69,7 +75,6 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
         // clear the results array
         attackRollResults.clear();
         SelectAttack.getAttackIdsForRoll().clear();
-        System.out.println("number of results: " + attackRollResults.size());
     }
 
 
@@ -87,48 +92,50 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
         });
     }
 
+    /**
+     * This is where Roll Attacks happens
+     * */
     private void rollAttacks(){
 
         Log.i("TargetAC", targetAcNum.toString());
+        Attack attack = new Attack(Roller.this);
 
+        // go through attackIds list (which holds attacks selected for rolling)
         for (Integer attackId : SelectAttack.getAttackIdsForRoll()){
 
-            Attack attack = new Attack(Roller.this);
+            // set up the attack object
             attack.setAttack(attackId);
 
-            // create a place to store the result
+            // create the new RollResult object for each attack to store the result and display
+
             RollResult result = new RollResult();
 
             // set attack name
             result.setAttackName(attack.getName());
 
-            // get hit
+            // roll hit and calculate the result
             Integer hit = attack.rollHit();
-            Integer hitMod = attack.getModHit();
-            result.setHitResult(hit, hitMod);
+            result.calculateHitResult(hit, attack.getModHit());
 
-            // roll damage if hit is greater than target AC
-            if(hit > targetAcNum){
+            // roll damage if the hit was greater than target AC
+            if(result.getHitResult() > targetAcNum){
 
-                result.setCanRollDamage(true);
+                result.setCanDamage(true);
 
                 for (int i = 0; i < attack.getNumOfDice(); i++) {
 
-                    Integer damage = attack.getDie().rollDamage();
-                    result.getDamages().add(damage);
+                    result.getDamages().add(attack.getDie().rollDamage());
                 }
 
                 result.calculateDamageResult(attack.getModDamage());
+
             }
 
-            attackRollResults.add(result);
+            adapter.add(result);
+            attack.clear();
 
         }
 
-    }
-
-    public static List<RollResult> getAttackRollResults(){
-        return attackRollResults;
     }
 
 }

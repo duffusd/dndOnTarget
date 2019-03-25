@@ -82,12 +82,19 @@ public class AttackContract implements BaseColumns {
     public static String getDiceIdColName() { return dice_id; }
 
     /**
-     * Gets the name of attack name column in the table
+     * Gets the name of the column for attack's name in the database table
      *
      * @return The name of attack name column
      * @author Atsuko Takanabe
      */
     public static String getAttackNameColName() { return attackName; }
 
+
+    /**
+     * Gets the name of column for Number of Die for the attack
+     *
+     * @return The name of the column for Number of Die
+     * @author Atsuko Takanabe
+     */
     public static String getNumOfDieColName() { return numOfDie; }
 }
