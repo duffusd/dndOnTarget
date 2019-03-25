@@ -31,6 +31,7 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
     private RollResultListAdapter adapter;
     public static List<RollResult> attackRollResults;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +65,6 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
         rollAttacks();
 
     }
-
 
     @Override
     public void onClick(View v) {
@@ -107,6 +107,7 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
             attack.setAttack(attackId);
 
             // create the new RollResult object for each attack to store the result and display
+
             RollResult result = new RollResult();
 
             // set attack name
@@ -132,6 +133,7 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
 
             adapter.add(result);
             attack.clear();
+
         }
 
     }

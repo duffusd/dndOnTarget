@@ -22,7 +22,7 @@ public class RollResultListAdapter extends ArrayAdapter<RollResult> {
     private List<RollResult> results;
     private int mViewResourceId;
 
-
+  
     public RollResultListAdapter(Context context, int textViewResourceId, List<RollResult> results) {
         super(context, textViewResourceId, results);
         this.results = results;
@@ -48,10 +48,11 @@ public class RollResultListAdapter extends ArrayAdapter<RollResult> {
         if(result.getCanDamage() == true){
             damage.setText(String.format("Damage Roll: (%d) + %d Mod", result.getDamageResult(), result.getDamageModifier()));
             totalDamage.setText(String.format("Total Damage: %d", result.getFinalDamage()));
+
         } else {
             damage.setText("Fail AC");
         }
-
+      
         return contentView;
 
 

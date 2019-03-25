@@ -5,7 +5,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * <H>RollResult</H>
  *
@@ -69,7 +68,6 @@ public class RollResult {
         totalDamage = Math.addExact(damageResult, damageModifier);
         return totalDamage;
     }
-
 
     /**
      * Calculates the hit result by adding hit and hit modifier
@@ -157,9 +155,5 @@ public class RollResult {
     public void setDamageModifier(Integer damageModifier){
         this.damageModifier = damageModifier;
     }
-
-
-
-
 
 }
