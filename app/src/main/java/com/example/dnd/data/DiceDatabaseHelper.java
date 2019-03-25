@@ -111,47 +111,4 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
         return dieNumber;
     }
 
-
-    /*
-
-    public Boolean findDiceById(int diceId) {
-
-       if (diceId >= 1 && diceId <= 6){
-           return true;
-       }
-       else
-           return false;
-    }
-
-    public Boolean findDiceByNumber(int number){
-
-        switch(number){
-            case 4:
-            case 6:
-            case 8:
-            case 10:
-            case 12:
-            case 20:
-                return true;
-            default:
-                return false;
-        }
-
-    }
-
-    public Cursor getNumbers() {
-        SQLiteDatabase db = getWritableDatabase();
-
-        String[] projection = { DiceContract.getIdColName(), DiceContract.getNumberColName() }; // only want the numbers column
-        Cursor nums = db.query(DiceContract.getTableName(),
-                projection, // projection is the numbers column
-                null,
-                null,
-                null,
-                null,
-                null);
-        return nums;
-
-    }
-    */
 }

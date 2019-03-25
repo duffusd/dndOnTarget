@@ -4,21 +4,29 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+
+/**
+ * <H>RollResult</H>
+ *
+ * The purpose of this class is to store the necessary details from rolling the attack so the result
+ * can be displayed easily
+ */
 public class RollResult {
 
-    String attackName;
-    Integer hit;
-    Integer hitModifier;
-    Integer hitResult;
-    Integer damageResult;
-    List<Integer> damages;
-    Integer damageModifier;
-    Integer totalDamage;
-    Boolean canRollDamage;
+    private String attackName;
+    private Integer hit;
+    private Integer hitModifier;
+    private Integer hitResult;
+    private Integer damageResult;
+    private List<Integer> damages;
+    private Integer damageModifier;
+    private Integer totalDamage;
+    private Boolean canDamage;
 
-
+    /**
+     * Default constructor
+     */
     public RollResult(){
 
         attackName = null;
@@ -29,9 +37,17 @@ public class RollResult {
         damages = new ArrayList<>();
         damageModifier = 0;
         totalDamage = 0;
-        canRollDamage = false;
+        canDamage = false;
     }
 
+
+    /**
+     * Calculates the damage result total by summing all the damages from the roll
+     *
+     * @param damageModifier Damage modifier for the attack
+     * @author Atsuko Takanabe
+     *
+     */
     public void calculateDamageResult(Integer damageModifier){
 
         this.damageModifier = damageModifier;
@@ -43,10 +59,34 @@ public class RollResult {
 
     }
 
-    public Integer getTotalDamage(){
+    /**
+     * Calcuates the damage total by adding damage result total and damage modifier
+     *
+     * @return The sum of damage result and damage modifier
+     * @author Atsuko Takanabe
+     */
+    public Integer getFinalDamage(){
         totalDamage = Math.addExact(damageResult, damageModifier);
         return totalDamage;
     }
+
+
+    /**
+     * Calculates the hit result by adding hit and hit modifier
+     *
+     * @param hit
+     * @param hitModifier
+     * @author Atsuko Takanabe
+     */
+    public void calculateHitResult(Integer hit, Integer hitModifier) {
+
+        this.hit = hit;
+        this.hitModifier = hitModifier;
+        this.hitResult = Math.addExact(hit, hitModifier);
+    }
+
+
+    /*************Setter and Getter***********************/
 
     public String getAttackName() {
         return attackName;
@@ -56,44 +96,70 @@ public class RollResult {
         this.attackName = attackName;
     }
 
+    public Integer getHit(){
+        return hit;
+    }
+
+    public void setHit(Integer hit){
+        this.hit = hit;
+    }
+
+
+    public Integer getHitModifier(){
+        return hitModifier;
+    }
+
+    public void setHitModifier(Integer hitModifier){
+        this.hitModifier = hitModifier;
+    }
+
+
     public Integer getHitResult() {
         return hitResult;
     }
 
-    public void setHitResult(Integer hit, Integer hitModifier) {
-
-        this.hit = hit;
-        this.hitModifier = hitModifier;
-        this.hitResult = Math.addExact(hit, hitModifier);
-    }
-
-    public List<Integer> getDamages() {
-        return damages;
+    public void setHitResult(Integer hitResult) {
+        this.hitResult = hitResult;
     }
 
     public Integer getDamageResult() {
         return damageResult;
     }
 
-    public Boolean getCanRollDamage(){
-        return canRollDamage;
+    public void setDamageResult(Integer result){
+        damageResult = result;
     }
 
-    public void setCanRollDamage(Boolean can){
-        this.canRollDamage = can;
+
+    public List<Integer> getDamages() {
+        return damages;
     }
 
-    public Integer getHitModifier(){
-        return hitModifier;
+    public void setDamages(List<Integer> damages){
+        this.damages = damages;
     }
 
-    public Integer getHit(){
-        return hit;
+
+    public Boolean getCanDamage(){
+        return canDamage;
     }
+
+
+    public void setCanDamage(Boolean x){
+        this.canDamage = x;
+    }
+
 
     public Integer getDamageModifier(){
         return damageModifier;
     }
+
+    public void setDamageModifier(Integer damageModifier){
+        this.damageModifier = damageModifier;
+    }
+
+
+
 
 
 }

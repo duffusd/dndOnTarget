@@ -8,13 +8,19 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Map;
 
+
+/**
+ * <h>RollResultListAdapter</h>
+ *
+ * An adapter class used to display the result from rolling the attack(s)
+ */
 public class RollResultListAdapter extends ArrayAdapter<RollResult> {
 
     private LayoutInflater mInflater;
     private List<RollResult> results;
     private int mViewResourceId;
-
 
 
     public RollResultListAdapter(Context context, int textViewResourceId, List<RollResult> results) {
@@ -39,13 +45,12 @@ public class RollResultListAdapter extends ArrayAdapter<RollResult> {
         attackName.setText(result.getAttackName());
         hit.setText(String.format("D20: %d + %d Mod = %d", result.getHit(), result.getHitModifier(), result.getHitResult()));
 
-        if(result.getCanRollDamage()){
+        if(result.getCanDamage() == true){
             damage.setText(String.format("Damage Roll: (%d) + %d Mod", result.getDamageResult(), result.getDamageModifier()));
-            totalDamage.setText(String.format("Total Damage: %d", result.getTotalDamage()));
+            totalDamage.setText(String.format("Total Damage: %d", result.getFinalDamage()));
         } else {
             damage.setText("Fail AC");
         }
-
 
         return contentView;
 
