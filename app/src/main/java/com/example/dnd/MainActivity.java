@@ -40,19 +40,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button addEditCharacterButton;
     private Button attackButton;
     private EditText targetACText;
-
-
-
     public static final String targetAcSharedPreference = "TargetAcSharedPref";
     public static final String targetAC = "TargetAC";
     public static SharedPreferences sharedPreferences;
-
-    /*
-    public static final String SharedPrefs = "CharacterPref";
-    public static final String SharedPrefCharacterName = "characterNameKey";
-    public static final String SharedPrefCharacterId = "characterId";
-    public static SharedPreferences sharedPreferences;
-    */
 
     @Override
     protected  void onStart(){
@@ -95,22 +85,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // get targetAC textfield
         targetACText = findViewById(R.id.targetACEditText);
-
-        /*
-
-        // Insert dice numbers to diceTable if the table is empty
-        DiceDatabaseHelper diceDbHelper = new DiceDatabaseHelper(this);
-        SQLiteDatabase diceDb = diceDbHelper.getReadableDatabase();
-
-        Cursor cursor = diceDb.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = \"" +
-                DiceContract.getTableName() + "\"", null);
-        int result = cursor.getCount();
-
-        if (result == 0){
-            diceDbHelper.insertNumbers();
-        }
-
-        */
 
         //populate an ArrayList<String> from the database and then view it
         ListView listView = findViewById(R.id.listView);
