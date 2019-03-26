@@ -24,7 +24,7 @@ public class RollResult {
 
 
     /**
-     * Default constructor
+     * Copy constructor
      */
     public RollResult(Attack attack){
 
@@ -38,7 +38,7 @@ public class RollResult {
     }
 
     /**
-     * Calculates the damage result total by summing all the damages from the roll
+     * Calculates the damage result total by summing all the damages from the roll and damage modifier
      *
      * @author Atsuko Takanabe
      *
