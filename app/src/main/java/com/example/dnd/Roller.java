@@ -115,7 +115,7 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
             result.calculateHitResult();
 
             // roll damage if the hit was greater than target AC
-            if(result.getHitResult() > targetAcNum){
+            if(result.getHitResult() >= targetAcNum){
 
                 result.setCanDamage(true);
                 result.calculateDamageResult();
