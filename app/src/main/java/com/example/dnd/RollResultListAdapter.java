@@ -42,14 +42,40 @@ public class RollResultListAdapter extends ArrayAdapter<RollResult> {
         TextView damage = contentView.findViewById(R.id.roll_damage);
         TextView totalDamage = contentView.findViewById(R.id.roll_total_damage);
 
-        attackName.setText(result.getAttackName());
-        hit.setText(String.format("D20: %d + %d Mod = %d", result.getHit(), result.getHitModifier(), result.getHitResult()));
+        // display the hit result
+        attackName.setText(result.getAttack().getName());
+        hit.setText(String.format("D20: %d + %d Mod = %d", result.getHit(), result.getAttack().getModHit(), result.getHitResult()));
 
+        // display the damage result if hit was greater than AC
         if(result.getCanDamage() == true){
-            damage.setText(String.format("Damage Roll: (%d) + %d Mod", result.getDamageResult(), result.getDamageModifier()));
-            totalDamage.setText(String.format("Total Damage: %d", result.getFinalDamage()));
 
-        } else {
+
+            int dieType = result.getAttack().getDie().getSides();
+            int numOfDie = result.getAttack().getNumOfDice();
+
+            // when only one die was used to roll for damage
+            if(result.getDamages().size() == 1){
+
+                damage.setText(String.format("Damage Roll: %dD%d (%d) + %d Mod", numOfDie, dieType, result.getDamages().get(0), result.getAttack().getModDamage()));
+
+            } else {
+
+                StringBuilder damagesBreakdown = new StringBuilder();
+                int numOfDamages = result.getDamages().size();
+
+                for(int i = 0; i < numOfDamages - 1; i++){
+                    damagesBreakdown.append(result.getDamages().get(i).toString() + ", ");
+                }
+
+                damagesBreakdown.append(result.getDamages().get(numOfDamages - 1));
+
+                damage.setText(String.format("Damage Roll: %dD%d (%s) + %d Mod", numOfDie, dieType, damagesBreakdown, result.getAttack().getModDamage()));
+            }
+
+            // display the total damage
+            totalDamage.setText(String.format("Total Damage: %d", result.getTotalDamage()));
+
+        } else { // when the AC was greater than hit
             damage.setText("Fail AC");
         }
       

@@ -68,11 +68,12 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         goHome();
 
-        // clear the results array
+        // clear the arrays used for rolling attacks
         attackRollResults.clear();
         SelectAttack.getAttackIdsForRoll().clear();
     }
@@ -108,26 +109,16 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
 
             // create the new RollResult object for each attack to store the result and display
 
-            RollResult result = new RollResult();
-
-            // set attack name
-            result.setAttackName(attack.getName());
+            RollResult result = new RollResult(attack);
 
             // roll hit and calculate the result
-            Integer hit = attack.rollHit();
-            result.calculateHitResult(hit, attack.getModHit());
+            result.calculateHitResult();
 
             // roll damage if the hit was greater than target AC
             if(result.getHitResult() > targetAcNum){
 
                 result.setCanDamage(true);
-
-                for (int i = 0; i < attack.getNumOfDice(); i++) {
-
-                    result.getDamages().add(attack.getDie().rollDamage());
-                }
-
-                result.calculateDamageResult(attack.getModDamage());
+                result.calculateDamageResult();
 
             }
 

@@ -28,11 +28,9 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  */
 public class Attack {
+
     private Integer id;
     private String name;
-    //private List<Die> dice;
-    // TODO: simplify List<Die> to int with sides since each attack only has one die for attack and hit
-    //private Integer sides;
     private Die die;
     private AttackDatabaseHelper dbHelper;
     private Integer modHit;
@@ -42,9 +40,12 @@ public class Attack {
     private Integer diceId;
     private Integer numOfDice;
 
+
+    /**
+     * Non-Default constructor
+     * @param context
+     */
     Attack(Context context){
-        //dice = new ArrayList<>();
-        //sides = 0;
         dbHelper = new AttackDatabaseHelper(context);
         this.context = context;
         modHit = null;
@@ -52,6 +53,25 @@ public class Attack {
         diceId = null;
         numOfDice = 0;
         die = null;
+    }
+
+    /**
+     * Copy constructor
+     *
+     * @param attack
+     */
+    Attack(Attack attack){
+        id = attack.id;
+        name = attack.name;
+        context = attack.context;
+        dbHelper = attack.dbHelper;
+        modHit = attack.modHit;
+        modDamage = attack.modDamage;
+        diceId = attack.diceId;
+        numOfDice = attack.numOfDice;
+        die = attack.die;
+
+
     }
 
     /**
@@ -65,24 +85,21 @@ public class Attack {
         Log.i(tag, String.format("Hit: %d", hit));
 
         return hit;
-
-        //return Math.addExact(hit, modHit);
     }
 
 
     /**
-     * This method will roll each of the dice in {@link Attack#dice} and add the damage modifier
-     * {@link Attack#modDamage} to the sum of the dice rolls.
+     * This method will roll each of the dice for damage
      *
-     * @return The sum of the dice roll and the damage modifier
+     * @return The result from rolling for damage
      * @author Justin Parry, Atsuko Takanabe
      */
     public int rollDamage() {
                  
         Integer damage = die.rollDamage();
-        Log.i(tag, String.format("Damage: %d, Damage modifier: %d", damage, modDamage));
+        Log.i(tag, String.format("Damage: %d", damage));
 
-        return Math.addExact(damage, modDamage);
+        return damage;
     }
 
 
@@ -249,8 +266,6 @@ public class Attack {
     public Integer getModDamage() { return modDamage; }
 
     public Integer getDiceId() { return diceId; }
-
-    //public Integer getSides() { return sides; }
 
     public Integer getNumOfDice() { return numOfDice; }
 
