@@ -51,68 +51,31 @@ public class CharacterAddEdit extends AppCompatActivity {
         deleteCharacterButton = findViewById(R.id.deleteCharacterButton);
         addEditAttackButton = findViewById(R.id.addEditAttackButton);
         btnAdd = findViewById(R.id.saveCharacterButton);
-        editText =  findViewById(R.id.characterNameEditText);
+        editText = findViewById(R.id.characterNameEditText);
         tag = "CharacterAddEdit";
 
 
         /* If the user has chosen to edit the existing character, fill the character name field
          with the selected character's name */
 
-        if(MainActivity.getCharacter().getName() != null){
+        if (MainActivity.getCharacter().getName() != null) {
             editText.setText(MainActivity.getCharacter().getName());
-        }
-        else {
+        } else {
 
             // if no character has been chosen to edit, that means adding a new character
             // User shouldn't be able to click "delete character" and "add/edit attack" buttons
             deleteCharacterButton.setEnabled(false);
             addEditAttackButton.setEnabled(false);
         }
-      
+    }
 
-        /***** display attacks for a character ********/
+    @Override
+    protected void onStart() {
 
-        // clear attacks in the character object
-        MainActivity.getCharacter().clearAttacks();
+        super.onStart();
 
-        // Get attackIds for the character
-        List<Integer> attackIds = MainActivity.getCharacter().getAttackIdsForCharacter();
-
-        // Create an attack object for each attackIds, then add it to the attack list of the character object
-        if(attackIds.size() > 0) {
-            for (int i = 0; i < attackIds.size(); i++) {
-                Attack attack = new Attack(this);
-                attack.setAttack(attackIds.get(i));
-                MainActivity.getCharacter().addAttack(attack);
-            }
-        }
-
-        // only display attacks list if the character was selected to edit in the previous step
-        if(MainActivity.getCharacter().getId() != null){
-
-            ListView attackListView = findViewById(R.id.attackListView);
-            AttacksListAdapter adapter = new AttacksListAdapter(this, R.layout.attack_list_adapter, MainActivity.getCharacter().getAttacks());
-
-            LayoutInflater inflater = getLayoutInflater();
-            ViewGroup header = (ViewGroup) inflater.inflate(R.layout.attacks_list_header, attackListView, false);
-            attackListView.addHeaderView(header, null, false);
-
-            attackListView.setAdapter(adapter);
-
-
-            // set onClick lister for attackListView
-            attackListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                    // get a character name from the clicked item
-                    Attack selectedAttack = (Attack) parent.getItemAtPosition(position);
-                    MainActivity.setAttack(selectedAttack);
-                }
-            });
-
-        }
-
+        // Display all the attacks that belong to the character
+        displayAllAttacks();
 
         // set onClickLister to Add button
         btnAdd.setOnClickListener(new OnClickListener() {
@@ -124,19 +87,18 @@ public class CharacterAddEdit extends AppCompatActivity {
 
                     final String newName = editText.getText().toString().trim();
 
-                    if (newName.isEmpty() || newName.length() == 0){
+                    if (newName.isEmpty() || newName.length() == 0) {
                         Toast.makeText(CharacterAddEdit.this, "You must put something in the text field!", Toast.LENGTH_LONG).show();
-                    }
-                    else{
+                    } else {
 
                         Integer newId = MainActivity.getCharacter().addNewCharacter(newName);
 
-                        if(newId == -1){
+                        if (newId == -1) {
 
                             MainActivity.getCharacter().addNewCharacter(newName);
                             Toast.makeText(CharacterAddEdit.this, "Something went wrong :(.", Toast.LENGTH_LONG).show();
 
-                        }else {
+                        } else {
 
                             MainActivity.getCharacter().setId(newId);
                             MainActivity.getCharacter().setName(newName);
@@ -189,4 +151,38 @@ public class CharacterAddEdit extends AppCompatActivity {
         });
 
     }
+
+
+    private void displayAllAttacks(){
+
+        // Clear List<Attack>attacks in the character object to ensure the correct attacks get displayed
+       //MainActivity.getCharacter().clearAttacks();
+
+        // only display attacks list if the character was selected to edit in the previous step
+        if (MainActivity.getCharacter().getId() != null) {
+
+            ListView attackListView = findViewById(R.id.attackListView);
+            AttacksListAdapter adapter = new AttacksListAdapter(this, R.layout.attack_list_adapter, MainActivity.getCharacter().getAttacks());
+
+            LayoutInflater inflater = getLayoutInflater();
+            ViewGroup header = (ViewGroup) inflater.inflate(R.layout.attacks_list_header, attackListView, false);
+            attackListView.addHeaderView(header, null, false);
+
+            attackListView.setAdapter(adapter);
+
+
+            // set onClick lister for attackListView
+            attackListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    // get a character name from the clicked item
+                    Attack selectedAttack = (Attack) parent.getItemAtPosition(position);
+                    MainActivity.setAttack(selectedAttack);
+                }
+            });
+
+        }
+    }
+
 }
