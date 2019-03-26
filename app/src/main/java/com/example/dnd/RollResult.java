@@ -24,7 +24,7 @@ public class RollResult {
 
 
     /**
-     * Default constructor
+     * Copy constructor
      */
     public RollResult(Attack attack){
 
@@ -35,12 +35,10 @@ public class RollResult {
         damages = new ArrayList<>();
         totalDamage = 0;
         canDamage = false;
-
     }
 
-
     /**
-     * Calculates the damage result total by summing all the damages from the roll
+     * Calculates the damage result total by summing all the damages from the roll and damage modifier
      *
      * @author Atsuko Takanabe
      *
@@ -68,7 +66,6 @@ public class RollResult {
         hit = attack.rollHit();
         this.hitResult = Math.addExact(hit, attack.getModHit());
     }
-
 
     /*************Setter and Getter***********************/
 
@@ -99,5 +96,4 @@ public class RollResult {
     public void setCanDamage(Boolean x){
         this.canDamage = x;
     }
-
 }
