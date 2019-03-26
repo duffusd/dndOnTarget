@@ -75,7 +75,7 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
 
         // clear the arrays used for rolling attacks
         attackRollResults.clear();
-        SelectAttack.getAttackIdsForRoll().clear();
+        SelectAttack.getAttacksForRoll().clear();
     }
 
 
@@ -99,13 +99,10 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
     private void rollAttacks(){
 
         Log.i("TargetAC", targetAcNum.toString());
-        Attack attack = new Attack(Roller.this);
+        //Attack attack = new Attack(Roller.this);
 
         // go through attackIds list (which holds attacks selected for rolling)
-        for (Integer attackId : SelectAttack.getAttackIdsForRoll()){
-
-            // set up the attack object
-            attack.setAttack(attackId);
+        for (Attack attack : SelectAttack.getAttacksForRoll()){
 
             // create the new RollResult object for each attack to store the result and display
 

@@ -17,16 +17,21 @@ import com.example.dnd.data.AttackDatabaseHelper;
 import com.example.dnd.data.CharacterDatabaseHelper;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class SelectAttack extends AppCompatActivity {
 
     AttackDatabaseHelper myAttackDB;
 
     private List<Model> mModelList;
+    private List<Attack> mAttackList;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    public static List<Integer> attackIdsForRoll = new ArrayList<>();  // new list to store selected attack's ID
+    public static List<Attack> attacksForRoll = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +58,7 @@ public class SelectAttack extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Log.d("Number of attacks selected for Roll Attack: ", String.valueOf(attackIdsForRoll.size()));
+                Log.d("Number of attacks selected for Roll Attack: ", String.valueOf(attacksForRoll.size()));
 
                 //List<String> attackStringList = RecyclerViewAdapter.attackStringList;
                 //ArrayList<String> myList = new ArrayList<String>();
@@ -71,17 +76,26 @@ public class SelectAttack extends AppCompatActivity {
      * @return
      */
     private List<Model> getListData() {
+
+        mModelList = new ArrayList<>();
+
+        if (MainActivity.getCharacter().getAttacks().size() > 0){
+
+            for (Attack attack : MainActivity.getCharacter().getAttacks()){
+
+                mModelList.add(new Model(attack.getName()));
+
+            }
+        }
+
+        return mModelList;
+
+        /*
         List<Integer> attackIds = MainActivity.getCharacter().getAttackIdsForCharacter();
         myAttackDB = new AttackDatabaseHelper(this);
         mModelList = new ArrayList<>();
         Cursor dataAttack = (Cursor) myAttackDB.getAttackContents(attackIds);
 
-/*        if(dataAttack.getCount() == 0){
-            Toast.makeText(this, "There are no contents in this list!",Toast.LENGTH_LONG).show();
-        }else{
-            while(dataAttack.moveToNext()){
-                mModelList.add(new Model(dataAttack.getString(1)));
-*/
         if (dataAttack.getCount() == 0) {
             Toast.makeText(this, String.format("There are no attacks for %s!", MainActivity.getCharacter().getName()), Toast.LENGTH_LONG).show();
         } else {
@@ -94,9 +108,13 @@ public class SelectAttack extends AppCompatActivity {
 
         return mModelList;
     }
+    */
+
+    }
 
 
-    public static List<Integer> getAttackIdsForRoll() {
-        return attackIdsForRoll;
+
+    public static List<Attack> getAttacksForRoll(){
+        return attacksForRoll;
     }
 }
