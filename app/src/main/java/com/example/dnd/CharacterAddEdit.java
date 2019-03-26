@@ -113,42 +113,6 @@ public class CharacterAddEdit extends AppCompatActivity {
 
         }
 
-/*
-        ListView attackListView = findViewById(R.id.attackListView);
-        List<String> attackNames = new ArrayList<>();
-        ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, attackNames);
-
-        if (MainActivity.getCharacter().getAttacks().size() == 0){
-            Toast.makeText(CharacterAddEdit.this, "No attacks available", Toast.LENGTH_LONG).show();
-        }
-        else{
-            for (Attack attack: MainActivity.getCharacter().getAttacks()){
-                attackNames.add(attack.getName());
-                attackListView.setAdapter(listAdapter);
-            }
-        }
-
-
-        // Set OnItemClickLister to attacks' listView
-        attackListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                // get the name of attack from the clicked item
-                String attackName = (String)parent.getItemAtPosition(position);
-
-                // create an attack object
-
-                for (Attack attack : MainActivity.getCharacter().getAttacks()){
-                    if(attack.getName() == attackName){
-                        MainActivity.setAttack(attack);
-                    }
-                }
-
-            }
-        });
-
-        */
 
         // set onClickLister to Add button
         btnAdd.setOnClickListener(new OnClickListener() {
@@ -187,6 +151,11 @@ public class CharacterAddEdit extends AppCompatActivity {
                 else {
 
                     final String newName = editText.getText().toString().trim();
+
+                    if (newName.isEmpty() || newName.length() == 0) {
+                        Toast.makeText(CharacterAddEdit.this, "The character name must not be empty", Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     MainActivity.getCharacter().updateCharacter(newName);
                     Toast.makeText(CharacterAddEdit.this, String.format("Updated %s", MainActivity.getCharacter().getName()), Toast.LENGTH_LONG).show();
                 }
