@@ -184,6 +184,9 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
             public void onClick(View v) {
 
                 MainActivity.getAttack().deleteAttack(MainActivity.getAttack().getId());
+                Toast.makeText(AttackAddEdit.this, String.format("Deleted %s", MainActivity.getAttack().getName()), Toast.LENGTH_LONG).show();
+                MainActivity.getCharacter().getAttacks().remove(MainActivity.getAttack());
+                MainActivity.getAttack().clear();
 
             }
         });
