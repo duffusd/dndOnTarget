@@ -174,11 +174,7 @@ public class CharacterAddEdit extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                    View rowview = parent.getChildAt(position);
-                    rowview.setSelected(true);
-                    rowview.setBackgroundColor(Color.GRAY);
-
-
+                    attackListView.setSelector(R.drawable.ic_launcher_background);
                     // get a character name from the clicked item
                     Attack selectedAttack = (Attack) parent.getItemAtPosition(position);
                     MainActivity.setAttack(selectedAttack);
