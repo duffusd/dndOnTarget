@@ -92,7 +92,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
     protected void onStart(){
 
         super.onStart();
-        
+
         // set onclick lister to save button
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,8 +151,6 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                         MainActivity.getAttack().updateDiceID(Integer.parseInt(dieId.toString()));
                         MainActivity.getAttack().getDie().setDieId(Integer.parseInt(dieId.toString()));
                         MainActivity.getAttack().getDie().updateSides();
-
-                        System.out.println("Updated diceID");
 
                     }
 
