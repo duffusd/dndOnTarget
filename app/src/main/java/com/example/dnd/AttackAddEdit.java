@@ -103,6 +103,12 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                 String newDamageModifier = damageModifier.getText().toString().trim();
                 String newNumOfDice = numDice.getText().toString().trim();
 
+                if(newAttackName.isEmpty()){
+                    Toast.makeText(AttackAddEdit.this, "Attack name cannot be empty", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+
                 // add a new attack
                 if(MainActivity.getAttack().getId() == null){
 
