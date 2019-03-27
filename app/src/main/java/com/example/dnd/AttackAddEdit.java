@@ -93,7 +93,6 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
 
         super.onStart();
 
-
         // set onclick lister to save button
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,7 +109,8 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                     Integer newId = MainActivity.getAttack().addAttack(newAttackName,
                             newHitModifier.isEmpty() ? 0 : Integer.parseInt(newHitModifier),
                             newDamageModifier.isEmpty() ? 0 : Integer.parseInt(newDamageModifier),
-                            dieId == null ? -1 : Math.addExact(Integer.parseInt(dieId.toString()), 1),
+                            //dieId == null ? -1 : Math.addExact(Integer.parseInt(dieId.toString()), 1),
+                            dieId == null ? -1 : Integer.parseInt(dieId.toString()),
                             newNumOfDice.isEmpty() ? 0 : Integer.parseInt(newNumOfDice));
 
 
@@ -145,11 +145,12 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                         MainActivity.getAttack().updateDamageModifier(Integer.parseInt(newDamageModifier));
                     }
 
-                    // update dice ID
+                    // update dice ID and die
                     if(Integer.parseInt(dieId.toString()) != MainActivity.getAttack().getDiceId()) {
 
-                        MainActivity.getAttack().updateDiceID(Integer.parseInt(dieId.toString()) + 1);
-                        System.out.println("Updated diceID");
+                        MainActivity.getAttack().updateDiceID(Integer.parseInt(dieId.toString()));
+                        MainActivity.getAttack().getDie().setDieId(Integer.parseInt(dieId.toString()));
+                        MainActivity.getAttack().getDie().updateSides();
 
                     }
 
@@ -165,7 +166,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                 }
 
                 // go back to character addd/edit activity
-                MainActivity.getAttack().clear();
+                //MainActivity.getAttack().clear();
                 Intent intent = new Intent(AttackAddEdit.this, CharacterAddEdit.class);
                 startActivity(intent);
             }
@@ -187,7 +188,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         Log.i(tag,"Item was selected in Spinner");
-        if (i < 6) {
+        if (i <= 6) {
             dieType = adapterView.getSelectedItem().toString();
             dieId = adapterView.getSelectedItemId();
         }

@@ -29,6 +29,7 @@ public class AttacksListAdapter extends ArrayAdapter<Attack> {
     }
 
     public View getView(int position, View contentView, ViewGroup parents) {
+
         contentView = mInflater.inflate(mViewResourceId, null);
 
         Attack attack = attacks.get(position);
