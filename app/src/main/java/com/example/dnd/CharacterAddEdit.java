@@ -160,6 +160,7 @@ public class CharacterAddEdit extends AppCompatActivity {
         if (MainActivity.getCharacter().getId() != null) {
 
             ListView attackListView = findViewById(R.id.attackListView);
+            attackListView.setSelector(R.drawable.ic_launcher_background);
             AttacksListAdapter adapter = new AttacksListAdapter(this, R.layout.attack_list_adapter, MainActivity.getCharacter().getAttacks());
 
             LayoutInflater inflater = getLayoutInflater();

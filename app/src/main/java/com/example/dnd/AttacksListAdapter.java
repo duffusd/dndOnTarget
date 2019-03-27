@@ -29,6 +29,7 @@ public class AttacksListAdapter extends ArrayAdapter<Attack> {
     }
 
     public View getView(int position, View contentView, ViewGroup parents) {
+
         contentView = mInflater.inflate(mViewResourceId, null);
 
         Attack attack = attacks.get(position);
@@ -37,6 +38,8 @@ public class AttacksListAdapter extends ArrayAdapter<Attack> {
         TextView hitMod = contentView.findViewById(R.id.attackHitModText);
         TextView damageMod = contentView.findViewById(R.id.attackDamageModText);
         TextView dice = contentView.findViewById(R.id.attackDiceText);
+
+        System.out.println("DiceID: " + attack.getDiceId());
         TextView numDice = contentView.findViewById(R.id.attackNumOfDiceText);
 
         attackName.setText(attack.getName());

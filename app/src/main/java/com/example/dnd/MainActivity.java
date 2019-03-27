@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //populate an ArrayList<String> from the database and then view it
         ListView listView = findViewById(R.id.listView);
-
         listView.setSelector(R.drawable.ic_launcher_background);
 
         myCharacterDB = new CharacterDatabaseHelper(this);
