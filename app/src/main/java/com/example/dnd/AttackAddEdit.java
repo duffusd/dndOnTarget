@@ -74,7 +74,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
         spinner.setSelection(6);
 
         // Set the field values if the attack was selected to edit in the previous activity
-        if(MainActivity.getAttack().getId() != null){
+        if (MainActivity.getAttack().getId() != null) {
 
             nameAtk.setText(MainActivity.getAttack().getName());
             hitModifier.setText(MainActivity.getAttack().getModHit().toString());
@@ -82,23 +82,27 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
             numDice.setText(MainActivity.getAttack().getNumOfDice().toString());
 
 
-
         } else {
 
             btnDelete.setEnabled(false);
         }
+    }
 
-        /**** set onclick lister to save button *****/
+    @Override
+    protected void onStart(){
+
+        super.onStart();
+
+
+        // set onclick lister to save button
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              
+
                 String newAttackName = nameAtk.getText().toString().trim();
                 String newHitModifier = hitModifier.getText().toString().trim();
                 String newDamageModifier = damageModifier.getText().toString().trim();
                 String newNumOfDice = numDice.getText().toString().trim();
-                //String newDiceString = numDice.getText().toString().trim() + "d" + dieType.trim();
-
 
                 // add a new attack
                 if(MainActivity.getAttack().getId() == null){
@@ -176,7 +180,6 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
 
             }
         });
-
 
     }
 

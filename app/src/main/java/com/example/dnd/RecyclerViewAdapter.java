@@ -7,16 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import java.util.ArrayList;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
 
     private List<Model> mModelList;
 
-    public static List<String> attackStringList = new ArrayList<String>();
-
     public RecyclerViewAdapter(List<Model> modelList) {
+
         mModelList = modelList;
     }
 
@@ -28,23 +26,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
+
         final Model model = mModelList.get(position);
+        final Attack attack = MainActivity.getCharacter().getAttacks().get(position);
 
-        for (Attack attack : MainActivity.getCharacter().getAttacks()){
-            if(attack.getId() == Integer.parseInt(model.getText())){
-                holder.textView.setText(attack.getName());
-            }
-        }
-
-        //holder.textView.setText(model.getText());
+        holder.textView.setText(model.getText());
         holder.view.setBackgroundColor(model.isSelected() ? Color.LTGRAY : Color.DKGRAY);
+
         holder.textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 model.setSelected(!model.isSelected());
                 holder.view.setBackgroundColor(model.isSelected() ? Color.LTGRAY : Color.DKGRAY);
-
-                SelectAttack.getAttackIdsForRoll().add(Integer.parseInt(model.getText()));
+                SelectAttack.getAttacksForRoll().add(attack);
 
                 /*
                 if(model.isSelected()){
