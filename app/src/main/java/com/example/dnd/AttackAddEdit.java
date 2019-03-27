@@ -86,7 +86,13 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
 
             btnDelete.setEnabled(false);
         }
+    }
 
+    @Override
+    protected void onStart(){
+
+        super.onStart();
+        
         // set onclick lister to save button
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
