@@ -88,6 +88,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //populate an ArrayList<String> from the database and then view it
         ListView listView = findViewById(R.id.listView);
+
+        listView.setSelector(R.drawable.ic_launcher_background);
+
         myCharacterDB = new CharacterDatabaseHelper(this);
         characters = new ArrayList<>();
         ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, characters);
@@ -112,6 +115,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                character.getAttacks().clear();
 
                 // get a character name from the clicked item
                 String selectedCharacter = (String) parent.getItemAtPosition(position);

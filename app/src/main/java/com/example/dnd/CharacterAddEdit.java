@@ -3,6 +3,7 @@ package com.example.dnd;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -155,9 +156,6 @@ public class CharacterAddEdit extends AppCompatActivity {
 
     private void displayAllAttacks(){
 
-        // Clear List<Attack>attacks in the character object to ensure the correct attacks get displayed
-       //MainActivity.getCharacter().clearAttacks();
-
         // only display attacks list if the character was selected to edit in the previous step
         if (MainActivity.getCharacter().getId() != null) {
 
@@ -175,6 +173,12 @@ public class CharacterAddEdit extends AppCompatActivity {
             attackListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    View rowview = parent.getChildAt(position);
+                    rowview.setSelected(true);
+                    rowview.setBackgroundColor(Color.GRAY);
+
+
 
                     // get a character name from the clicked item
                     Attack selectedAttack = (Attack) parent.getItemAtPosition(position);
