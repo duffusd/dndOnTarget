@@ -179,7 +179,6 @@ public class CharacterAddEdit extends AppCompatActivity {
                     rowview.setBackgroundColor(Color.GRAY);
 
 
-
                     // get a character name from the clicked item
                     Attack selectedAttack = (Attack) parent.getItemAtPosition(position);
                     MainActivity.setAttack(selectedAttack);
