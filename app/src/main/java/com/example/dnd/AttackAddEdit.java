@@ -109,6 +109,16 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                     return;
                 }
 
+                // check if the hit modifier contains a character
+                if(newHitModifier.matches(".*[a-zA-Z]+.*")){
+                    Toast.makeText(AttackAddEdit.this, "Hit Modifier can't contain any alphabet", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                if(newDamageModifier.matches(".*[a-zA-Z]+.*")){
+                    Toast.makeText(AttackAddEdit.this, "Damage Modifier can't contain any alphabet", Toast.LENGTH_LONG).show();
+                }
+
                 // check if dieId is 0 from selecting "Choose..."
                 if(dieId == 0){
                     Toast.makeText(AttackAddEdit.this,"Select the die type", Toast.LENGTH_LONG).show();
@@ -147,14 +157,16 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                     }
 
                     // update hit modifier
-                    if(Integer.parseInt(newHitModifier) != MainActivity.getAttack().getModHit()){
-                        MainActivity.getAttack().updateHitModifier(Integer.parseInt(newHitModifier));
+                    Integer newHitModInt = newHitModifier.length() == 0 ? 0 : Integer.parseInt(newHitModifier);
+                    if(newHitModInt != MainActivity.getAttack().getModHit()){
+                        MainActivity.getAttack().updateHitModifier(newHitModInt);
 
                     }
 
                     // update damage modifier
-                    if(Integer.parseInt(newDamageModifier) != MainActivity.getAttack().getModDamage()){
-                        MainActivity.getAttack().updateDamageModifier(Integer.parseInt(newDamageModifier));
+                    Integer newDamageModInt = newDamageModifier.length() == 0 ? 0 : Integer.parseInt(newDamageModifier);
+                    if(newDamageModInt != MainActivity.getAttack().getModDamage()){
+                        MainActivity.getAttack().updateDamageModifier(newDamageModInt);
                     }
 
                     // update dice ID and die

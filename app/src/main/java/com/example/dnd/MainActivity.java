@@ -115,8 +115,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                character.getAttacks().clear();
-
                 // get a character name from the clicked item
                 String selectedCharacter = (String) parent.getItemAtPosition(position);
 
@@ -125,28 +123,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 character.setName(selectedCharacter);
                 character.setId(selectedCharacterId);
-
-                // Get attackIds for the character
-                List<Integer> attackIds = character.getAttackIdsForCharacter();
-
-                // Create an attack object for each attackIds, then add it to the attack list of the character object
-                if (attackIds.size() > 0) {
-                    for (int i = 0; i < attackIds.size(); i++) {
-                        Attack attack = new Attack(MainActivity.this);
-                        attack.setAttack(attackIds.get(i));
-                        character.addAttack(attack);
-                    }
-
-                }
+                character.generateAttacksForCharacter();
 
             }
 
         });
 
-
-
     }
-
 
     @Override
     public void onClick(View view) {
@@ -226,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         attack = newAttack;
     }
 
+    /*
     public int roll(int AC) {
         // get the text view from the View to get the user input
         EditText textAC = findViewById(R.id.targetACEditText);
@@ -247,4 +231,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return -1;
 
     }
+
+    */
 }

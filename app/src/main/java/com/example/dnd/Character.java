@@ -128,6 +128,33 @@ public class Character {
         return attackIds;
     }
 
+
+    /**
+     * This method is used for generating the attacks list.
+     *
+     * Using the attackIDs that belong to the character, it creates the attack object for each
+     * attck ID then adds it to the attacks list
+     *
+     * @exception SQLiteException
+     * @author Atsuko Takanabe
+     */
+    public void generateAttacksForCharacter(){
+
+        attacks.clear();
+        attackIds = getAttackIdsForCharacter();
+
+        if (attackIds.size() > 0) {
+            for (int i = 0; i < attackIds.size(); i++) {
+                Attack attack = new Attack(context);
+                attack.setAttack(attackIds.get(i));
+                addAttack(attack);
+            }
+
+        }
+    }
+
+
+
     /**
      * Sets the id and name of the character to null, and clears attacks' list
      *
