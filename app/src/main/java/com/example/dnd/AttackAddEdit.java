@@ -103,11 +103,17 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                 String newDamageModifier = damageModifier.getText().toString().trim();
                 String newNumOfDice = numDice.getText().toString().trim();
 
+                // check if the attack name is empty
                 if(newAttackName.isEmpty()){
                     Toast.makeText(AttackAddEdit.this, "Attack name cannot be empty", Toast.LENGTH_LONG).show();
                     return;
                 }
 
+                // check if dieId is 0 from selecting "Choose..."
+                if(dieId == 0){
+                    Toast.makeText(AttackAddEdit.this,"Select the die type", Toast.LENGTH_LONG).show();
+                    return;
+                }
 
                 // add a new attack
                 if(MainActivity.getAttack().getId() == null){
@@ -191,6 +197,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
             }
         });
 
+
     }
 
 
@@ -207,6 +214,8 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+        /*
+
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -222,5 +231,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                 MainActivity.getAttack().clear();
             }
         });
+
+        */
     }
 }
