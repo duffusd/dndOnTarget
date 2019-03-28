@@ -259,6 +259,8 @@ public class Attack {
         setModHit(null);
         setDiceId(null);
         setNumOfDice(null);
+        die = null;
+
     }
 
     /********************************** GETTER AND SETTERS ***************************************/

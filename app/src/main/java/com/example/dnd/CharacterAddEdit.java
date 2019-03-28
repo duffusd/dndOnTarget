@@ -68,12 +68,16 @@ public class CharacterAddEdit extends AppCompatActivity {
             deleteCharacterButton.setEnabled(false);
             addEditAttackButton.setEnabled(false);
         }
+
     }
 
     @Override
     protected void onStart() {
 
         super.onStart();
+
+        // clear the attack every time the user comes to this activity
+        MainActivity.getAttack().clear();
 
         // Display all the attacks that belong to the character
         displayAllAttacks();
@@ -176,13 +180,11 @@ public class CharacterAddEdit extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     attackListView.setSelector(R.drawable.ic_launcher_background);
-                    /*
-                    View rowview = parent.getChildAt(position);
-                    rowview.setSelected(true);
-                    rowview.setBackgroundColor(Color.GRAY);
-                    */
-                    // get a character name from the clicked item
-                    Attack selectedAttack = (Attack) parent.getItemAtPosition(position);
+
+                    // get the clicked attack
+                    Attack selectedAttack = new Attack((Attack) parent.getItemAtPosition(position));
+
+                    // set the main attack to the clicked attack
                     MainActivity.setAttack(selectedAttack);
                 }
             });
