@@ -178,7 +178,6 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                 }
 
                 // go back to character addd/edit activity
-                //MainActivity.getAttack().clear();
                 Intent intent = new Intent(AttackAddEdit.this, CharacterAddEdit.class);
                 startActivity(intent);
             }
