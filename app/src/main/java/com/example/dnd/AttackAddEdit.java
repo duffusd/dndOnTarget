@@ -115,8 +115,16 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                     return;
                 }
 
+                // check if the damage modifier contains a character
                 if(newDamageModifier.matches(".*[a-zA-Z]+.*")){
                     Toast.makeText(AttackAddEdit.this, "Damage Modifier can't contain any alphabet", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                // check if the number of die is 0
+                if(newNumOfDice.isEmpty() || Integer.parseInt(newNumOfDice) == 0){
+                    Toast.makeText(AttackAddEdit.this, "Number of dice can't be 0", Toast.LENGTH_LONG).show();
+                    return;
                 }
 
                 // check if dieId is 0 from selecting "Choose..."
