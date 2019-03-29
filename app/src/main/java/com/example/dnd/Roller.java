@@ -46,7 +46,7 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
         resultView.setAdapter(adapter);
 
         // display targetAC
-        targetAcNum = MainActivity.sharedPreferences.getInt(MainActivity.targetAC, 0);
+        targetAcNum = SelectAttack.sharedPreferences.getInt(SelectAttack.targetAC, 0);
         targetAcText = findViewById(R.id.targetAC);
         targetAcText.setText(targetAcNum.toString());
 
@@ -68,14 +68,14 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        // clear the arrays used for rolling attacks
+        attackRollResults.clear();
+        SelectAttack.getAttacksForRoll().clear();
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         goHome();
 
-        // clear the arrays used for rolling attacks
-        attackRollResults.clear();
-        SelectAttack.getAttacksForRoll().clear();
     }
 
 
