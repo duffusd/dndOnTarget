@@ -18,20 +18,21 @@ import java.util.List;
 public class AttacksListAdapter extends ArrayAdapter<Attack> {
 
     private LayoutInflater mInflater;
-    private List<Attack> attacks;
+    private List<Attack> mAttacks;
     private int mViewResourceId;
 
     public AttacksListAdapter(Context context, int textViewResourceId, List<Attack> attacks) {
+
         super(context, textViewResourceId, attacks);
-        this.attacks = attacks;
+        mAttacks = attacks;
         mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mViewResourceId = textViewResourceId;
     }
 
     public View getView(int position, View contentView, ViewGroup parents) {
-        contentView = mInflater.inflate(mViewResourceId, null);
 
-        Attack attack = attacks.get(position);
+        contentView = mInflater.inflate(mViewResourceId, null);
+        Attack attack = mAttacks.get(position);
 
         TextView attackName = contentView.findViewById(R.id.attackNameText);
         TextView hitMod = contentView.findViewById(R.id.attackHitModText);

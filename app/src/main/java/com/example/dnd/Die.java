@@ -61,6 +61,10 @@ public class Die {
 
     }
 
+    public void updateSides(){
+        sides = diceDbHelper.getDieNumber(dieId);
+    }
+
     /********************************** GETTER AND SETTERS ***************************************/
 
     public void setSides(int sides) {
@@ -72,5 +76,6 @@ public class Die {
     }
   
     public Integer getDieId() { return dieId; }
+
     public void setDieId(int dieId) { this.dieId = dieId; }
 }

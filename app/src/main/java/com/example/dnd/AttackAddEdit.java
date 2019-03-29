@@ -74,7 +74,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
         spinner.setSelection(6);
 
         // Set the field values if the attack was selected to edit in the previous activity
-        if(MainActivity.getAttack().getId() != null){
+        if (MainActivity.getAttack().getId() != null) {
 
             nameAtk.setText(MainActivity.getAttack().getName());
             hitModifier.setText(MainActivity.getAttack().getModHit().toString());
@@ -82,23 +82,56 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
             numDice.setText(MainActivity.getAttack().getNumOfDice().toString());
 
 
-
         } else {
 
             btnDelete.setEnabled(false);
         }
+    }
 
-        /**** set onclick lister to save button *****/
+    @Override
+    protected void onStart(){
+
+        super.onStart();
+
+        // set onclick lister to save button
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              
+
                 String newAttackName = nameAtk.getText().toString().trim();
                 String newHitModifier = hitModifier.getText().toString().trim();
                 String newDamageModifier = damageModifier.getText().toString().trim();
                 String newNumOfDice = numDice.getText().toString().trim();
-                //String newDiceString = numDice.getText().toString().trim() + "d" + dieType.trim();
 
+                // check if the attack name is empty
+                if(newAttackName.isEmpty()){
+                    Toast.makeText(AttackAddEdit.this, "Attack name cannot be empty", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                // check if the hit modifier contains a character
+                if(newHitModifier.matches(".*[a-zA-Z]+.*")){
+                    Toast.makeText(AttackAddEdit.this, "Hit Modifier can't contain any alphabet", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                // check if the damage modifier contains a character
+                if(newDamageModifier.matches(".*[a-zA-Z]+.*")){
+                    Toast.makeText(AttackAddEdit.this, "Damage Modifier can't contain any alphabet", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                // check if the number of die is 0
+                if(newNumOfDice.isEmpty() || Integer.parseInt(newNumOfDice) == 0){
+                    Toast.makeText(AttackAddEdit.this, "Number of dice can't be 0", Toast.LENGTH_LONG).show();
+                    return;
+                }
+              
+                // check if dieId is 0 from selecting "Choose..."
+                if(dieId == 0){
+                    Toast.makeText(AttackAddEdit.this,"Select the die type", Toast.LENGTH_LONG).show();
+                    return;
+                }
 
                 // add a new attack
                 if(MainActivity.getAttack().getId() == null){
@@ -106,7 +139,8 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                     Integer newId = MainActivity.getAttack().addAttack(newAttackName,
                             newHitModifier.isEmpty() ? 0 : Integer.parseInt(newHitModifier),
                             newDamageModifier.isEmpty() ? 0 : Integer.parseInt(newDamageModifier),
-                            dieId == null ? -1 : Math.addExact(Integer.parseInt(dieId.toString()), 1),
+                            //dieId == null ? -1 : Math.addExact(Integer.parseInt(dieId.toString()), 1),
+                            dieId == null ? -1 : Integer.parseInt(dieId.toString()),
                             newNumOfDice.isEmpty() ? 0 : Integer.parseInt(newNumOfDice));
 
 
@@ -131,21 +165,24 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                     }
 
                     // update hit modifier
-                    if(Integer.parseInt(newHitModifier) != MainActivity.getAttack().getModHit()){
-                        MainActivity.getAttack().updateHitModifier(Integer.parseInt(newHitModifier));
+                    Integer newHitModInt = newHitModifier.length() == 0 ? 0 : Integer.parseInt(newHitModifier);
+                    if(newHitModInt != MainActivity.getAttack().getModHit()){
+                        MainActivity.getAttack().updateHitModifier(newHitModInt);
 
                     }
 
                     // update damage modifier
-                    if(Integer.parseInt(newDamageModifier) != MainActivity.getAttack().getModDamage()){
-                        MainActivity.getAttack().updateDamageModifier(Integer.parseInt(newDamageModifier));
+                    Integer newDamageModInt = newDamageModifier.length() == 0 ? 0 : Integer.parseInt(newDamageModifier);
+                    if(newDamageModInt != MainActivity.getAttack().getModDamage()){
+                        MainActivity.getAttack().updateDamageModifier(newDamageModInt);
                     }
 
-                    // update dice ID
+                    // update dice ID and die
                     if(Integer.parseInt(dieId.toString()) != MainActivity.getAttack().getDiceId()) {
 
-                        MainActivity.getAttack().updateDiceID(Integer.parseInt(dieId.toString()) + 1);
-                        System.out.println("Updated diceID");
+                        MainActivity.getAttack().updateDiceID(Integer.parseInt(dieId.toString()));
+                        MainActivity.getAttack().getDie().setDieId(Integer.parseInt(dieId.toString()));
+                        MainActivity.getAttack().getDie().updateSides();
 
                     }
 
@@ -161,7 +198,6 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                 }
 
                 // go back to character addd/edit activity
-                MainActivity.getAttack().clear();
                 Intent intent = new Intent(AttackAddEdit.this, CharacterAddEdit.class);
                 startActivity(intent);
             }
@@ -173,6 +209,9 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
             public void onClick(View v) {
 
                 MainActivity.getAttack().deleteAttack(MainActivity.getAttack().getId());
+                Toast.makeText(AttackAddEdit.this, String.format("Deleted %s", MainActivity.getAttack().getName()), Toast.LENGTH_LONG).show();
+                MainActivity.getCharacter().getAttacks().remove(MainActivity.getAttack());
+                MainActivity.getAttack().clear();
 
             }
         });
@@ -184,7 +223,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         Log.i(tag,"Item was selected in Spinner");
-        if (i < 6) {
+        if (i <= 6) {
             dieType = adapterView.getSelectedItem().toString();
             dieId = adapterView.getSelectedItemId();
         }
@@ -193,6 +232,8 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
+
+        /*
 
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,5 +250,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                 MainActivity.getAttack().clear();
             }
         });
+
+        */
     }
 }

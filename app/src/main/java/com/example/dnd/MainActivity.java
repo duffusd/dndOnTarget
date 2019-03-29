@@ -40,19 +40,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button addEditCharacterButton;
     private Button attackButton;
     private EditText targetACText;
-
-
-
     public static final String targetAcSharedPreference = "TargetAcSharedPref";
     public static final String targetAC = "TargetAC";
     public static SharedPreferences sharedPreferences;
-
-    /*
-    public static final String SharedPrefs = "CharacterPref";
-    public static final String SharedPrefCharacterName = "characterNameKey";
-    public static final String SharedPrefCharacterId = "characterId";
-    public static SharedPreferences sharedPreferences;
-    */
 
     @Override
     protected  void onStart(){
@@ -96,24 +86,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // get targetAC textfield
         targetACText = findViewById(R.id.targetACEditText);
 
-        /*
-
-        // Insert dice numbers to diceTable if the table is empty
-        DiceDatabaseHelper diceDbHelper = new DiceDatabaseHelper(this);
-        SQLiteDatabase diceDb = diceDbHelper.getReadableDatabase();
-
-        Cursor cursor = diceDb.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = \"" +
-                DiceContract.getTableName() + "\"", null);
-        int result = cursor.getCount();
-
-        if (result == 0){
-            diceDbHelper.insertNumbers();
-        }
-
-        */
-
         //populate an ArrayList<String> from the database and then view it
         ListView listView = findViewById(R.id.listView);
+        listView.setSelector(R.drawable.ic_launcher_background);
+
         myCharacterDB = new CharacterDatabaseHelper(this);
         characters = new ArrayList<>();
         ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, characters);
@@ -147,28 +123,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 character.setName(selectedCharacter);
                 character.setId(selectedCharacterId);
-
-                // Get attackIds for the character
-                List<Integer> attackIds = character.getAttackIdsForCharacter();
-
-                // Create an attack object for each attackIds, then add it to the attack list of the character object
-                if (attackIds.size() > 0) {
-                    for (int i = 0; i < attackIds.size(); i++) {
-                        Attack attack = new Attack(MainActivity.this);
-                        attack.setAttack(attackIds.get(i));
-                        character.addAttack(attack);
-                    }
-
-                }
+                character.generateAttacksForCharacter();
 
             }
 
         });
 
-
-
     }
-
 
     @Override
     public void onClick(View view) {
@@ -248,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         attack = newAttack;
     }
 
+    /*
     public int roll(int AC) {
         // get the text view from the View to get the user input
         EditText textAC = findViewById(R.id.targetACEditText);
@@ -269,4 +231,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return -1;
 
     }
+
+    */
 }

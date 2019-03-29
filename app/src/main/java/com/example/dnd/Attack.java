@@ -140,6 +140,7 @@ public class Attack {
      * @author Atsuko Takanabe
      */
     public void updateName(String newName){
+
         try{
             dbHelper.updateName(id, newName);
         }catch (SQLiteException e){
@@ -163,6 +164,8 @@ public class Attack {
             e.printStackTrace();
             Log.e(tag, "Updating hit modifier failed");
         }
+
+        modHit = hit;
     }
 
     /**
@@ -181,6 +184,8 @@ public class Attack {
             e.printStackTrace();
             Log.e(tag, "Updating damage modifier failed");
         }
+
+        modDamage = damage;
     }
 
 
@@ -194,11 +199,14 @@ public class Attack {
     public void updateDiceID(Integer diceId){
 
         try{
-            dbHelper.updateDamageModifier(id, diceId);
+            dbHelper.updateDiceId(id, diceId);
         }catch (SQLiteException e){
             e.printStackTrace();
             Log.e(tag, "Updating diceID failed");
         }
+
+        this.diceId = diceId;
+        die.setDieId(diceId);
     }
 
     /**
@@ -216,6 +224,8 @@ public class Attack {
             e.printStackTrace();
             Log.e(tag, "Updating the number of die/dice failed");
         }
+
+        this.numOfDice = numOfDie;
     }
 
     /**
@@ -249,6 +259,8 @@ public class Attack {
         setModHit(null);
         setDiceId(null);
         setNumOfDice(null);
+        die = null;
+
     }
 
     /********************************** GETTER AND SETTERS ***************************************/
