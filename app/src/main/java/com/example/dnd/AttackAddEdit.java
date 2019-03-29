@@ -126,7 +126,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                     Toast.makeText(AttackAddEdit.this, "Number of dice can't be 0", Toast.LENGTH_LONG).show();
                     return;
                 }
-
+              
                 // check if dieId is 0 from selecting "Choose..."
                 if(dieId == 0){
                     Toast.makeText(AttackAddEdit.this,"Select the die type", Toast.LENGTH_LONG).show();
