@@ -1,6 +1,7 @@
 package com.example.dnd;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,16 +43,26 @@ public class RollResultListAdapter extends ArrayAdapter<RollResult> {
         TextView damage = contentView.findViewById(R.id.roll_damage);
         TextView totalDamage = contentView.findViewById(R.id.roll_total_damage);
 
+        boolean canDoDamage = result.getCanDamage();
         // display the hit result
         attackName.setText(result.getAttack().getName());
-        hit.setText(String.format("D20: %d + %d Mod = %d", result.getHit(), result.getAttack().getModHit(), result.getHitResult()));
+            if (result.getHit() == 20){
+                canDoDamage = true;
 
+                hit.setText(String.format("D20: %d *** Critical Hit ***", result.getHit()));
+            }else {
+
+
+                hit.setText(String.format("D20: %d + %d Mod = %d", result.getHit(), result.getAttack().getModHit(), result.getHitResult()));
+            }
         // display the damage result if hit was greater than AC
-        if(result.getCanDamage() == true){
+        if(canDoDamage == true){
 
 
             int dieType = result.getAttack().getDie().getSides();
+
             int numOfDie = result.getAttack().getNumOfDice();
+
 
             // when only one die was used to roll for damage
             if(result.getDamages().size() == 1){
@@ -59,10 +70,18 @@ public class RollResultListAdapter extends ArrayAdapter<RollResult> {
                 damage.setText(String.format("Damage Roll: %dD%d (%d) + %d Mod", numOfDie, dieType, result.getDamages().get(0), result.getAttack().getModDamage()));
 
             } else {
-
+                int numOfDamages = 0;
+                if (result.getHit() == 20) {
+                    numOfDamages = result.getDamages().size();
+                    numOfDie = numOfDie * 2;
+                }
+                else{
+                    numOfDamages = result.getDamages().size();
+                }
                 StringBuilder damagesBreakdown = new StringBuilder();
-                int numOfDamages = result.getDamages().size();
 
+
+                Log.e("Number of Damages: ", "is " + numOfDamages);
                 for(int i = 0; i < numOfDamages - 1; i++){
                     damagesBreakdown.append(result.getDamages().get(i).toString() + ", ");
                 }
@@ -74,6 +93,7 @@ public class RollResultListAdapter extends ArrayAdapter<RollResult> {
 
             // display the total damage
             totalDamage.setText(String.format("Total Damage: %d", result.getTotalDamage()));
+
 
         } else { // when the AC was greater than hit
             damage.setText("Fail AC");

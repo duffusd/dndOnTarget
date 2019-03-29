@@ -32,7 +32,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         for (Attack attack : MainActivity.getCharacter().getAttacks()){
             if(attack.getId() == Integer.parseInt(model.getText())){
-                holder.textView.setText(attack.getName());
+                holder.textView.setText(attack.getName() + " -- Dice + Mod: " + attack.getNumOfDice() + "D" + attack.getDie().getSides() + " + " + attack.getModDamage()
+                + " Hit Mod: " + attack.getModHit());
             }
         }
 
