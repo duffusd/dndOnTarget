@@ -26,24 +26,24 @@
         android:id="@+id/addEditAttackButton"
         android:layout_width="wrap_content"
         android:layout_height="47dp"
+        android:layout_marginEnd="128dp"
         android:layout_marginBottom="16dp"
         android:onClick="onClick"
         android:text="@string/AddEditCharacter"
-        app:layout_constraintBottom_toTopOf="@+id/targetACEditText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.485"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/rollAttackbtn"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ListView
         android:id="@+id/listView"
-        android:layout_width="0dp"
-        android:layout_height="281dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:scrollbars="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
         android:choiceMode="singleChoice"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/addEditAttackButton"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -59,16 +59,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/targetACEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="38dp"
-        android:layout_marginBottom="16dp"
-        android:ems="10"
-        android:hint="Target's AC"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/rollAttackbtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>

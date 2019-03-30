@@ -1,12 +1,15 @@
 package com.example.dnd;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.Toast;
 import android.view.View;
 import android.widget.Button;
@@ -32,6 +35,10 @@ public class SelectAttack extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     public static List<Attack> attacksForRoll = new ArrayList<>();
+    private EditText targetACText;
+    public static final String targetAcSharedPreference = "TargetAcSharedPref";
+    public static final String targetAC = "TargetAC";
+    public static SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +46,15 @@ public class SelectAttack extends AppCompatActivity {
         setContentView(R.layout.activity_select_attack);
 
         mRecyclerView = findViewById(R.id.recycler_view);
+        targetACText = findViewById(R.id.targetACEditText);
         mAdapter = new com.example.dnd.RecyclerViewAdapter(getListData());
         LinearLayoutManager manager = new LinearLayoutManager(SelectAttack.this);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
+
+        // set up shared preferences for this app
+        sharedPreferences = getSharedPreferences(targetAcSharedPreference, Context.MODE_PRIVATE);
 
         goToRoller();
     }
@@ -53,6 +64,7 @@ public class SelectAttack extends AppCompatActivity {
      * Sends user to Roller activity when clicks the Attack! button
      */
     private void goToRoller() {
+
         Button goToRollerButton = findViewById(R.id.attackbtn);
         goToRollerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,13 +72,39 @@ public class SelectAttack extends AppCompatActivity {
 
                 Log.d("Number of attacks selected for Roll Attack: ", String.valueOf(attacksForRoll.size()));
 
+                Boolean validTargetAC = validateTargetAC();
+
                 //List<String> attackStringList = RecyclerViewAdapter.attackStringList;
                 //ArrayList<String> myList = new ArrayList<String>();
-                startActivity(new Intent(SelectAttack.this, Roller.class));
+
+                if (attacksForRoll.size() == 0){
+                    Toast.makeText(SelectAttack.this, "Please select at least one attack", Toast.LENGTH_LONG).show();
+                } else if (!validTargetAC){
+                    Toast.makeText(SelectAttack.this, "What is the target AC?", Toast.LENGTH_LONG).show();
+                } else {
+                    startActivity(new Intent(SelectAttack.this, Roller.class));
+                }
 
 
             }
         });
+
+    }
+
+    private boolean validateTargetAC(){
+        // set up targetAC shared preference and get the value
+        Integer targetAcNum = Integer.parseInt(targetACText.getText().toString().isEmpty() ? "0" : targetACText.getText().toString());
+
+        // first, make sure targetAC is not empty
+        switch (targetAcNum){
+            case 0:
+                return false;
+            default:
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt(targetAC, targetAcNum);
+                editor.commit();
+                return true;
+        }
 
     }
 

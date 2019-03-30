@@ -53,6 +53,9 @@ public class RollResultListAdapter extends ArrayAdapter<RollResult> {
             int dieType = result.getAttack().getDie().getSides();
             int numOfDie = result.getAttack().getNumOfDice();
 
+            System.out.println("numOfDamages: " + result.getDamages().size());
+
+
             // when only one die was used to roll for damage
             if(result.getDamages().size() == 1){
 
@@ -67,6 +70,7 @@ public class RollResultListAdapter extends ArrayAdapter<RollResult> {
                     damagesBreakdown.append(result.getDamages().get(i).toString() + ", ");
                 }
 
+                System.out.println("damagesBreakdown: " + damagesBreakdown.length());
                 damagesBreakdown.append(result.getDamages().get(numOfDamages - 1));
 
                 damage.setText(String.format("Damage Roll: %dD%d (%s) + %d Mod", numOfDie, dieType, damagesBreakdown, result.getAttack().getModDamage()));
