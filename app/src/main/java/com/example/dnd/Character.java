@@ -78,10 +78,8 @@ public class Character {
      * Updates a selected character's name
      *
      * @param newName The new name for a character
-     * @reutrn void
      * @author Atsuko Takanabe
      */
-  
     public void updateCharacter(String newName){
     
         name = newName;
@@ -154,7 +152,6 @@ public class Character {
     }
 
 
-
     /**
      * Sets the id and name of the character to null, and clears attacks' list
      *
@@ -163,8 +160,9 @@ public class Character {
     public void clearCharacter(){
         id = null;
         name = null;
-        if(attacks != null && !attacks.isEmpty())
+        if(attacks.size() > 0) {
             attacks.clear();
+        }
     }
 
     /**
@@ -177,28 +175,16 @@ public class Character {
         attacks.add(attack);
     }
 
-    public void clearAttacks(){
-        attacks.clear();
-    }
 
+    /***** Getters and Setters ********/
 
-    public Integer getId() {
-        return id;
-    }
+    public Integer getId() { return id; }
 
-    public String getName() {
-        return name;
-    }
-
+    public String getName() { return name; }
 
     public List<Attack> getAttacks() { return attacks; }
 
+    public void setId(Integer id) { this.id = id; }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setName(String name) { this.name = name; }
 }

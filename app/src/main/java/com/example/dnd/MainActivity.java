@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+
     /**
      *  Returns the Character object
      *  @author Atsuko Critchfield (Takanabe)
