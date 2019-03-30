@@ -40,6 +40,14 @@ public class Attack {
     private Integer diceId;
     private Integer numOfDice;
 
+    Attack(){
+        modHit = null;
+        modDamage = null;
+        diceId = null;
+        numOfDice = 0;
+        die = null;
+    }
+
 
     /**
      * Non-Default constructor

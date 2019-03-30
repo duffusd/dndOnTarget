@@ -53,9 +53,6 @@ public class RollResultListAdapter extends ArrayAdapter<RollResult> {
             int dieType = result.getAttack().getDie().getSides();
             int numOfDie = result.getAttack().getNumOfDice();
 
-            System.out.println("numOfDamages: " + result.getDamages().size());
-
-
             // when only one die was used to roll for damage
             if(result.getDamages().size() == 1){
 
