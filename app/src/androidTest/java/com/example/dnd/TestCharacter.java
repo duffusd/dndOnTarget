@@ -43,14 +43,14 @@ public class TestCharacter {
         CharacterDatabaseHelper dbHelper = new CharacterDatabaseHelper(InstrumentationRegistry.getTargetContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        Cursor result = db.rawQuery("SELECT " +
-                CharacterContract.getNameColName() +
-                " FROM " +
-                CharacterContract.getTableName() +
-                " WHERE " +
-                CharacterContract.getIdColName() +
-                "=" +
-                characterId, null);
+        Cursor result = db.rawQuery("SELECT "
+                + CharacterContract.getNameColName()
+                + " FROM "
+                + CharacterContract.getTableName()
+                + " WHERE "
+                + CharacterContract.getIdColName()
+                + "="
+                + characterId, null);
 
         String characterNameInDB = null;
 
@@ -63,7 +63,8 @@ public class TestCharacter {
         assertTrue(characterNameInDB.equals(name));
 
 
-        // delete the character
+        // delete the character and close the database helper
+        dbHelper.close();
         character.deleteCharacter();
     }
 
@@ -91,7 +92,7 @@ public class TestCharacter {
     }
 
     @Test
-    public void testGetAttackIdsForCharacter() {
+    public void testGetAttackIdsForCharacter() throws Exception{
 
         Character character = new Character(InstrumentationRegistry.getTargetContext());
         Integer characterId = character.addNewCharacter("Lion");
@@ -105,7 +106,7 @@ public class TestCharacter {
         Integer attack1_damageModifier = 3;
         Integer attack1_dieType = 3;
         Integer attack1_numOfDice = 3;
-        Integer attack1_id = attack1.addAttack(attack1_name, attack1_hitModifier, attack1_damageModifier, attack1_dieType, attack1_numOfDice);
+        Integer attack1_id = attack1.addAttack(attack1_name, attack1_hitModifier.toString(), attack1_damageModifier.toString(), attack1_dieType, attack1_numOfDice.toString());
 
         Attack attack2 = new Attack(InstrumentationRegistry.getTargetContext());
         String attack2_name = "Attack2";
@@ -113,7 +114,7 @@ public class TestCharacter {
         Integer attack2_damageModifier = 3;
         Integer attack2_dieType = 3;
         Integer attack2_numOfDice = 3;
-        Integer attack2_id = attack2.addAttack(attack2_name, attack2_hitModifier, attack2_damageModifier, attack2_dieType, attack2_numOfDice);
+        Integer attack2_id = attack2.addAttack(attack2_name, attack2_hitModifier.toString(), attack2_damageModifier.toString(), attack2_dieType, attack2_numOfDice.toString());
 
         // add a character and attack to CharacterAttacks Database
         CharacterAttacksDatabaseHelper dbHelper = new CharacterAttacksDatabaseHelper(InstrumentationRegistry.getTargetContext());
@@ -127,14 +128,15 @@ public class TestCharacter {
         assertTrue(attackIds.get(0) == attack1_id || attackIds.get(0) == attack2_id);
         assertTrue(attackIds.get(1) == attack1_id || attackIds.get(1) == attack2_id);
 
-        // delete character and attacks
+        // delete character and attacks and close the database helper
         character.deleteCharacter();
         attack1.deleteAttack(attack1_id);
         attack2.deleteAttack(attack2_id);
+        dbHelper.close();
     }
 
     @Test
-    public void TestGenerateAttacksForCharacter(){
+    public void TestGenerateAttacksForCharacter() throws Exception{
 
         Character character = new Character(InstrumentationRegistry.getTargetContext());
         Integer characterId = character.addNewCharacter("LionXX");
@@ -148,7 +150,7 @@ public class TestCharacter {
         Integer attack_damageModifier = 3;
         Integer attack_dieType = 3;
         Integer attack_numOfDice = 3;
-        Integer attack_id = attack.addAttack(attack_name, attack_hitModifier, attack_damageModifier, attack_dieType, attack_numOfDice);
+        Integer attack_id = attack.addAttack(attack_name, attack_hitModifier.toString(), attack_damageModifier.toString(), attack_dieType, attack_numOfDice.toString());
         attack.setId(attack_id);
         attack.setName(attack_name);
         attack.setModHit(attack_hitModifier);
@@ -171,9 +173,10 @@ public class TestCharacter {
         assertEquals(attack.getDiceId(), testAttack.getDiceId());
         assertEquals(attack.getNumOfDice(), testAttack.getNumOfDice());
 
-        // delete character and attack
+        // delete character and attack and close the database helper
         character.deleteCharacter();
         attack.deleteAttack(attack_id);
+        dbHelper.close();
 
     }
 
@@ -202,7 +205,9 @@ public class TestCharacter {
         assertTrue(result.getCount() == 0);
 
 
+        // delete the character and close the database helper
         character.deleteCharacter();
+        dbHelper.close();
 
     }
 

@@ -29,13 +29,6 @@ public class Die {
     private Integer sides;
     private DiceDatabaseHelper diceDbHelper;
 
-    /*
-    Die() {
-        sides = 0;
-    }
-    */
-
-
     /**
      * Non-default constructor 
      * @param context
@@ -46,6 +39,17 @@ public class Die {
         diceDbHelper = new DiceDatabaseHelper(context);
         this.dieId = diceId;
         sides = diceDbHelper.getDieNumber(dieId);
+    }
+
+    /**
+     * Default constructor
+     *
+     */
+    Die(){
+        context = null;
+        dieId = null;
+        sides = null;
+        diceDbHelper = null;
     }
 
 
@@ -61,6 +65,13 @@ public class Die {
 
     }
 
+
+    /**
+     * Updates the number of sides on the die
+     *
+     * @author Atsuko Takanabe
+     * @exception android.database.sqlite.SQLiteException
+     */
     public void updateSides(){
         sides = diceDbHelper.getDieNumber(dieId);
     }

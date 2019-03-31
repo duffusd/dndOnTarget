@@ -103,17 +103,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                 String newDamageModifier = damageModifier.getText().toString().trim();
                 String newNumOfDice = numDice.getText().toString().trim();
 
-                // check if the attack name is empty
-                if(newAttackName.isEmpty()){
-                    Toast.makeText(AttackAddEdit.this, "Attack name cannot be empty", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                // check if the hit modifier contains a character
-                if(newHitModifier.matches(".*[a-zA-Z]+.*")){
-                    Toast.makeText(AttackAddEdit.this, "Hit Modifier can't contain any alphabet", Toast.LENGTH_LONG).show();
-                    return;
-                }
+                /*
 
                 // check if the damage modifier contains a character
                 if(newDamageModifier.matches(".*[a-zA-Z]+.*")){
@@ -132,17 +122,35 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                     Toast.makeText(AttackAddEdit.this,"Select the die type", Toast.LENGTH_LONG).show();
                     return;
                 }
+                */
 
                 // add a new attack
                 if(MainActivity.getAttack().getId() == null){
 
+                    Integer newId = null;
+
+                    try{
+
+                        newId = MainActivity.getAttack().addAttack(newAttackName,
+                                newHitModifier,
+                                newDamageModifier,
+                                dieId.intValue(),
+                                newNumOfDice);
+
+                    } catch(Exception e){
+                        Toast.makeText(AttackAddEdit.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.e(tag, e.getMessage());
+                        return;
+                    }
+
+                    /*
                     Integer newId = MainActivity.getAttack().addAttack(newAttackName,
                             newHitModifier.isEmpty() ? 0 : Integer.parseInt(newHitModifier),
                             newDamageModifier.isEmpty() ? 0 : Integer.parseInt(newDamageModifier),
                             //dieId == null ? -1 : Math.addExact(Integer.parseInt(dieId.toString()), 1),
                             dieId == null ? -1 : Integer.parseInt(dieId.toString()),
                             newNumOfDice.isEmpty() ? 0 : Integer.parseInt(newNumOfDice));
-
+*/
 
                     // create a new attack object and add it to attacks array list of the selected character object
                     Attack newAttack = new Attack(AttackAddEdit.this);
@@ -161,26 +169,64 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
 
                     // update name
                     if(newAttackName != MainActivity.getAttack().getName()){
-                        MainActivity.getAttack().updateName(newAttackName);
+
+                        try{
+
+                            MainActivity.getAttack().updateName(newAttackName);
+
+                        } catch(Exception e){
+
+                            Toast.makeText(AttackAddEdit.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            e.getMessage();
+                            return;
+                        }
                     }
 
                     // update hit modifier
-                    Integer newHitModInt = newHitModifier.length() == 0 ? 0 : Integer.parseInt(newHitModifier);
-                    if(newHitModInt != MainActivity.getAttack().getModHit()){
-                        MainActivity.getAttack().updateHitModifier(newHitModInt);
+                    if(Integer.parseInt(newHitModifier) != MainActivity.getAttack().getModHit()){
+
+                        try{
+
+                            MainActivity.getAttack().updateHitModifier(newHitModifier);
+
+                        } catch(Exception e){
+
+                            Toast.makeText(AttackAddEdit.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            e.getMessage();
+                            return;
+                        }
 
                     }
 
                     // update damage modifier
-                    Integer newDamageModInt = newDamageModifier.length() == 0 ? 0 : Integer.parseInt(newDamageModifier);
-                    if(newDamageModInt != MainActivity.getAttack().getModDamage()){
-                        MainActivity.getAttack().updateDamageModifier(newDamageModInt);
+                    if(Integer.parseInt(newDamageModifier) != MainActivity.getAttack().getModDamage()){
+
+                        try{
+
+                            MainActivity.getAttack().updateDamageModifier(newDamageModifier);
+
+                        } catch(Exception e){
+
+                            Toast.makeText(AttackAddEdit.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            e.getMessage();
+                            return;
+                        }
                     }
 
                     // update dice ID and die
-                    if(Integer.parseInt(dieId.toString()) != MainActivity.getAttack().getDiceId()) {
+                    if(dieId.intValue() != MainActivity.getAttack().getDiceId()) {
 
-                        MainActivity.getAttack().updateDiceID(Integer.parseInt(dieId.toString()));
+                        try{
+
+                            MainActivity.getAttack().updateDiceID(dieId.intValue());
+
+                        }catch(Exception e){
+
+                            Toast.makeText(AttackAddEdit.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            e.getMessage();
+                            return;
+                        }
+
                         MainActivity.getAttack().getDie().setDieId(Integer.parseInt(dieId.toString()));
                         MainActivity.getAttack().getDie().updateSides();
 
@@ -188,7 +234,17 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
 
                     // update the number of die
                     if(Integer.parseInt(newNumOfDice) != MainActivity.getAttack().getNumOfDice()) {
-                        MainActivity.getAttack().updateNumOfDie(Integer.parseInt(newNumOfDice));
+
+                        try{
+
+                            MainActivity.getAttack().updateNumOfDie(newNumOfDice);
+
+                        } catch(Exception e){
+
+                            Toast.makeText(AttackAddEdit.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            e.getMessage();
+                            return;
+                        }
 
                     }
 

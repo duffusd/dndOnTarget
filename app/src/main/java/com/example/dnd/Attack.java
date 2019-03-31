@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.dnd.data.AttackContract;
 import com.example.dnd.data.AttackDatabaseHelper;
@@ -39,12 +40,24 @@ public class Attack {
     private Context context;
     private Integer diceId;
     private Integer numOfDice;
+    private String message_emptyAttackName = "What's the name of the attack?";
+    private String message_damageModifierContainsAlphabet = "Damage Modifier can't have any alphabet";
+    private String message_invalidDieType = "Select the correct die type";
+    private String message_invalidNumOfDie = "At least one die is required";
 
+
+    /**
+     * Default constructor
+     *
+     */
     Attack(){
+        id = null;
+        name = null;
+        dbHelper = null;
         modHit = null;
         modDamage = null;
         diceId = null;
-        numOfDice = 0;
+        numOfDice = null;
         die = null;
     }
 
@@ -111,7 +124,6 @@ public class Attack {
     }
 
 
-
     /**
      * Adds a new attack to the backend database
      *
@@ -124,15 +136,27 @@ public class Attack {
      * @exception SQLiteException
      * @author Atsuko Takanabe
      */
-    public Integer addAttack(String attackName, Integer hitModifier, Integer damageModifier, Integer diceId, Integer numOfDice){
-      
-      Integer newRowId = null;
+    public Integer addAttack(String attackName, String hitModifier, String damageModifier, Integer diceId, String numOfDice) throws Exception {
+
+        Integer newRowId = null;
+        String attackNameString = null;
+        Integer hitModifierInt = null;
+        Integer damageModifierInt = null;
+        Integer numOfDiceInt = null;
+
+        // validate the parameter values
+        attackNameString = validateAttackName(attackName);
+        hitModifierInt = validateHitModifier(hitModifier);
+        damageModifierInt = validateDamageModifier(damageModifier);
+        validateDiceId(diceId);
+        numOfDiceInt = validateNumOfDie(numOfDice);
 
         try{
 
-            newRowId = dbHelper.addAttack(attackName, hitModifier, damageModifier, diceId, numOfDice);
+            newRowId = dbHelper.addAttack(attackNameString, hitModifierInt, damageModifierInt, diceId, numOfDiceInt);
           
         }catch(SQLiteException e){
+
             e.printStackTrace();
             Log.e(tag, "addAttack method failed");
         }
@@ -147,10 +171,12 @@ public class Attack {
      * @exception SQLiteException
      * @author Atsuko Takanabe
      */
-    public void updateName(String newName){
+    public void updateName(String newName) throws Exception{
+
+        String newAttackName = validateAttackName(newName);
 
         try{
-            dbHelper.updateName(id, newName);
+            dbHelper.updateName(id, newAttackName);
         }catch (SQLiteException e){
             e.printStackTrace();
             Log.e(tag, "Updating an attack name failed");
@@ -164,16 +190,18 @@ public class Attack {
      *
      * @param hit New hitModifier value
      */
-    public void updateHitModifier(Integer hit){
+    public void updateHitModifier(String hit) throws Exception {
+
+        Integer hitModifier = validateHitModifier(hit);
 
         try{
-            dbHelper.updateHitModifier(id, hit);
+            dbHelper.updateHitModifier(id, hitModifier);
         } catch(SQLiteException e){
             e.printStackTrace();
             Log.e(tag, "Updating hit modifier failed");
         }
 
-        modHit = hit;
+        modHit = hitModifier;
     }
 
     /**
@@ -183,17 +211,18 @@ public class Attack {
      * @exception SQLiteException
      * @author Atsuko Takanabe
      */
+    public void updateDamageModifier(String damage) throws Exception{
 
-    public void updateDamageModifier(Integer damage){
+        Integer damageInt = validateDamageModifier(damage);
 
         try{
-            dbHelper.updateDamageModifier(id, damage);
+            dbHelper.updateDamageModifier(id, damageInt);
         }catch (SQLiteException e){
             e.printStackTrace();
             Log.e(tag, "Updating damage modifier failed");
         }
 
-        modDamage = damage;
+        modDamage = damageInt;
     }
 
 
@@ -204,7 +233,9 @@ public class Attack {
      * @exception SQLiteException
      * @author Atsuko Takanabe
      */
-    public void updateDiceID(Integer diceId){
+    public void updateDiceID(Integer diceId) throws Exception{
+
+        validateDiceId(diceId);
 
         try{
             dbHelper.updateDiceId(id, diceId);
@@ -224,16 +255,18 @@ public class Attack {
      * @exception SQLiteException
      * @author Atsuko Takanabe
      */
-    public void updateNumOfDie(Integer numOfDie){
+    public void updateNumOfDie(String numOfDie) throws Exception{
+
+        Integer numOfDieInt = validateNumOfDie(numOfDie);
 
         try{
-            dbHelper.updateNumOfDie(id, numOfDie);
+            dbHelper.updateNumOfDie(id, numOfDieInt);
         }catch (SQLiteException e){
             e.printStackTrace();
             Log.e(tag, "Updating the number of die/dice failed");
         }
 
-        this.numOfDice = numOfDie;
+        this.numOfDice = numOfDieInt;
     }
 
     /**
@@ -254,6 +287,140 @@ public class Attack {
             Log.e(tag, "deleteAttack method failed");
         }
     }
+
+    /**
+     * Validates the name of attack to make sure that the user has given the correct attack name.
+     *
+     * If the name is empty, it throws the exception.
+     * If the name of the attack is valid, it returns back the same attack name
+     *
+     * @param name of the attack to validate
+     * @return name of the validated attack
+     * @throws EmptyStringException
+     * @author Atsuko Takanabe
+     */
+    public String validateAttackName(String name) throws Exception{
+
+        String attackName = null;
+
+        if(name.isEmpty()){
+
+            throw new EmptyStringException(message_emptyAttackName);
+        }
+
+        attackName = name;
+
+        return attackName;
+    }
+
+
+    /**
+     * Validates the value of hit modifier. If the empty value is given, this method converts it to 0.
+     *
+     * @param hitModifier to validate
+     * @return 0 if the hit modifier is empty. Otherwise, the integer value of hitModifier
+     * @exception InvalidIntegerException
+     * @author Atsuko Takanabe
+     */
+    public Integer validateHitModifier(String hitModifier){
+
+        Integer hitModifierValue = null;
+
+        // check hit modifier
+        if(hitModifier.isEmpty()){
+
+            hitModifierValue = 0;
+
+        }else{
+
+            hitModifierValue = Integer.parseInt(hitModifier);
+        }
+
+        return hitModifierValue;
+
+    }
+
+    /**
+     * Validates the value of damage modifier. If the value contains alphabet, it throws an InvalidIntegerException.
+     * If the value is null, this method converts it to 0.
+     *
+     * @param damageModifier
+     * @return 0 if the damageModifier is null or empty. Otherwise, the integer value of damageModifier
+     * @throws InvalidIntegerException
+     * @author Atsuko Takanabe
+     */
+    public Integer validateDamageModifier(String damageModifier) throws Exception{
+
+        Integer damageModifierValue = null;
+
+        // check if the damage modifier contains any alphabet
+        if(damageModifier.matches(".*[a-zA-Z]+.*")){
+
+            //Toast.makeText(context, message_damageModifierContainsAlphabet, Toast.LENGTH_LONG).show();
+            throw new InvalidIntegerException(message_damageModifierContainsAlphabet);
+
+        }
+
+        if(damageModifier.isEmpty()){
+
+            damageModifierValue = 0;
+
+        } else {
+
+            damageModifierValue = Integer.parseInt(damageModifier);
+
+        }
+
+        return damageModifierValue;
+    }
+
+
+    /**
+     * Validates the diceId. If the diceId equal to or less than 0 or greater than 6, it throws an InvalidIntegerException.
+     * The valid dice IDs should be 1 to 6
+     *
+     * @param diceId
+     * @throws InvalidIntegerException
+     * @author Atsuko Takanabe
+     */
+    public void validateDiceId(Integer diceId) throws Exception{
+
+        // Make sure that the diceId is NOT 0
+        if(diceId.equals(0) || diceId > 6 || diceId < 0){
+
+            //Toast.makeText(context, message_invalidDieType, Toast.LENGTH_LONG).show();
+            throw new InvalidIntegerException(message_invalidDieType);
+        }
+    }
+
+    /**
+     * Validates the number of dice to ensure that it is greater than 0 or not empty. If the numOfDice is empty or 0,
+     * it throws an InvalidIntegerException
+     *
+     * @param numOfDice to validate
+     * @return Integer value of numOfDice
+     * @throws InvalidIntegerException
+     * @author Atsuko Takanabe
+     */
+    public Integer validateNumOfDie(String numOfDice) throws Exception {
+
+        Integer numOfDiceValue = null;
+
+        // Ensure that the number of dice is greater than 0
+        if(numOfDice.isEmpty() || numOfDice == "0"){
+
+            //Toast.makeText(context, message_invalidNumOfDie, Toast.LENGTH_LONG).show();
+            throw new InvalidIntegerException(message_invalidNumOfDie);
+
+        }else{
+
+            numOfDiceValue = Integer.parseInt(numOfDice);
+        }
+
+        return numOfDiceValue;
+
+    }
+
 
     /**
      * Sets the attributes of attack object to null
@@ -310,6 +477,8 @@ public class Attack {
     public void setNumOfDice(Integer numOfDice) { this.numOfDice = numOfDice; }
 
     public void setDiceId(Integer diceId) { this.diceId = diceId; }
+
+    public void setDie(Die die) { this.die = die; }
 
     /**
      * Using the attack ID, it inquires the database and gets the rest of the attack's attribute,
