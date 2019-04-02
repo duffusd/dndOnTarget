@@ -40,6 +40,7 @@ public class CharacterAddEdit extends AppCompatActivity {
     private Button addEditAttackButton;
     private EditText editText;
     private String tag;
+    public static Attack selectedAttack;
     //private Intent attackIntent;
 
     @Override
@@ -163,6 +164,8 @@ public class CharacterAddEdit extends AppCompatActivity {
         // only display attacks list if the character was selected to edit in the previous step
         if (MainActivity.getCharacter().getId() != null) {
 
+            MainActivity.getCharacter().generateAttacksForCharacter();
+
             ListView attackListView = findViewById(R.id.attackListView);
             attackListView.setSelector(R.drawable.ic_launcher_background);
             AttacksListAdapter adapter = new AttacksListAdapter(this, R.layout.attack_list_adapter, MainActivity.getCharacter().getAttacks());
@@ -182,7 +185,7 @@ public class CharacterAddEdit extends AppCompatActivity {
                     attackListView.setSelector(R.drawable.ic_launcher_background);
 
                     // get the clicked attack
-                    Attack selectedAttack = new Attack((Attack) parent.getItemAtPosition(position));
+                    selectedAttack = new Attack((Attack) parent.getItemAtPosition(position));
 
                     // set the main attack to the clicked attack
                     MainActivity.setAttack(selectedAttack);

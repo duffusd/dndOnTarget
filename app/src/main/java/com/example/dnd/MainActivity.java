@@ -39,10 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static Attack attack;
     private Button addEditCharacterButton;
     private Button attackButton;
-    private EditText targetACText;
-    public static final String targetAcSharedPreference = "TargetAcSharedPref";
-    public static final String targetAC = "TargetAC";
-    public static SharedPreferences sharedPreferences;
+
 
     @Override
     protected  void onStart(){
@@ -68,10 +65,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // set up shared preferences for this app
-        sharedPreferences = getSharedPreferences(targetAcSharedPreference, Context.MODE_PRIVATE);
-        //clearSharedPreferences(); // clear existing shared preferences
-
         // instantiate the character and attack object
         character = new Character(this);
         attack = new Attack(this);
@@ -83,8 +76,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         addEditCharacterButton.setOnClickListener(this);
         attackButton.setOnClickListener(this);
 
-        // get targetAC textfield
-        targetACText = findViewById(R.id.targetACEditText);
 
         //populate an ArrayList<String> from the database and then view it
         ListView listView = findViewById(R.id.listView);
@@ -115,8 +106,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                character.getAttacks().clear();
-
                 // get a character name from the clicked item
                 String selectedCharacter = (String) parent.getItemAtPosition(position);
 
@@ -125,31 +114,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 character.setName(selectedCharacter);
                 character.setId(selectedCharacterId);
-
-                // Get attackIds for the character
-                List<Integer> attackIds = character.getAttackIdsForCharacter();
-
-                // Create an attack object for each attackIds, then add it to the attack list of the character object
-                if (attackIds.size() > 0) {
-                    for (int i = 0; i < attackIds.size(); i++) {
-                        Attack attack = new Attack(MainActivity.this);
-                        attack.setAttack(attackIds.get(i));
-                        character.addAttack(attack);
-                    }
-
-                }
+                character.generateAttacksForCharacter();
 
             }
 
         });
 
-
-
     }
-
 
     @Override
     public void onClick(View view) {
+
         switch (view.getId()){
             case R.id.addEditAttackButton:
                 Log.e("Add Attack Button", "Going to CharacterAddEdit ");
@@ -157,47 +132,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
             case R.id.rollAttackbtn:
-                Log.e("Select Attack Button", "Going to SelectAttack ");
-
-                // set up targetAC shared preference and get the value
-
-                String targetACString = targetACText.getText().toString().trim();
-
-                // first, make sure targetAC is not empty
-
-                if(targetACString.isEmpty()){
-
-                    Toast.makeText(this, "What is the target AC?", Toast.LENGTH_LONG).show();
-                    break;
-
-                } else {
-
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    Integer targetAcNum = null;
-
-                    try {
-
-                        // if this fails, the value for targetAC is wrong
-                        targetAcNum = Integer.parseInt(targetACString);
-
-                    } catch (Exception e){
-                        Toast.makeText(this, "Invalid targetAC", Toast.LENGTH_LONG).show();
-                        break;
-                    }
-
-                    editor.putInt(targetAC, targetAcNum);
-                    editor.commit();
-
-                    // create the new intend
-                    Intent attackButton = new Intent(this, SelectAttack.class);
-                    startActivity(attackButton);
-
+                if(character.getId() == null){
+                    Toast.makeText(this, "Pleasee choose a character", Toast.LENGTH_LONG).show();
                     break;
                 }
-
+                Log.e("Select Attack Button", "Going to SelectAttack ");
+                // create the new intend
+                Intent attackButton = new Intent(this, SelectAttack.class);
+                startActivity(attackButton);
+                break;
         }
 
     }
+
 
     /**
      *  Returns the Character object
@@ -226,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         attack = newAttack;
     }
 
+    /*
     public int roll(int AC) {
         // get the text view from the View to get the user input
         EditText textAC = findViewById(R.id.targetACEditText);
@@ -247,4 +195,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return -1;
 
     }
+
+    */
 }

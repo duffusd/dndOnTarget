@@ -67,6 +67,7 @@ public class RollResultListAdapter extends ArrayAdapter<RollResult> {
                     damagesBreakdown.append(result.getDamages().get(i).toString() + ", ");
                 }
 
+                System.out.println("damagesBreakdown: " + damagesBreakdown.length());
                 damagesBreakdown.append(result.getDamages().get(numOfDamages - 1));
 
                 damage.setText(String.format("Damage Roll: %dD%d (%s) + %d Mod", numOfDie, dieType, damagesBreakdown, result.getAttack().getModDamage()));
