@@ -106,7 +106,7 @@ public class TestCharacter {
         Integer attack1_damageModifier = 3;
         Integer attack1_dieType = 3;
         Integer attack1_numOfDice = 3;
-        Integer attack1_id = attack1.addAttack(attack1_name, attack1_hitModifier.toString(), attack1_damageModifier.toString(), attack1_dieType, attack1_numOfDice.toString());
+        Integer attack1_id = attack1.addAttack(attack1_name, attack1_hitModifier, attack1_damageModifier, attack1_dieType, attack1_numOfDice);
 
         Attack attack2 = new Attack(InstrumentationRegistry.getTargetContext());
         String attack2_name = "Attack2";
@@ -114,7 +114,7 @@ public class TestCharacter {
         Integer attack2_damageModifier = 3;
         Integer attack2_dieType = 3;
         Integer attack2_numOfDice = 3;
-        Integer attack2_id = attack2.addAttack(attack2_name, attack2_hitModifier.toString(), attack2_damageModifier.toString(), attack2_dieType, attack2_numOfDice.toString());
+        Integer attack2_id = attack2.addAttack(attack2_name, attack2_hitModifier, attack2_damageModifier, attack2_dieType, attack2_numOfDice);
 
         // add a character and attack to CharacterAttacks Database
         CharacterAttacksDatabaseHelper dbHelper = new CharacterAttacksDatabaseHelper(InstrumentationRegistry.getTargetContext());
@@ -150,7 +150,7 @@ public class TestCharacter {
         Integer attack_damageModifier = 3;
         Integer attack_dieType = 3;
         Integer attack_numOfDice = 3;
-        Integer attack_id = attack.addAttack(attack_name, attack_hitModifier.toString(), attack_damageModifier.toString(), attack_dieType, attack_numOfDice.toString());
+        Integer attack_id = attack.addAttack(attack_name, attack_hitModifier, attack_damageModifier, attack_dieType, attack_numOfDice);
         attack.setId(attack_id);
         attack.setName(attack_name);
         attack.setModHit(attack_hitModifier);

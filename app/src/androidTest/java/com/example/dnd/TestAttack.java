@@ -28,15 +28,16 @@ public class TestAttack {
 
         Attack attack = new Attack(InstrumentationRegistry.getTargetContext());
         String attackName = "attack1";
-        String hitModifier = "3";
-        String damageModifier = "5";
+        Integer hitModifier = 3;
+        Integer damageModifier = 5;
         Integer diceId = 2;
-        String numOfDice = "2";
+        Integer numOfDice = 2;
+
         attack.setName(attackName);
-        attack.setModHit(Integer.parseInt(hitModifier));
-        attack.setModDamage(Integer.parseInt(damageModifier));
+        attack.setModHit(hitModifier);
+        attack.setModDamage(damageModifier);
         attack.setDiceId(diceId);
-        attack.setNumOfDice(Integer.parseInt(numOfDice));
+        attack.setNumOfDice(numOfDice);
 
         // add the new attack to the database
         Integer attackId = attack.addAttack(attackName, hitModifier, damageModifier, diceId, numOfDice);
@@ -89,15 +90,15 @@ public class TestAttack {
 
         Attack attack = new Attack(InstrumentationRegistry.getTargetContext());
         String attackName = "attack1";
-        String hitModifier = "3";
-        String damageModifier = "5";
+        Integer hitModifier = 3;
+        Integer damageModifier = 5;
         Integer diceId = 2;
-        String numOfDice = "2";
+        Integer numOfDice = 2;
         attack.setName(attackName);
-        attack.setModHit(Integer.parseInt(hitModifier));
-        attack.setModDamage(Integer.parseInt(damageModifier));
+        attack.setModHit(hitModifier);
+        attack.setModDamage(damageModifier);
         attack.setDiceId(diceId);
-        attack.setNumOfDice(Integer.parseInt(numOfDice));
+        attack.setNumOfDice(numOfDice);
 
         // add the new attack to the database
         Integer attackId = attack.addAttack(attackName, hitModifier, damageModifier, diceId, numOfDice);
@@ -149,7 +150,7 @@ public class TestAttack {
         attack.setName(attackName);
 
         // add the attack to the database table
-        Integer attackId = attack.addAttack(attackName, "0", "0", 1, "1");
+        Integer attackId = attack.addAttack(attackName, 0, 0, 1, 1);
         attack.setAttack(attackId);
 
         // update the attack name
@@ -193,12 +194,12 @@ public class TestAttack {
         attack.setName(attackName);
 
         // add the attack to the database table
-        Integer attackId = attack.addAttack(attackName, "0", "0", 1, "1");
+        Integer attackId = attack.addAttack(attackName, 0, 0, 1, 1);
         attack.setAttack(attackId);
 
         // update the hit modifier
         Integer newHitModifier = 3;
-        attack.updateHitModifier(newHitModifier.toString());
+        attack.updateHitModifier(newHitModifier);
 
         // check the hit modifier in the database table
         AttackDatabaseHelper dbHelper = new AttackDatabaseHelper(InstrumentationRegistry.getTargetContext());
@@ -237,12 +238,12 @@ public class TestAttack {
         attack.setName(attackName);
 
         // add the attack to the database table
-        Integer attackId = attack.addAttack(attackName, "0", "0", 1, "1");
+        Integer attackId = attack.addAttack(attackName, 0, 0, 1, 1);
         attack.setAttack(attackId);
 
         // update the damage modifier
         Integer newDamageModifier = 3;
-        attack.updateDamageModifier(newDamageModifier.toString());
+        attack.updateDamageModifier(newDamageModifier);
 
         // check the damage modifier in the database table
         AttackDatabaseHelper dbHelper = new AttackDatabaseHelper(InstrumentationRegistry.getTargetContext());
@@ -279,7 +280,7 @@ public class TestAttack {
         attack.setName(attackName);
 
         // add the attack to the database table
-        Integer attackId = attack.addAttack(attackName, "0", "0", 1, "1");
+        Integer attackId = attack.addAttack(attackName, 0, 0, 1, 1);
         attack.setAttack(attackId);
 
         // update the diceId
@@ -322,12 +323,12 @@ public class TestAttack {
         attack.setName(attackName);
 
         // add the attack to the database table
-        Integer attackId = attack.addAttack(attackName, "0", "0", 1, "1");
+        Integer attackId = attack.addAttack(attackName, 0, 0, 1, 1);
         attack.setAttack(attackId);
 
         // update the diceId
         Integer newNumOfDice = 3;
-        attack.updateNumOfDie(newNumOfDice.toString());
+        attack.updateNumOfDie(newNumOfDice);
 
         // check the diceID in the database table
         AttackDatabaseHelper dbHelper = new AttackDatabaseHelper(InstrumentationRegistry.getTargetContext());
@@ -445,7 +446,7 @@ public class TestAttack {
         attack.setName(attackName);
 
         // add the attack to the database table
-        Integer attackId = attack.addAttack(attackName, "0", "0", 1, "1");
+        Integer attackId = attack.addAttack(attackName, 0, 0, 1, 1);
         attack.setAttack(attackId);
         Die die = new Die(InstrumentationRegistry.getTargetContext(), attack.getDiceId());
         attack.setDie(die);
