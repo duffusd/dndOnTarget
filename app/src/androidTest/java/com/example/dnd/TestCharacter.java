@@ -91,6 +91,53 @@ public class TestCharacter {
 
     }
 
+
+
+    @Test
+    public void testValidateCharacterName(){
+
+        String message_already_taken = "Character name is already taken";
+        String message_empty_name = "You must put something in the text field";
+
+        String expectedMessage_already_taken = null;
+        String expectedMessage_empty_name = null;
+
+
+        Character character = new Character(InstrumentationRegistry.getTargetContext());
+        String name = "TestCharacter";
+        Integer id = character.addNewCharacter(name);
+        character.setId(id);
+
+        // validate the character name that already exists in the database table
+        try{
+
+            character.validateCharacterName(name);
+
+        }catch (Exception e){
+
+            expectedMessage_already_taken = e.getMessage();
+        }
+
+        assertTrue(expectedMessage_already_taken.equals(message_already_taken));
+
+
+        // validate the empty character name
+        try{
+
+            character.validateCharacterName("");
+
+        }catch (Exception e){
+
+            expectedMessage_empty_name = e.getMessage();
+        }
+
+        assertTrue(expectedMessage_empty_name.equals(message_empty_name));
+
+        // delete the character
+        character.deleteCharacter();
+
+    }
+
     @Test
     public void testGetAttackIdsForCharacter() throws Exception{
 

@@ -120,66 +120,32 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    /*
-    public boolean findCharacter(int id){
+    public Boolean findCharacterByName(String name){
 
-        try{
-
-            SQLiteDatabase db = getWritableDatabase();
-
-            String sqlSelectCharacterId =
-                    "SELECT " + CharacterContract.getIdColName() + " FROM " + CharacterContract.getTableName() +
-                    " WHERE " + CharacterContract.getIdColName() + "=" + id;
-
-            Cursor c = db.rawQuery(sqlSelectCharacterId, null);
-
-            if (c != null && c.getCount() == 1) {
-                db.close();
-                return true;
-            }
-            else
-                db.close();
-                return false;
-
-        } catch (SQLiteException e) {
-            e.printStackTrace();
-            Log.e(ERROR_SQLite, "findCharacter(): Couldn't find a character");
-            return false;
-        }
-    }
-*/
-
-    /*
-    // get the id of the CharacterAttacks column with character id
-    public int getCharacterAttacksId(int id) {
+        String sqlFindCharacterByName =
+                "SELECT " + CharacterContract.getNameColName() +
+                        " FROM " + CharacterContract.getTableName() +
+                        " WHERE " + CharacterContract.getNameColName() + "=" + "'" + name + "'";
 
         SQLiteDatabase db = getReadableDatabase();
-        String sqlSelectCharacterAttackId =
-                "SELECT " + CharacterContract.getCharacterAttacksIdColName()
-                        + " FROM " + CharacterContract.getTableName()
-                        + " WHERE " + CharacterContract.getCharacterAttacksIdColName()
-                        + "=" + id;
 
         Cursor c = null;
 
-        try {
-            c = db.rawQuery(sqlSelectCharacterAttackId, null);
+        try{
 
-        } catch (SQLiteException e) {
+            c = db.rawQuery(sqlFindCharacterByName, null);
+        }catch(SQLiteException e){
             e.printStackTrace();
-            Log.e(ERROR_SQLite, "getCharacterAttacksId() FAILED");
-            return -1;
+            Log.e(ERROR_SQLite, "findCharacterByName Failed");
         }
 
-            if (c != null) {
-                c.moveToFirst();
-                int idCharAtks = c.getInt(c.getColumnIndex(CharacterContract.getCharacterAttacksIdColName()));
-                return idCharAtks;
-            } else {
-                return -1;
-            }
+        if(c.getCount() == 1){
+            return true;
+        }else{
+            return false;
+        }
     }
-    */
+
 
 
     /**

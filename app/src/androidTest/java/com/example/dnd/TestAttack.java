@@ -359,18 +359,25 @@ public class TestAttack {
     }
 
 
-
-
-    @Test(expected = EmptyStringException.class)
-    public void testValidateAttackName() throws Exception{
-
-        EmptyStringException exception = new EmptyStringException();
+    @Test
+    public void testValidateAttackName(){
 
         Attack attack = new Attack(InstrumentationRegistry.getTargetContext());
         String attackName = "";
+        String message = "What's the name of the attack?";
+        String actual_message = null;
 
-        attack.validateAttackName(attackName);
-        assertTrue(exception.equals(EmptyStringException.class));
+        try{
+
+            attack.validateAttackName(attackName);
+
+        }catch(Exception e){
+
+            actual_message = e.getMessage();
+
+        }
+
+        assertTrue(actual_message.equals(message));
 
     }
 
@@ -386,60 +393,109 @@ public class TestAttack {
     }
 
 
-    @Test(expected = InvalidIntegerException.class)
-    public void testValidateDamageModifier() throws Exception{
-
-        InvalidIntegerException exception = new InvalidIntegerException();
+    @Test
+    public void testValidateDamageModifier(){
 
         Attack attack = new Attack(InstrumentationRegistry.getTargetContext());
         String damageModifierEmptyString = "";
         String damageModifierAlphabet = "12b";
 
+        // if the empty string is passed for damage modifier, it returns 0
         Integer damageModifierZero = attack.validateHitModifier(damageModifierEmptyString);
-        attack.validateDamageModifier(damageModifierAlphabet);
-
         assertTrue(damageModifierZero == 0);
-        assertTrue(exception.equals(InvalidIntegerException.class));
+
+
+        // if the damage modifier contains the alphabet, the error message is thrown
+        String message_alphabet = "Damage Modifier can't have any alphabet";
+        String actual_message = null;
+
+        try{
+
+            attack.validateDamageModifier(damageModifierAlphabet);
+
+        }catch(Exception e){
+
+            actual_message = e.getMessage();
+        }
+
+        assertTrue(actual_message.equals(message_alphabet));
+
+
     }
 
 
-    @Test(expected = InvalidIntegerException.class)
-    public void testValidateNumOfDice() throws Exception{
+    @Test
+    public void testValidateNumOfDice(){
 
-        InvalidIntegerException exception = new InvalidIntegerException();
+        String message = "At least one die is required";
+        String actual_message = null;
 
         Attack attack = new Attack(InstrumentationRegistry.getTargetContext());
         String emptyString = "";
         String zeroString = "0";
 
-        attack.validateNumOfDie(emptyString);
-        attack.validateNumOfDie(zeroString);
+        // validate the empty number of dice
+        try{
 
-        assertTrue(exception.equals(InvalidIntegerException.class));
+            attack.validateNumOfDie(emptyString);
+
+        }catch(Exception e){
+
+            actual_message = null;
+            actual_message = e.getMessage();
+        }
+
+        assertTrue(actual_message.equals(message));
+
+
+        // validate 0 for number of dice
+        try{
+
+            attack.validateNumOfDie(zeroString);
+
+        }catch(Exception e){
+
+            actual_message = null;
+            actual_message = e.getMessage();
+
+        }
+
+        assertTrue(actual_message.equals(message));
 
     }
 
-    @Test(expected = InvalidIntegerException.class)
-    public void testValidateDiceId() throws Exception{
+    @Test
+    public void testValidateDiceId(){
 
-        InvalidIntegerException exception = new InvalidIntegerException();
         ArrayList<Integer> invalidIds = new ArrayList<>();
         invalidIds.add(0);
         invalidIds.add(7);
         invalidIds.add(-10);
 
+        String message = "Select the correct die type";
+        String actual_message = null;
+
         Attack attack = new Attack(InstrumentationRegistry.getTargetContext());
 
         for (int id : invalidIds){
 
-            attack.validateDiceId(id);
-            assertTrue(exception.equals(InvalidIntegerException.class));
+            try{
+
+                attack.validateDiceId(id);
+
+            }catch(Exception e){
+
+                actual_message = e.getMessage();
+                assertTrue(actual_message.equals(message));
+                actual_message = null;
+
+            }
         }
     }
 
 
     @Test
-    public void testSetAttack() throws Exception {
+    public void testSetAttack(){
 
         Attack attack = new Attack(InstrumentationRegistry.getTargetContext());
         String attackName = "TestAttack";

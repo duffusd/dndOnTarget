@@ -3,6 +3,7 @@ package com.example.dnd;
 import android.content.Context;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.dnd.data.CharacterAttacksDatabaseHelper;
 import com.example.dnd.data.CharacterDatabaseHelper;
@@ -149,6 +150,35 @@ public class Character {
             }
 
         }
+    }
+
+
+    /**
+     * This method takes the character name in string and returns the character ID if the name
+     * exists in the database table.
+     *
+     * @param name Character name to validate
+     * @return Validated new character name
+     * @author Atsuko Takanabe
+     */
+    public void validateCharacterName(String name) throws Exception{
+
+        Boolean characterExists = dbHelper.findCharacterByName(name);
+
+        if(characterExists){
+
+            throw new InvalidStringException("Character name is already taken");
+        }
+
+        if(name.isEmpty() || name.length() == 0){
+
+            throw new InvalidStringException("You must put something in the text field");
+
+        }
+
+        dbHelper.close();
+
+
     }
 
 

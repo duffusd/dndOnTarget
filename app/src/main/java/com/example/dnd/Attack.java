@@ -382,7 +382,7 @@ public class Attack {
         return diceId;
     }
 
-    
+
     /**
      * Validates the number of dice to ensure that it is greater than 0 or not empty. If the numOfDice is empty or 0,
      * it throws an InvalidIntegerException
@@ -397,7 +397,7 @@ public class Attack {
         Integer numOfDiceValue = null;
 
         // Ensure that the number of dice is greater than 0
-        if(numOfDice.isEmpty() || numOfDice == "0"){
+        if(numOfDice.isEmpty() || numOfDice.equals("0")){
 
             //Toast.makeText(context, message_invalidNumOfDie, Toast.LENGTH_LONG).show();
             throw new InvalidIntegerException(message_invalidNumOfDie);

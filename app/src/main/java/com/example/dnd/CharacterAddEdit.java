@@ -88,43 +88,46 @@ public class CharacterAddEdit extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                String nameStr = editText.getText().toString().trim();
+
+                // validate the character name
+                try{
+
+                    MainActivity.getCharacter().validateCharacterName(nameStr);
+
+                }catch(Exception e){
+
+                    Toast.makeText(CharacterAddEdit.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.e(tag, e.getMessage());
+                    return;
+                }
+
+
                 // Adding a new character
                 if (MainActivity.getCharacter().getId() == null) {
 
-                    final String newName = editText.getText().toString().trim();
-
-                    if (newName.isEmpty() || newName.length() == 0) {
-                        Toast.makeText(CharacterAddEdit.this, "You must put something in the text field!", Toast.LENGTH_LONG).show();
-                    } else {
-
-                        Integer newId = MainActivity.getCharacter().addNewCharacter(newName);
+                        Integer newId = MainActivity.getCharacter().addNewCharacter(nameStr);
 
                         if (newId == -1) {
 
-                            MainActivity.getCharacter().addNewCharacter(newName);
+                            //MainActivity.getCharacter().addNewCharacter(name);
                             Toast.makeText(CharacterAddEdit.this, "Something went wrong :(.", Toast.LENGTH_LONG).show();
 
                         } else {
 
                             MainActivity.getCharacter().setId(newId);
-                            MainActivity.getCharacter().setName(newName);
+                            MainActivity.getCharacter().setName(nameStr);
 
-                            Toast.makeText(CharacterAddEdit.this, "" + newName + " Successfully Inserted!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(CharacterAddEdit.this, "" + nameStr + " Successfully Inserted!", Toast.LENGTH_LONG).show();
                             addEditAttackButton.setEnabled(true);
                             deleteCharacterButton.setEnabled(true);
                         }
-                    }
                 }
+
                 // Updating an existing character's name
                 else {
 
-                    final String newName = editText.getText().toString().trim();
-
-                    if (newName.isEmpty() || newName.length() == 0) {
-                        Toast.makeText(CharacterAddEdit.this, "The character name must not be empty", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    MainActivity.getCharacter().updateCharacter(newName);
+                    MainActivity.getCharacter().updateCharacter(nameStr);
                     Toast.makeText(CharacterAddEdit.this, String.format("Updated %s", MainActivity.getCharacter().getName()), Toast.LENGTH_LONG).show();
                 }
             }

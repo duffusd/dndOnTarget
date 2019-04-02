@@ -115,7 +115,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                 damageModifierStr = damageModifier.getText().toString().trim();
                 numDiceStr = numDice.getText().toString().trim();
 
-                // use these values for update
+                // use these values for adding/updating
                 String attackName = null;
                 Integer hitModifier = null;
                 Integer damageModifier = null;
