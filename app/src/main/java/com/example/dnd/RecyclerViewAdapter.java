@@ -30,7 +30,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         final Model model = mModelList.get(position);
         final Attack attack = MainActivity.getCharacter().getAttacks().get(position);
 
-        holder.textView.setText(model.getText());
+        holder.textView.setText(attack.getName()
+                + " -- Dice + Mod: "
+                + attack.getNumOfDice()
+                + "D" + attack.getDie().getSides() +
+                " + " + attack.getModDamage()
+                + " Hit Mod: " + attack.getModHit());
+
         holder.view.setBackgroundColor(model.isSelected() ? Color.LTGRAY : Color.DKGRAY);
 
         holder.textView.setOnClickListener(new View.OnClickListener() {

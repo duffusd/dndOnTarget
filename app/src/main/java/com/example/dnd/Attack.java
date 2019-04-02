@@ -102,6 +102,7 @@ public class Attack {
      */
     public Integer rollHit(){
 
+
         Integer hit = ThreadLocalRandom.current().nextInt(1,21);
         Log.i(tag, String.format("Hit: %d", hit));
 
