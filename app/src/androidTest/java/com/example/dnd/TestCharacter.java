@@ -43,14 +43,14 @@ public class TestCharacter {
         CharacterDatabaseHelper dbHelper = new CharacterDatabaseHelper(InstrumentationRegistry.getTargetContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        Cursor result = db.rawQuery("SELECT " +
-                CharacterContract.getNameColName() +
-                " FROM " +
-                CharacterContract.getTableName() +
-                " WHERE " +
-                CharacterContract.getIdColName() +
-                "=" +
-                characterId, null);
+        Cursor result = db.rawQuery("SELECT "
+                + CharacterContract.getNameColName()
+                + " FROM "
+                + CharacterContract.getTableName()
+                + " WHERE "
+                + CharacterContract.getIdColName()
+                + "="
+                + characterId, null);
 
         String characterNameInDB = null;
 
@@ -63,7 +63,8 @@ public class TestCharacter {
         assertTrue(characterNameInDB.equals(name));
 
 
-        // delete the character
+        // delete the character and close the database helper
+        dbHelper.close();
         character.deleteCharacter();
     }
 
@@ -90,8 +91,55 @@ public class TestCharacter {
 
     }
 
+
+
     @Test
-    public void testGetAttackIdsForCharacter() {
+    public void testValidateCharacterName(){
+
+        String message_already_taken = "Character name is already taken";
+        String message_empty_name = "You must put something in the text field";
+
+        String expectedMessage_already_taken = null;
+        String expectedMessage_empty_name = null;
+
+
+        Character character = new Character(InstrumentationRegistry.getTargetContext());
+        String name = "TestCharacter";
+        Integer id = character.addNewCharacter(name);
+        character.setId(id);
+
+        // validate the character name that already exists in the database table
+        try{
+
+            character.validateCharacterName(name);
+
+        }catch (Exception e){
+
+            expectedMessage_already_taken = e.getMessage();
+        }
+
+        assertTrue(expectedMessage_already_taken.equals(message_already_taken));
+
+
+        // validate the empty character name
+        try{
+
+            character.validateCharacterName("");
+
+        }catch (Exception e){
+
+            expectedMessage_empty_name = e.getMessage();
+        }
+
+        assertTrue(expectedMessage_empty_name.equals(message_empty_name));
+
+        // delete the character
+        character.deleteCharacter();
+
+    }
+
+    @Test
+    public void testGetAttackIdsForCharacter() throws Exception{
 
         Character character = new Character(InstrumentationRegistry.getTargetContext());
         Integer characterId = character.addNewCharacter("Lion");
@@ -127,14 +175,15 @@ public class TestCharacter {
         assertTrue(attackIds.get(0) == attack1_id || attackIds.get(0) == attack2_id);
         assertTrue(attackIds.get(1) == attack1_id || attackIds.get(1) == attack2_id);
 
-        // delete character and attacks
+        // delete character and attacks and close the database helper
         character.deleteCharacter();
         attack1.deleteAttack(attack1_id);
         attack2.deleteAttack(attack2_id);
+        dbHelper.close();
     }
 
     @Test
-    public void TestGenerateAttacksForCharacter(){
+    public void TestGenerateAttacksForCharacter() throws Exception{
 
         Character character = new Character(InstrumentationRegistry.getTargetContext());
         Integer characterId = character.addNewCharacter("LionXX");
@@ -171,9 +220,10 @@ public class TestCharacter {
         assertEquals(attack.getDiceId(), testAttack.getDiceId());
         assertEquals(attack.getNumOfDice(), testAttack.getNumOfDice());
 
-        // delete character and attack
+        // delete character and attack and close the database helper
         character.deleteCharacter();
         attack.deleteAttack(attack_id);
+        dbHelper.close();
 
     }
 
@@ -202,7 +252,9 @@ public class TestCharacter {
         assertTrue(result.getCount() == 0);
 
 
+        // delete the character and close the database helper
         character.deleteCharacter();
+        dbHelper.close();
 
     }
 

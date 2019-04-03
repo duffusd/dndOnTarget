@@ -40,6 +40,10 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
     private EditText hitModifier;
     private EditText damageModifier;
     private EditText numDice;
+    private String attackNameStr;
+    private String hitModifierStr;
+    private String damageModifierStr;
+    private String numDiceStr;
     private String tag = "AttackAddEdit";
     private String dieType;
     private Long dieId = null;
@@ -47,11 +51,14 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
     private Spinner spinner;
     private ArrayAdapter adapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_attack_add_edit);
+
         dbAttacks = new AttackDatabaseHelper(this);
         dbCharAttacks = new CharacterAttacksDatabaseHelper(this);
         dbDice = new DiceDatabaseHelper(this);
@@ -72,6 +79,11 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
 
         spinner.setOnItemSelectedListener(this);
         spinner.setSelection(0);
+
+        attackNameStr = null;
+        hitModifierStr = null;
+        damageModifierStr = null;
+        numDiceStr = null;
 
         // Set the field values if the attack was selected to edit in the previous activity
         if (MainActivity.getAttack().getId() != null) {
@@ -99,51 +111,43 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
             @Override
             public void onClick(View v) {
 
-                String newAttackName = nameAtk.getText().toString().trim();
-                String newHitModifier = hitModifier.getText().toString().trim();
-                String newDamageModifier = damageModifier.getText().toString().trim();
-                String newNumOfDice = numDice.getText().toString().trim();
+                attackNameStr = nameAtk.getText().toString().trim();
+                hitModifierStr = hitModifier.getText().toString().trim();
+                damageModifierStr = damageModifier.getText().toString().trim();
+                numDiceStr = numDice.getText().toString().trim();
 
-                // check if the attack name is empty
-                if(newAttackName.isEmpty()){
-                    Toast.makeText(AttackAddEdit.this, "Attack name cannot be empty", Toast.LENGTH_LONG).show();
+                // use these values for adding/updating
+                String attackName = null;
+                Integer hitModifier = null;
+                Integer damageModifier = null;
+                Integer diceId = dieId.intValue();
+                Integer numOfDice = null;
+
+                // validate the entries by the user
+                try{
+
+                    attackName = MainActivity.getAttack().validateAttackName(attackNameStr);
+                    hitModifier = MainActivity.getAttack().validateHitModifier(hitModifierStr);
+                    damageModifier = MainActivity.getAttack().validateDamageModifier(damageModifierStr);
+                    diceId = MainActivity.getAttack().validateDiceId(diceId.intValue());
+                    numOfDice = MainActivity.getAttack().validateNumOfDie(numDiceStr);
+
+                } catch(Exception e){
+
+                    Toast.makeText(AttackAddEdit.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.e(tag, e.getMessage());
                     return;
                 }
 
-                // check if the hit modifier contains a character
-                if(newHitModifier.matches(".*[a-zA-Z]+.*")){
-                    Toast.makeText(AttackAddEdit.this, "Hit Modifier can't contain any alphabet", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                // check if the damage modifier contains a character
-                if(newDamageModifier.matches(".*[a-zA-Z]+.*")){
-                    Toast.makeText(AttackAddEdit.this, "Damage Modifier can't contain any alphabet", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                // check if the number of die is 0
-                if(newNumOfDice.isEmpty() || Integer.parseInt(newNumOfDice) == 0){
-                    Toast.makeText(AttackAddEdit.this, "Number of dice can't be 0", Toast.LENGTH_LONG).show();
-                    return;
-                }
-              
-                // check if dieId is 0 from selecting "Choose..."
-                if(dieId == 0){
-                    Toast.makeText(AttackAddEdit.this,"Select the die type", Toast.LENGTH_LONG).show();
-                    return;
-                }
 
                 // add a new attack
                 if(MainActivity.getAttack().getId() == null){
 
-                    Integer newId = MainActivity.getAttack().addAttack(newAttackName,
-                            newHitModifier.isEmpty() ? 0 : Integer.parseInt(newHitModifier),
-                            newDamageModifier.isEmpty() ? 0 : Integer.parseInt(newDamageModifier),
-                            //dieId == null ? -1 : Math.addExact(Integer.parseInt(dieId.toString()), 1),
-                            dieId == null ? -1 : Integer.parseInt(dieId.toString()),
-                            newNumOfDice.isEmpty() ? 0 : Integer.parseInt(newNumOfDice));
-
+                    Integer newId = MainActivity.getAttack().addAttack(attackName,
+                            hitModifier,
+                            damageModifier,
+                            diceId,
+                            numOfDice);
 
                     // create a new attack object and add it to attacks array list of the selected character object
                     Attack newAttack = new Attack(AttackAddEdit.this);
@@ -160,38 +164,47 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                 // update the selected attack
                 else {
 
-                    // update name
-                    if(newAttackName != MainActivity.getAttack().getName()){
-                        MainActivity.getAttack().updateName(newAttackName);
+                    /** update name **/
+
+                    if(attackName != MainActivity.getAttack().getName()){
+
+                        MainActivity.getAttack().updateName(attackName);
                     }
 
-                    // update hit modifier
-                    Integer newHitModInt = newHitModifier.length() == 0 ? 0 : Integer.parseInt(newHitModifier);
-                    if(newHitModInt != MainActivity.getAttack().getModHit()){
-                        MainActivity.getAttack().updateHitModifier(newHitModInt);
 
+                    /** update hit modifier **/
+
+                    if(hitModifier != MainActivity.getAttack().getModHit()){
+
+                        MainActivity.getAttack().updateHitModifier(hitModifier);
                     }
 
-                    // update damage modifier
-                    Integer newDamageModInt = newDamageModifier.length() == 0 ? 0 : Integer.parseInt(newDamageModifier);
-                    if(newDamageModInt != MainActivity.getAttack().getModDamage()){
-                        MainActivity.getAttack().updateDamageModifier(newDamageModInt);
+
+                    /** update damage modifier **/
+
+                    if(damageModifier != MainActivity.getAttack().getModDamage()){
+
+                        MainActivity.getAttack().updateDamageModifier(damageModifier);
                     }
 
-                    // update dice ID and die
-                    if(Integer.parseInt(dieId.toString()) != MainActivity.getAttack().getDiceId()) {
 
-                        MainActivity.getAttack().updateDiceID(Integer.parseInt(dieId.toString()));
-                        MainActivity.getAttack().getDie().setDieId(Integer.parseInt(dieId.toString()));
+                    /** update dice ID and die **/
+
+                    if(diceId != MainActivity.getAttack().getDiceId()) {
+
+                        MainActivity.getAttack().updateDiceID(diceId);
+                        MainActivity.getAttack().getDie().setDieId(diceId);
                         MainActivity.getAttack().getDie().updateSides();
 
                     }
 
                     // update the number of die
-                    if(Integer.parseInt(newNumOfDice) != MainActivity.getAttack().getNumOfDice()) {
-                        MainActivity.getAttack().updateNumOfDie(Integer.parseInt(newNumOfDice));
+                    if(numOfDice != MainActivity.getAttack().getNumOfDice()) {
 
+                        MainActivity.getAttack().updateNumOfDie(numOfDice);
                     }
+
+
 
                     Toast.makeText(AttackAddEdit.this, String.format("Updated %s",
                             MainActivity.getAttack().getName()), Toast.LENGTH_LONG).show();

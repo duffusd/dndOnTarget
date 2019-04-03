@@ -43,9 +43,16 @@ public class RollResult {
      * @author Atsuko Takanabe
      *
      */
-    public void calculateDamageResult(){
+    public void calculateDamageResult(int crit){
 
-        for (int i = 0; i < attack.getNumOfDice(); i++){
+        int totalNumberOfDice = 0;
+
+        if (crit ==20)
+            totalNumberOfDice = attack.getNumOfDice() * 2;
+        else
+            totalNumberOfDice = attack.getNumOfDice();
+
+        for (int i = 0; i < totalNumberOfDice; i++){
 
             Integer damage = attack.rollDamage();
             damages.add(damage);
