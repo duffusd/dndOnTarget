@@ -78,7 +78,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
 
 
         spinner.setOnItemSelectedListener(this);
-        spinner.setSelection(6);
+        spinner.setSelection(0);
 
         attackNameStr = null;
         hitModifierStr = null;
@@ -92,6 +92,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
             hitModifier.setText(MainActivity.getAttack().getModHit().toString());
             damageModifier.setText(MainActivity.getAttack().getModDamage().toString());
             numDice.setText(MainActivity.getAttack().getNumOfDice().toString());
+            spinner.setSelection(MainActivity.getAttack().getDiceId());
 
 
         } else {
