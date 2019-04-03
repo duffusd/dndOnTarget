@@ -247,24 +247,5 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
-        /*
-
-        btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                MainActivity.getAttack().deleteAttack(MainActivity.getAttack().getId());
-                MainActivity.getCharacter().removeAttack(MainActivity.getAttack());
-                Toast.makeText(AttackAddEdit.this, String.format("Deleted %s", MainActivity.getAttack().getName()), Toast.LENGTH_LONG).show();
-
-                // clear the text and attack object
-                nameAtk.setText(null);
-                hitModifier.setText(null);
-                damageModifier.setText(null);
-                MainActivity.getAttack().clear();
-            }
-        });
-
-        */
     }
 }

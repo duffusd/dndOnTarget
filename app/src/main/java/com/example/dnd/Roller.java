@@ -28,6 +28,7 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
     private TextView targetAcText;
     private Integer targetAcNum;
     private Button backButton;
+    private Button reRollButton;
     private RollResultListAdapter adapter;
     public static List<RollResult> attackRollResults;
 
@@ -54,6 +55,9 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
         backButton = findViewById(R.id.BackButton);
         backButton.setOnClickListener(Roller.this);
 
+        reRollButton = findViewById(R.id.reroll_button);
+        reRollButton.setOnClickListener(Roller.this);
+
     }
 
 
@@ -68,13 +72,26 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        // clear the arrays used for rolling attacks
-        attackRollResults.clear();
-        SelectAttack.getAttacksForRoll().clear();
 
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        goHome();
+        switch(v.getId()){
+
+            case R.id.BackButton:
+
+                // clear the arrays used for rolling attacks
+                attackRollResults.clear();
+                SelectAttack.getAttacksForRoll().clear();
+
+
+                // start the intent to go back to MainActivity
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                //goHome();
+
+            case R.id.reroll_button:
+                recreate();
+
+
+        }
 
     }
 
@@ -122,7 +139,7 @@ public class Roller extends AppCompatActivity implements View.OnClickListener {
             }
 
             adapter.add(result);
-            attack.clear();
+            //attack.clear();
 
         }
 
