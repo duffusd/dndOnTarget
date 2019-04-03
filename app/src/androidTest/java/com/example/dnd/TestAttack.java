@@ -24,7 +24,7 @@ public class TestAttack {
 
 
     @Test
-    public void testAddAttack() throws Exception{
+    public void testAddAttack(){
 
         Attack attack = new Attack(InstrumentationRegistry.getTargetContext());
         String attackName = "attack1";
@@ -86,7 +86,7 @@ public class TestAttack {
     }
 
     @Test
-    public void testDeleteAttack() throws Exception{
+    public void testDeleteAttack(){
 
         Attack attack = new Attack(InstrumentationRegistry.getTargetContext());
         String attackName = "attack1";
@@ -143,7 +143,7 @@ public class TestAttack {
 
 
     @Test
-    public void testUpdateName() throws Exception {
+    public void testUpdateName(){
 
         Attack attack = new Attack(InstrumentationRegistry.getTargetContext());
         String attackName = "TestAttack";
@@ -187,7 +187,7 @@ public class TestAttack {
 
 
     @Test
-    public void testUpdateHitModifier() throws Exception {
+    public void testUpdateHitModifier(){
 
         Attack attack = new Attack(InstrumentationRegistry.getTargetContext());
         String attackName = "TestAttack";
@@ -231,7 +231,7 @@ public class TestAttack {
 
 
     @Test
-    public void testUpdateDamageModifier() throws Exception{
+    public void testUpdateDamageModifier(){
 
         Attack attack = new Attack(InstrumentationRegistry.getTargetContext());
         String attackName = "TestAttack";
@@ -273,7 +273,7 @@ public class TestAttack {
 
     }
 
-    public void testUpdateDiceId() throws Exception{
+    public void testUpdateDiceId(){
 
         Attack attack = new Attack(InstrumentationRegistry.getTargetContext());
         String attackName = "TestAttack";
@@ -316,7 +316,7 @@ public class TestAttack {
     }
 
     @Test
-    public void testUpdateNumOfDice() throws Exception {
+    public void testUpdateNumOfDice(){
 
         Attack attack = new Attack(InstrumentationRegistry.getTargetContext());
         String attackName = "TestAttack";
