@@ -164,38 +164,34 @@ public class CharacterAddEdit extends AppCompatActivity {
 
     private void displayAllAttacks(){
 
-        // only display attacks list if the character was selected to edit in the previous step
-        if (MainActivity.getCharacter().getId() != null) {
+        MainActivity.getCharacter().generateAttacksForCharacter();
 
-            MainActivity.getCharacter().generateAttacksForCharacter();
+        ListView attackListView = findViewById(R.id.attackListView);
+        attackListView.setSelector(R.drawable.ic_launcher_background);
+        AttacksListAdapter adapter = new AttacksListAdapter(this, R.layout.attack_list_adapter, MainActivity.getCharacter().getAttacks());
 
-            ListView attackListView = findViewById(R.id.attackListView);
-            attackListView.setSelector(R.drawable.ic_launcher_background);
-            AttacksListAdapter adapter = new AttacksListAdapter(this, R.layout.attack_list_adapter, MainActivity.getCharacter().getAttacks());
+        LayoutInflater inflater = getLayoutInflater();
+        ViewGroup header = (ViewGroup) inflater.inflate(R.layout.attacks_list_header, attackListView, false);
+        attackListView.addHeaderView(header, null, false);
 
-            LayoutInflater inflater = getLayoutInflater();
-            ViewGroup header = (ViewGroup) inflater.inflate(R.layout.attacks_list_header, attackListView, false);
-            attackListView.addHeaderView(header, null, false);
+        attackListView.setAdapter(adapter);
 
-            attackListView.setAdapter(adapter);
+        // set onClick lister for attackListView
+        attackListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                attackListView.setSelector(R.drawable.ic_launcher_background);
 
-            // set onClick lister for attackListView
-            attackListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // get the clicked attack
+                selectedAttack = new Attack((Attack) parent.getItemAtPosition(position));
 
-                    attackListView.setSelector(R.drawable.ic_launcher_background);
+                // set the main attack to the clicked attack
+                MainActivity.setAttack(selectedAttack);
+            }
+        });
 
-                    // get the clicked attack
-                    selectedAttack = new Attack((Attack) parent.getItemAtPosition(position));
-
-                    // set the main attack to the clicked attack
-                    MainActivity.setAttack(selectedAttack);
-                }
-            });
-
-        }
     }
+
 
 }
