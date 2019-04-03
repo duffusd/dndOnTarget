@@ -2,6 +2,7 @@ package com.example.dnd.data;
 
 import android.provider.BaseColumns;
 
+
 public class AttackContract implements BaseColumns {
 
     private static final String db_name = "Attacks.db";
