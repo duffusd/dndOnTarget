@@ -5,14 +5,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.util.Log;
 import android.widget.EditText;
@@ -22,6 +27,7 @@ import com.example.dnd.data.CharacterDatabaseHelper;
 import com.example.dnd.data.DiceContract;
 import com.example.dnd.data.DiceDatabaseHelper;
 
+import org.w3c.dom.CharacterData;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -39,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static Attack attack;
     private Button addEditCharacterButton;
     private Button attackButton;
+    private ListView characterListView;
 
 
     @Override
@@ -78,8 +85,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         //populate an ArrayList<String> from the database and then view it
-        ListView listView = findViewById(R.id.listView);
-        listView.setSelector(R.drawable.ic_launcher_background);
+        characterListView = findViewById(R.id.listView);
+        characterListView.setSelector(R.drawable.ic_launcher_background);
+        registerForContextMenu(characterListView);
 
         myCharacterDB = new CharacterDatabaseHelper(this);
         characters = new ArrayList<>();
@@ -87,9 +95,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Cursor data = myCharacterDB.getListContents();
 
-        if(data.getCount() == 0){
-            Toast.makeText(this, "There are no contents in this list!",Toast.LENGTH_LONG).show();
-        }else{
+        //if(data.getCount() == 0){
+            //Toast.makeText(this, "No characters",Toast.LENGTH_LONG).show();
+        //}else{
             while(data.moveToNext()){
 
                 // Create a new character name object from the data (Cursor)
@@ -97,30 +105,94 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 // add a new character name to characters list
                 characters.add(characterName);
-                listView.setAdapter(listAdapter);
+                characterListView.setAdapter(listAdapter);
             }
-        }
+        //}
 
         // Set OnItemClickLister to characters' listView
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        characterListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                // get a character name from the clicked item
-                String selectedCharacter = (String) parent.getItemAtPosition(position);
-
-                // get a character's id
-                Integer selectedCharacterId = myCharacterDB.getCharacterIdByName(selectedCharacter);
-
-                character.setName(selectedCharacter);
-                character.setId(selectedCharacterId);
-                character.generateAttacksForCharacter();
+                getOnClickedCharacter(parent, position);
 
             }
 
         });
 
+        //characterListView.setLongClickable(true);
+        characterListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                           int position, long id) {
+
+                getOnClickedCharacter(parent, position);
+
+                return false;
+            }
+        });
+
     }
+
+    /*
+     * Use this method to grab a on-clicked character and set it to Main.character
+     */
+    private void getOnClickedCharacter(AdapterView<?> view, Integer position){
+
+        // get a character name from the clicked item
+        String selectedCharacter = (String) view.getItemAtPosition(position);
+
+        // get a character's id
+        Integer selectedCharacterId = myCharacterDB.getCharacterIdByName(selectedCharacter);
+
+        character.setName(selectedCharacter);
+        character.setId(selectedCharacterId);
+        character.generateAttacksForCharacter();
+    }
+
+
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        if (v.getId()==R.id.listView) {
+
+            String[] menuItems = getResources().getStringArray(R.array.options);
+
+            for(int i = 0; i < menuItems.length; i++) {
+
+                menu.add(0, i, i, menuItems[i]);
+            }
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        // Get the name of the selected operation to perform - edit or delete the character?
+        String menuItemName = getResources().getStringArray(R.array.options)[item.getItemId()];
+
+        switch (menuItemName){
+
+            case "Edit":
+                Intent intent = new Intent(this, CharacterAddEdit.class);
+                startActivity(intent);
+                break;
+
+            case "Delete":
+                character.deleteCharacter();
+                Toast.makeText(this, String.format("Deleted %s", MainActivity.getCharacter().getName()), Toast.LENGTH_LONG).show();
+                MainActivity.getCharacter().clearCharacter();
+                recreate();
+                break;
+
+        }
+
+        return true;
+    }
+
 
     @Override
     public void onClick(View view) {

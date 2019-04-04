@@ -1,16 +1,20 @@
 package com.example.dnd;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -39,6 +43,7 @@ public class CharacterAddEdit extends AppCompatActivity {
     private Button deleteCharacterButton;
     private Button addEditAttackButton;
     private EditText editText;
+    private ListView attackListView;
     private String tag;
     public static Attack selectedAttack;
     //private Intent attackIntent;
@@ -70,18 +75,53 @@ public class CharacterAddEdit extends AppCompatActivity {
             addEditAttackButton.setEnabled(false);
         }
 
+        // clear the attack every time the user comes to this activity
+        MainActivity.getAttack().clear();
+
+        // Display all the attacks that belong to the character
+        MainActivity.getCharacter().generateAttacksForCharacter();
+
+        attackListView = findViewById(R.id.attackListView);
+        attackListView.setSelector(R.drawable.ic_launcher_background);
+        AttacksListAdapter adapter = new AttacksListAdapter(this, R.layout.attack_list_adapter, MainActivity.getCharacter().getAttacks());
+
+        LayoutInflater inflater = getLayoutInflater();
+        ViewGroup header = (ViewGroup) inflater.inflate(R.layout.attacks_list_header, attackListView, false);
+        attackListView.addHeaderView(header, null, false);
+
+        attackListView.setAdapter(adapter);
+
     }
+
+
+    /*
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+
+        if(v.getId() == R.id.attackListView){
+
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+            menu.setHeaderTitle(MainActivity.getCharacter().getAttacks().get(info.position).getName());
+            menu.add("Edit");
+            menu.add("Delete");
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item){
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        int menuITemIndex = item.getItemId();
+        return true;
+
+
+    }
+    */
 
     @Override
     protected void onStart() {
 
         super.onStart();
-
-        // clear the attack every time the user comes to this activity
-        MainActivity.getAttack().clear();
-
-        // Display all the attacks that belong to the character
-        displayAllAttacks();
 
         // set onClickLister to Add button
         btnAdd.setOnClickListener(new OnClickListener() {
@@ -159,23 +199,6 @@ public class CharacterAddEdit extends AppCompatActivity {
             }
         });
 
-    }
-
-
-    private void displayAllAttacks(){
-
-        MainActivity.getCharacter().generateAttacksForCharacter();
-
-        ListView attackListView = findViewById(R.id.attackListView);
-        attackListView.setSelector(R.drawable.ic_launcher_background);
-        AttacksListAdapter adapter = new AttacksListAdapter(this, R.layout.attack_list_adapter, MainActivity.getCharacter().getAttacks());
-
-        LayoutInflater inflater = getLayoutInflater();
-        ViewGroup header = (ViewGroup) inflater.inflate(R.layout.attacks_list_header, attackListView, false);
-        attackListView.addHeaderView(header, null, false);
-
-        attackListView.setAdapter(adapter);
-
         // set onClick lister for attackListView
         attackListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -189,6 +212,7 @@ public class CharacterAddEdit extends AppCompatActivity {
                 // set the main attack to the clicked attack
                 MainActivity.setAttack(selectedAttack);
             }
+
         });
 
     }
