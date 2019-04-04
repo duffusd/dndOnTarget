@@ -3,7 +3,7 @@
     <string name="CharacterName">Character Name</string>
     <string name="DelCharacter">Delete Character</string>
     <string name="AddEditAttackButton">Add/Edit Attack</string>
-    <string name="AddEditCharacter">Add/Edit Character</string>
+    <string name="AddNewCharacter">Add a new character</string>
     <string name="Roller">Select Attacks</string>
     <string name="self_destruct">self_destruct</string>
     <string name="numberOfDiceInputHint">How many dice?</string>
@@ -19,5 +19,9 @@
         <item>10</item>
         <item>12</item>
         <item>20</item>
+    </string-array>
+    <string-array name="options">
+        <item>Edit</item>
+        <item>Delete</item>
     </string-array>
 </resources>
