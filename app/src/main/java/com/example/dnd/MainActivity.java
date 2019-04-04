@@ -1,15 +1,11 @@
 package com.example.dnd;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,18 +13,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.util.Log;
-import android.widget.EditText;
 
 import com.example.dnd.data.CharacterContract;
 import com.example.dnd.data.CharacterDatabaseHelper;
 import com.example.dnd.data.DiceContract;
 import com.example.dnd.data.DiceDatabaseHelper;
-
-import org.w3c.dom.CharacterData;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static Character character;
     public static Attack attack;
-    private Button addEditCharacterButton;
+    private Button addNewCharacterButton;
     private Button attackButton;
     private ListView characterListView;
 
@@ -77,10 +68,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         attack = new Attack(this);
 
         // get buttons and set OnClickLister
-        addEditCharacterButton = findViewById(R.id.addEditAttackButton);
+        addNewCharacterButton = findViewById(R.id.addNewCharacter);
         attackButton = findViewById(R.id.rollAttackbtn);
 
-        addEditCharacterButton.setOnClickListener(this);
+        addNewCharacterButton.setOnClickListener(this);
         attackButton.setOnClickListener(this);
 
 
@@ -198,11 +189,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
 
         switch (view.getId()){
-            case R.id.addEditAttackButton:
+            case R.id.addNewCharacter:
+
+                // make sure that the character is not set to any existing character
+                character.clearCharacter();
+
                 Log.e("Add Attack Button", "Going to CharacterAddEdit ");
                 Intent intent = new Intent(this, CharacterAddEdit.class);
                 startActivity(intent);
                 break;
+
             case R.id.rollAttackbtn:
                 if(character.getId() == null){
                     Toast.makeText(this, "Pleasee choose a character", Toast.LENGTH_LONG).show();

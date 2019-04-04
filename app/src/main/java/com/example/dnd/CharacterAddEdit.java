@@ -1,25 +1,13 @@
 package com.example.dnd;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,12 +15,6 @@ import android.view.View;
 import android.widget.Button;
 
 import android.widget.EditText;
-
-import com.example.dnd.data.AttackDatabaseHelper;
-import com.example.dnd.data.CharacterDatabaseHelper;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CharacterAddEdit extends AppCompatActivity {
 
@@ -56,7 +38,7 @@ public class CharacterAddEdit extends AppCompatActivity {
 
         // get the buttons
         deleteCharacterButton = findViewById(R.id.deleteCharacterButton);
-        addEditAttackButton = findViewById(R.id.addEditAttackButton);
+        addEditAttackButton = findViewById(R.id.addNewCharacter);
         btnAdd = findViewById(R.id.saveCharacterButton);
         editText = findViewById(R.id.characterNameEditText);
         tag = "CharacterAddEdit";
