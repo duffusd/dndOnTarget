@@ -23,6 +23,19 @@ public class Character {
     private Context context;
 
 
+    Character(Character copy){
+
+        id = copy.id;
+        name = copy.name;
+        attackIds = copy.getAttackIdsForCharacter();
+        attacks = copy.getAttacks();
+        dbHelper = copy.dbHelper;
+        characterAttacksDbHelper = copy.characterAttacksDbHelper;
+        tag = copy.tag;
+        context = copy.context;
+
+    }
+
     /**
      * Character constructor
      *
@@ -36,7 +49,6 @@ public class Character {
         attacks = new ArrayList<>();
         this.context = context;
     }
-
 
     /**
      * This method removes attacks from the list {@link Character#attacks} without needing to access

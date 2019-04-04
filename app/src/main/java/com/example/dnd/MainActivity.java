@@ -3,11 +3,14 @@ package com.example.dnd;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -77,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //populate an ArrayList<String> from the database and then view it
         characterListView = findViewById(R.id.listView);
-        characterListView.setSelector(R.drawable.ic_launcher_background);
         registerForContextMenu(characterListView);
 
         myCharacterDB = new CharacterDatabaseHelper(this);
@@ -97,16 +99,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // add a new character name to characters list
                 characters.add(characterName);
                 characterListView.setAdapter(listAdapter);
+
             }
         //}
 
         // Set OnItemClickLister to characters' listView
         characterListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            boolean clicked = false;
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                getOnClickedCharacter(parent, position);
+                Character clickedCharacter;
 
+                if(!clicked){
+
+                    parent.getChildAt(position).setBackgroundColor(Color.GRAY);
+                    getOnClickedCharacter(parent, position);
+
+                    clicked = true;
+
+                } else{
+
+                    parent.getChildAt(position).setBackgroundColor(Color.TRANSPARENT);
+                    character.clearCharacter();
+                    clicked = false;
+                }
             }
 
         });
@@ -200,11 +219,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.rollAttackbtn:
+
                 if(character.getId() == null){
                     Toast.makeText(this, "Pleasee choose a character", Toast.LENGTH_LONG).show();
                     break;
                 }
                 Log.e("Select Attack Button", "Going to SelectAttack ");
+
                 // create the new intend
                 Intent attackButton = new Intent(this, SelectAttack.class);
                 startActivity(attackButton);
@@ -241,28 +262,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         attack = newAttack;
     }
 
-    /*
-    public int roll(int AC) {
-        // get the text view from the View to get the user input
-        EditText textAC = findViewById(R.id.targetACEditText);
-
-        // instantiate the objects to open and manipulate the share preferences file
-        SharedPreferences sPref = getSharedPreferences("com.example.dnd_prefs", MODE_PRIVATE);
-        SharedPreferences.Editor editPref = sPref.edit();
-
-        // add the string with AC to the shared preferences file
-        editPref.putString("targetAC", textAC.toString());
-
-        // apply the changes to the sharedPreferences file
-        editPref.apply();
-
-        Log.d(TAG, "Target AC saved to sharedpref file \"com.example.dnd_prefs\"");
-
-        //TODO: run the roll methods from the attack set object
-
-        return -1;
-
-    }
-
-    */
 }
