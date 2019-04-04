@@ -180,6 +180,22 @@ public class CharacterAddEdit extends AppCompatActivity {
                 startActivity(attackIntent);
             }
         });
+    }
+
+
+    private void displayAllAttacks(){
+
+        MainActivity.getCharacter().generateAttacksForCharacter();
+
+        ListView attackListView = findViewById(R.id.attackListView);
+        attackListView.setSelector(R.drawable.ic_launcher_background);
+        AttacksListAdapter adapter = new AttacksListAdapter(this, R.layout.attack_list_adapter, MainActivity.getCharacter().getAttacks());
+
+        LayoutInflater inflater = getLayoutInflater();
+        ViewGroup header = (ViewGroup) inflater.inflate(R.layout.attacks_list_header, attackListView, false);
+        attackListView.addHeaderView(header, null, false);
+
+        attackListView.setAdapter(adapter);
 
         // set onClick lister for attackListView
         attackListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

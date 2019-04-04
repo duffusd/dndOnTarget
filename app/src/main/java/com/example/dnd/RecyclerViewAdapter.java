@@ -45,7 +45,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 model.setSelected(!model.isSelected());
                 holder.view.setBackgroundColor(model.isSelected() ? Color.LTGRAY : Color.DKGRAY);
-                SelectAttack.getAttacksForRoll().add(attack);
+                if(model.isSelected() == true){
+                    SelectAttack.getAttacksForRoll().add(attack);
+                } else {
+                    SelectAttack.getAttacksForRoll().remove(attack);
+                }
+
+
+
+                Log.e(" Adding List Item", "Item that is in the List " + SelectAttack.attacksForRoll);
+
 
                 /*
                 if(model.isSelected()){
