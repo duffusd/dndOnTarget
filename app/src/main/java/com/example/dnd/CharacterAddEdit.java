@@ -55,8 +55,9 @@ public class CharacterAddEdit extends AppCompatActivity {
 
         } else{
             // if no character has been chosen to edit, that means adding a new character
-            // User shouldn't be able to click "delete character" button
+            // User shouldn't be able to delete the character or create the attack
             deleteCharacterButton.setEnabled(false);
+            createAttackButton.setEnabled(false);
         }
 
         // clear the attack every time the user comes to this activity
@@ -74,7 +75,10 @@ public class CharacterAddEdit extends AppCompatActivity {
         attackListView.addHeaderView(header, null, false);
 
         attackListView.setAdapter(adapter);
+
+        // these are for setting up context menu
         registerForContextMenu(attackListView);
+        registerForContextMenu(characterNameText);
 
     }
 
@@ -111,7 +115,6 @@ public class CharacterAddEdit extends AppCompatActivity {
 
                         if (newId == -1) {
 
-                            //MainActivity.getCharacter().addNewCharacter(name);
                             Toast.makeText(CharacterAddEdit.this, "Something went wrong :(.", Toast.LENGTH_LONG).show();
 
                         } else {
@@ -122,6 +125,7 @@ public class CharacterAddEdit extends AppCompatActivity {
                             Toast.makeText(CharacterAddEdit.this, "" + nameStr + " Successfully Inserted!", Toast.LENGTH_LONG).show();
                             saveCharacterButton.setEnabled(true);
                             deleteCharacterButton.setEnabled(true);
+                            createAttackButton.setEnabled(true);
                         }
                 }
 
@@ -190,47 +194,98 @@ public class CharacterAddEdit extends AppCompatActivity {
                 return false;
             }
         });
-    }
 
+        attackListView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+                String[] menuItems = getResources().getStringArray(R.array.options);
 
-        super.onCreateContextMenu(menu, v, menuInfo);
+                for(int i = 0; i < menuItems.length; i++) {
 
-        if (v.getId()==R.id.attackListView) {
+                    menu.add(0, i, i, menuItems[i]);
 
-            String[] menuItems = getResources().getStringArray(R.array.options);
-
-            for(int i = 0; i < menuItems.length; i++) {
-
-                menu.add(0, i, i, menuItems[i]);
+                }
             }
-        }
+        });
+
+/*
+        characterNameText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                return false;
+            }
+        });
+
+        characterNameText.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+            @Override
+            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+                String[] menuItems = getResources().getStringArray(R.array.characterOptions);
+
+                for(int i = 0; i < menuItems.length; i++){
+
+                 menu.add(1, i, i, menuItems[i]);
+
+                }
+
+            }
+        });
+
+        */
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
 
-        // Get the name of the selected operation to perform - edit or delete the character?
-        String menuItemName = getResources().getStringArray(R.array.options)[item.getItemId()];
+        // Get the name of the selected operation to perform
 
-        switch (menuItemName){
+        String menuItemName = null;
 
-            case "Edit":
-                Intent intent = new Intent(CharacterAddEdit.this, AttackAddEdit.class);
-                startActivity(intent);
-                break;
+        if(item.getGroupId() == 0){
 
-            case "Delete":
-                MainActivity.getAttack().deleteAttack(MainActivity.getAttack().getId());
-                Toast.makeText(this, String.format("Deleted %s", MainActivity.getAttack().getName()), Toast.LENGTH_LONG).show();
-                MainActivity.getCharacter().removeAttack(MainActivity.getAttack());
-                MainActivity.getAttack().clear();
-                recreate();
-                break;
+            menuItemName = getResources().getStringArray(R.array.options)[item.getItemId()];
+
+            switch (menuItemName){
+
+                case "Edit":
+                    Intent intent = new Intent(CharacterAddEdit.this, AttackAddEdit.class);
+                    startActivity(intent);
+                    break;
+
+                case "Delete":
+                    MainActivity.getAttack().deleteAttack(MainActivity.getAttack().getId());
+                    Toast.makeText(this, String.format("Deleted %s", MainActivity.getAttack().getName()), Toast.LENGTH_LONG).show();
+                    MainActivity.getCharacter().removeAttack(MainActivity.getAttack());
+                    MainActivity.getAttack().clear();
+                    recreate();
+                    break;
+
+            }
 
         }
+
+        /*
+        if(item.getGroupId() == 1){
+
+            menuItemName = getResources().getStringArray(R.array.characterOptions)[item.getItemId()];
+
+            switch(menuItemName){
+
+                case "Save":
+                    String nameStr = characterNameText.getText().toString().trim();
+                    validateCharacterName(nameStr);
+                    updateCharacterName(nameStr);
+                    break;
+
+                case "Delete":
+                    System.out.println("Deleting character name");
+                    break;
+            }
+
+        }
+*/
 
         return true;
     }

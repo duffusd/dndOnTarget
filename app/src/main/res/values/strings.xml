@@ -24,4 +24,8 @@
         <item>Edit</item>
         <item>Delete</item>
     </string-array>
+    <string-array name="characterOptions">
+        <item>Save</item>
+        <item>Delete</item>
+    </string-array>
 </resources>
