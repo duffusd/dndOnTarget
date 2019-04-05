@@ -20,9 +20,6 @@ import android.widget.EditText;
 
 public class CharacterAddEdit extends AppCompatActivity {
 
-    public static final String ATTACKS_ID = "com.example.dnd.ATTACKS_ID";
-
-    //private CharacterDatabaseHelper myDB;
     private Button createAttackButton;
     private Button deleteCharacterButton;
     private Button saveCharacterButton;
@@ -30,7 +27,6 @@ public class CharacterAddEdit extends AppCompatActivity {
     private ListView attackListView;
     private String tag;
     public static Attack selectedAttack;
-    //private Intent attackIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +69,10 @@ public class CharacterAddEdit extends AppCompatActivity {
         LayoutInflater inflater = getLayoutInflater();
         ViewGroup header = (ViewGroup) inflater.inflate(R.layout.attacks_list_header, attackListView, false);
         attackListView.addHeaderView(header, null, false);
-
         attackListView.setAdapter(adapter);
 
-        // these are for setting up context menu
+        // for setting up context menu
         registerForContextMenu(attackListView);
-        registerForContextMenu(characterNameText);
 
     }
 
@@ -209,31 +203,6 @@ public class CharacterAddEdit extends AppCompatActivity {
             }
         });
 
-/*
-        characterNameText.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-
-                return false;
-            }
-        });
-
-        characterNameText.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-            @Override
-            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-
-                String[] menuItems = getResources().getStringArray(R.array.characterOptions);
-
-                for(int i = 0; i < menuItems.length; i++){
-
-                 menu.add(1, i, i, menuItems[i]);
-
-                }
-
-            }
-        });
-
-        */
     }
 
     @Override
@@ -265,27 +234,6 @@ public class CharacterAddEdit extends AppCompatActivity {
             }
 
         }
-
-        /*
-        if(item.getGroupId() == 1){
-
-            menuItemName = getResources().getStringArray(R.array.characterOptions)[item.getItemId()];
-
-            switch(menuItemName){
-
-                case "Save":
-                    String nameStr = characterNameText.getText().toString().trim();
-                    validateCharacterName(nameStr);
-                    updateCharacterName(nameStr);
-                    break;
-
-                case "Delete":
-                    System.out.println("Deleting character name");
-                    break;
-            }
-
-        }
-*/
 
         return true;
     }

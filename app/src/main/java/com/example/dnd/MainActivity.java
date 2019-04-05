@@ -88,20 +88,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Cursor data = myCharacterDB.getListContents();
 
-        //if(data.getCount() == 0){
-            //Toast.makeText(this, "No characters",Toast.LENGTH_LONG).show();
-        //}else{
-            while(data.moveToNext()){
+        while(data.moveToNext()){
 
-                // Create a new character name object from the data (Cursor)
-                String characterName = data.getString(data.getColumnIndex(CharacterContract.getNameColName()));
+            // Create a new character name object from the data (Cursor)
+            String characterName = data.getString(data.getColumnIndex(CharacterContract.getNameColName()));
 
-                // add a new character name to characters list
-                characters.add(characterName);
-                characterListView.setAdapter(listAdapter);
+            // add a new character name to characters list
+            characters.add(characterName);
+            characterListView.setAdapter(listAdapter);
 
-            }
-        //}
+        }
 
         // Set OnItemClickLister to characters' listView
         characterListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -110,8 +106,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Character clickedCharacter;
 
                 if(!clicked){
 
