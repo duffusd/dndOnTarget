@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //populate an ArrayList<String> from the database and then view it
         characterListView = findViewById(R.id.listView);
+        characterListView.setSelector(R.drawable.ic_launcher_background);
         registerForContextMenu(characterListView);
 
         myCharacterDB = new CharacterDatabaseHelper(this);
@@ -153,8 +154,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         character.setId(selectedCharacterId);
         character.generateAttacksForCharacter();
     }
-
-
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {

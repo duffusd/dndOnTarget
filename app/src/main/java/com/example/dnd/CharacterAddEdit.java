@@ -74,8 +74,8 @@ public class CharacterAddEdit extends AppCompatActivity {
         // for setting up context menu
         registerForContextMenu(attackListView);
 
-    }
 
+    }
 
     @Override
     protected void onStart() {
@@ -224,9 +224,9 @@ public class CharacterAddEdit extends AppCompatActivity {
                     break;
 
                 case "Delete":
-                    MainActivity.getAttack().deleteAttack(MainActivity.getAttack().getId());
                     Toast.makeText(this, String.format("Deleted %s", MainActivity.getAttack().getName()), Toast.LENGTH_LONG).show();
                     MainActivity.getCharacter().removeAttack(MainActivity.getAttack());
+                    MainActivity.getAttack().deleteAttack(MainActivity.getAttack().getId());
                     MainActivity.getAttack().clear();
                     recreate();
                     break;
