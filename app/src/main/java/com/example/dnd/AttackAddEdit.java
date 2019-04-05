@@ -35,7 +35,6 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
     private CharacterAttacksDatabaseHelper dbCharAttacks;
     private DiceDatabaseHelper dbDice;
     private Button btnSave;
-    private Button btnDelete;
     private EditText nameAtk;
     private EditText hitModifier;
     private EditText damageModifier;
@@ -64,7 +63,6 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
         dbDice = new DiceDatabaseHelper(this);
 
         btnSave = findViewById(R.id.attackSaveButton);
-        btnDelete = findViewById(R.id.deleteAttackButton);
         nameAtk = findViewById(R.id.attackNameEditText);
         hitModifier = findViewById(R.id.hitModEditText);
         damageModifier = findViewById(R.id.damageModifierText);
@@ -93,11 +91,6 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
             damageModifier.setText(MainActivity.getAttack().getModDamage().toString());
             numDice.setText(MainActivity.getAttack().getNumOfDice().toString());
             spinner.setSelection(MainActivity.getAttack().getDiceId());
-
-
-        } else {
-
-            btnDelete.setEnabled(false);
         }
     }
 
@@ -216,20 +209,6 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                 startActivity(intent);
             }
         });
-
-
-        btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                MainActivity.getAttack().deleteAttack(MainActivity.getAttack().getId());
-                Toast.makeText(AttackAddEdit.this, String.format("Deleted %s", MainActivity.getAttack().getName()), Toast.LENGTH_LONG).show();
-                MainActivity.getCharacter().getAttacks().remove(MainActivity.getAttack());
-                MainActivity.getAttack().clear();
-
-            }
-        });
-
 
     }
 
