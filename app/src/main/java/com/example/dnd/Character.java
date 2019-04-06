@@ -11,6 +11,12 @@ import com.example.dnd.data.CharacterDatabaseHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <h>Character Class</h>
+ *
+ * This entity contains the attributes of a character and methods for maintaining those attributes
+ *
+ */
 public class Character {
 
     private Integer id;
@@ -22,7 +28,11 @@ public class Character {
     private String tag = "Character";
     private Context context;
 
-
+    /**
+     * Copy constructor
+     *
+     * @param copy Character object to copy
+     */
     Character(Character copy){
 
         id = copy.id;
@@ -36,8 +46,9 @@ public class Character {
 
     }
 
+
     /**
-     * Character constructor
+     * Non-default constructor
      *
      * @param context
      */
@@ -62,11 +73,12 @@ public class Character {
     }
 
 
+
     /**
      * Adds a new character to the backend database table
      *
      * @param newName The name of the new character
-     * @return The new Character ID of the newly added character. If the procedure fails, it returns -1
+     * @return The Character ID of the newly added character. If the procedure fails, it returns -1
      * @exception SQLiteException
      * @author Atsuko Takanabe
      */
@@ -75,9 +87,11 @@ public class Character {
         Integer newId = null;
 
         try{
+
             newId = dbHelper.addName(newName);
 
         }catch(SQLiteException e){
+
             e.printStackTrace();
             newId = -1;
             Log.e(tag, "Adding a new character to characterTable failed");
@@ -87,8 +101,9 @@ public class Character {
 
     }
 
+
     /**
-     * Updates a selected character's name
+     * Updates the character name
      *
      * @param newName The new name for a character
      * @author Atsuko Takanabe
@@ -98,17 +113,23 @@ public class Character {
         name = newName;
 
         try{
+
             dbHelper.updateName(name, id);
+
         } catch(SQLiteException e){
+
             e.printStackTrace();
             Log.e(tag, "UpdateCharacter failed");
+
         }
     }
 
+
+
     /**
-     * Deletes the character from the backend character table.
+     * Deletes the character from the backend character table
      *
-     * All the attacks associted with the character get deleted as well
+     * All the attacks associated with the character get deleted as well
      *
      * @author Atsuko Takanabe
      * @exception SQLiteException
@@ -116,35 +137,40 @@ public class Character {
     public void deleteCharacter(){
 
         try{
+
             dbHelper.deleteCharacter(id);
             CharacterAttacksDatabaseHelper charAttackDbHelper = new CharacterAttacksDatabaseHelper(context);
             charAttackDbHelper.deleteCharacter(id);
 
         }catch(SQLiteException e){
+
             e.printStackTrace();
             Log.e(tag, "Deleting a character failed");
         }
 
     }
 
+
     /**
-     * Gets the attack IDs associted with the character
+     * Gets the attack IDs associated with the character
      *
-     * @return List of Attack IDs associted with the character
+     * @return List of Attack IDs associated with the character
      * @author Atsuko Takanabe
      */
     public List<Integer> getAttackIdsForCharacter(){
+
         attackIds = new ArrayList<>();
         attackIds = characterAttacksDbHelper.getAttackIdsByCharacterId(id);
         return attackIds;
+
     }
 
 
     /**
-     * This method is used for generating the attacks list.
+     * This method is used for generating the attacks list
      *
-     * Using the attackIDs that belong to the character, it creates the attack object for each
-     * attck ID then adds it to the attacks list
+     * Using the attackIDs that are linked to the character, this method creates the attack object for each
+     * attack ID and adds it to the attacks list
      *
      * @exception SQLiteException
      * @author Atsuko Takanabe
@@ -155,10 +181,13 @@ public class Character {
         attackIds = getAttackIdsForCharacter();
 
         if (attackIds.size() > 0) {
+
             for (int i = 0; i < attackIds.size(); i++) {
+
                 Attack attack = new Attack(context);
                 attack.setAttack(attackIds.get(i));
                 addAttack(attack);
+
             }
 
         }
@@ -166,8 +195,8 @@ public class Character {
 
 
     /**
-     * This method takes the character name in string and returns the character ID if the name
-     * exists in the database table.
+     * This method validates the character name. If the name is an empty string or already exists in the database,
+     * it throws the InvalidString exception
      *
      * @param name Character name to validate
      * @return Validated new character name
@@ -195,27 +224,32 @@ public class Character {
 
 
     /**
-     * Sets the id and name of the character to null, and clears attacks' list
+     * Sets the id and name of the character to null and clears the attacks' list
      *
      * @author Atsuko Takanabe
      */
     public void clearCharacter(){
+
         id = null;
         name = null;
+
         if(attacks.size() > 0) {
+
             attacks.clear();
         }
     }
 
+
     /**
-     * Adds an attack to attacks' list
+     * Adds an attack object to the attacks' list
      *
-     * @param attack attack to add to attacks' list
+     * @param attack Attack object to add to the attacks' list
      * @author Atsuko Takanabe
      */
     public void addAttack(Attack attack){
         attacks.add(attack);
     }
+
 
 
     /***** Getters and Setters ********/
@@ -229,4 +263,5 @@ public class Character {
     public void setId(Integer id) { this.id = id; }
 
     public void setName(String name) { this.name = name; }
+
 }

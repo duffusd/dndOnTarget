@@ -23,8 +23,8 @@ import java.util.ListIterator;
 /**
  * <h>CharacterAttacksDatabaseHelper</h>
  *
- * CharacterAttacksDatabaseHelper is a helper class for accessing and maintaining the CharacterAttacks table
- * in the backend database
+ * CharacterAttacksDatabaseHelper is a helper class for accessing and maintaining the attributes of CharacterAttack
+ * table
  */
 public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
 
@@ -53,10 +53,10 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Adds a character and its attack in the database table
+     * Adds the character ID and the attack ID for that character in the database table
      *
-     * @param characterId
-     * @param attackId
+     * @param characterId Character ID
+     * @param attackId Attack ID that belongs to the character
      * @exception SQLiteException
      * @author Atsuko Takanabe
      */
@@ -64,7 +64,6 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
 
         try {
 
-            CharacterDatabaseHelper characterDbhelper = new CharacterDatabaseHelper(_context);
             AttackDatabaseHelper attackDbHelper = new AttackDatabaseHelper(_context);
             SQLiteDatabase db = getReadableDatabase();
 
@@ -73,9 +72,12 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
             if (findAttack){
 
                 ContentValues values = new ContentValues();
+
                 if(characterId != null){
+
                     values.put(CharacterAttacksContract.getCharacterIdColName(), characterId);
                 }
+
                 values.put(CharacterAttacksContract.getAttackIdColName(), attackId);
                 db.insert(CharacterAttacksContract.getTableName(), null, values);
             }
@@ -83,6 +85,7 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
             db.close();
 
         } catch (SQLiteException e) {
+
             e.printStackTrace();
             Log.e(ERROR_SQLite, "CharacterAttacks: Inserting a new character-attack record failed");
         }
@@ -91,7 +94,7 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
     /**
      * Returns all the attack IDs associated with the character ID
      *
-     * @param characterId CharacterID of which attacks to enquire in the database table
+     * @param characterId CharacterID of which attacks to enquire
      * @return List of attackIDs associated with the character
      * @author Atsuko Takanabe
      */
@@ -104,6 +107,7 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
                 " WHERE " + CharacterAttacksContract.getCharacterIdColName() + "=" + characterId, null);
 
         while(data.getCount() != 0 && data.moveToNext()){
+
             attacksId.add(data.getInt(0));
         }
 
@@ -115,7 +119,7 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
     /**
      * Deletes the character and its attacks in the database table
      *
-     * @param characterId
+     * @param characterId Character ID to delete
      * @exception SQLiteException
      * @author Atsuko Takanabe
      */
@@ -130,10 +134,12 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
             db.close();
 
         } catch (SQLiteException e) {
+
             e.printStackTrace();
             Log.e(ERROR_SQLite, "Deleting a character failed");
         }
     }
+
 
     /**
      * Deletes the attack from the database table

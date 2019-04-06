@@ -13,7 +13,7 @@ import android.util.Log;
  * <h>DiceDatabaseHelper</h>
  *
  * DiceDatabaseHelper is a helper class that enables accessing and maintaining the database table
- * used for Dice
+ * used for Die class
  *
  */
 public class DiceDatabaseHelper extends SQLiteOpenHelper {
@@ -27,6 +27,7 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
      * @param context
      */
     public DiceDatabaseHelper(Context context){
+
         super(context, DiceContract.getDbName(), null, DatabaseContract.version);
     }
 
@@ -47,7 +48,7 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
 
 
     /**
-     * Inserts Dice numbers (4, 6, 8, 10, 12, 20) in the database table used for Dice
+     * Inserts Dice numbers (4, 6, 8, 10, 12, 20) in the table
      *
      * @exception SQLiteException
      * @author Atsuko Takanabe
@@ -61,12 +62,14 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
 
         for (int number : diceNumbers) {
 
-            //ContentValues value = new ContentValues();
             numberContent.put(DiceContract.getNumberColName(), number);
 
             try{
+
                 db.insert(DiceContract.getTableName(), null, numberContent);
+
             }catch(SQLiteException e){
+
                 e.printStackTrace();
                 Log.e(ERROR_SQLite, "Inserting a dice number failed");
             }
@@ -79,7 +82,7 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
      * Returns the number of sides of a die
      *
      * @param dieId
-     * @return number of sides of a die
+     * @return Number of the sides of a die
      * @exception SQLiteException
      * @author Atsuko Takanabe
      */
@@ -96,8 +99,10 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
             data = db.rawQuery(sql, null);
 
         } catch (SQLiteException e) {
+
             e.printStackTrace();
             Log.e(ERROR_SQLite, "getDieNumber() failed");
+
         }
 
         if (data != null) {

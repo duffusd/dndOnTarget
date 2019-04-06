@@ -14,6 +14,7 @@ import java.util.List;
  * <h>AttackListAdapter</h>
  *
  * An Adapter class specific for displaying attacks of the chosen character in CharacterAddEdit activity
+ * @author Atsuko Takanabe
  */
 public class AttacksListAdapter extends ArrayAdapter<Attack> {
 

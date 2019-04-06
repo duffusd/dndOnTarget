@@ -1,5 +1,10 @@
 package com.example.dnd.data;
 
+/**
+ * CharacterAttacksContract class contains the constant definitions for the database table and the SQL queries
+ * used for storing each attack for the character
+ *
+ */
 public class CharacterAttacksContract {
 
     private static final String db_name = "CharacterAttacks.db";
@@ -21,43 +26,47 @@ public class CharacterAttacksContract {
 
 
     /**
-     * Returns the name of the database used for Character
+     * Returns the name of the database that contains Character-Attack table
      *
-     * @return Name of the database used for Character
+     * @return Database name
      * @author Atsuko Takanabe
      */
     public static String getDbName() { return db_name; }
 
+
     /**
-     * Gets the SQL query used to create the table for Character
+     * Returns the SQL query used for creating the Character-Attack table
      *
-     * @return SQL query used to create the table for Character
+     * @return SQL query used for creating the table
      * @author Atsuko Takanabe
      */
     public static String getSQLCreateTable() { return TABLE_CHARACTER_ATTACKS_CREATE; }
 
+
     /**
-     * Gets the name of the database table used to store Character
+     * Returns the name of the database table
      *
-     * @return Name of the table in the database for Character
+     * @return Name of the database table
      * @author Atsuko Takanabe
      */
     public static String getTableName() { return table_name; }
 
+
     /**
-     * Gets the name of CharacterID column in the database table
+     * Returns the name of the CharacterID column in the table
      *
      * @return Name of the CharacterID column
      * @author Atsuko Takanabe
      */
     public static String getCharacterIdColName() { return characterId; }
 
+
     /**
-     * Gets the name of the AttackID column in the database table
+     * Returns the name of the AttackID column in the table
      *
      * @return Name of the AttackID column
      * @author Atsuko Takanabe
      */
     public static String getAttackIdColName() { return attackId; }
-    public static String getAttackName() { return attackName; }
+
 }

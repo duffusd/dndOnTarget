@@ -25,7 +25,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * <h>Attack Class</h>
  *
- * This entity will contain the information and characteristics of an attack.
+ * This entity contains the attributes of an attack and methods for maintaining those attributes
  *
  */
 public class Attack {
@@ -126,13 +126,13 @@ public class Attack {
 
 
     /**
-     * Adds a new attack to the backend database
+     * Adds a new attack to the database table
      *
      * @param attackName New attack name
-     * @param hitModifier Hit modifier value of the new attack
-     * @param damageModifier Damage modifier value of the new attack
-     * @param diceId Dice ID for the new attack
-     * @param numOfDice Number of Dice for the new attack
+     * @param hitModifier Hit modifier value
+     * @param damageModifier Damage modifier value
+     * @param diceId Dice ID
+     * @param numOfDice Number of Dice
      * @return The Attack ID of the newly created attack
      * @exception SQLiteException
      * @author Atsuko Takanabe
@@ -156,7 +156,7 @@ public class Attack {
 
 
     /**
-     * Updates the name of the existing attack
+     * Updates the name of the attack
      *
      * @param newName The new name to update with
      * @exception SQLiteException
@@ -165,8 +165,11 @@ public class Attack {
     public void updateName(String newName) {
 
         try{
+
             dbHelper.updateName(id, newName);
+
         }catch (SQLiteException e){
+
             e.printStackTrace();
             Log.e(tag, "Updating an attack name failed");
         }
@@ -176,17 +179,21 @@ public class Attack {
 
 
     /**
-     * Updates the value of hit modifier of the existing attack
+     * Updates the value of hit modifier of the attack
      *
      * @param hit New hitModifier value
      */
     public void updateHitModifier(Integer hit){
 
         try{
+
             dbHelper.updateHitModifier(id, hit);
+
         } catch(SQLiteException e){
+
             e.printStackTrace();
             Log.e(tag, "Updating hit modifier failed");
+
         }
 
         modHit = hit;
@@ -194,7 +201,7 @@ public class Attack {
 
 
     /**
-     * Updates the value of damage modifier of the existing attack
+     * Updates the value of damage modifier of the attack
      *
      * @param damage New value for damage modifier
      * @exception SQLiteException
@@ -203,10 +210,14 @@ public class Attack {
     public void updateDamageModifier(Integer damage){
 
         try{
+
             dbHelper.updateDamageModifier(id, damage);
+
         }catch (SQLiteException e){
+
             e.printStackTrace();
             Log.e(tag, "Updating damage modifier failed");
+
         }
 
         modDamage = damage;
@@ -214,7 +225,7 @@ public class Attack {
 
 
     /**
-     * Updates the diceID of the existing attack
+     * Updates the diceID of the attack
      *
      * @param diceId New dieId
      * @exception SQLiteException
@@ -223,10 +234,14 @@ public class Attack {
     public void updateDiceID(Integer diceId){
 
         try{
+
             dbHelper.updateDiceId(id, diceId);
+
         }catch (SQLiteException e){
+
             e.printStackTrace();
             Log.e(tag, "Updating diceID failed");
+
         }
 
         this.diceId = diceId;
@@ -235,7 +250,7 @@ public class Attack {
 
 
     /**
-     * Updates the number of dice of the existing attack
+     * Updates the number of dice of the attack
      *
      * @param numOfDie New number of dice
      * @exception SQLiteException
@@ -244,8 +259,11 @@ public class Attack {
     public void updateNumOfDie(Integer numOfDie){
 
         try{
+
             dbHelper.updateNumOfDie(id, numOfDie);
+
         }catch (SQLiteException e){
+
             e.printStackTrace();
             Log.e(tag, "Updating the number of die/dice failed");
         }
@@ -255,7 +273,7 @@ public class Attack {
 
 
     /**
-     * Deletes an attack from the attack table and character-attack table
+     * Deletes the attack from the attack table and character-attack table
      *
      * @param attackId Attack ID to delete
      * @exception SQLiteException
@@ -264,21 +282,24 @@ public class Attack {
     public void deleteAttack(Integer attackId){
 
         try{
+
             dbHelper.deleteAttack(attackId);
             CharacterAttacksDatabaseHelper charAttackDbHelper = new CharacterAttacksDatabaseHelper(context);
             charAttackDbHelper.deleteAttack(attackId);
+
         }catch (SQLiteException e){
+
             e.printStackTrace();
             Log.e(tag, "deleteAttack method failed");
+
         }
     }
 
 
     /**
-     * Validates the name of attack to make sure that the user has given the correct attack name.
+     * Validates the attack name to make sure that the user has given the correct attack name.
      *
-     * If the name is empty, it throws the exception.
-     * If the name of the attack is valid, it returns back the same attack name
+     * If the name is empty, it throws the exception
      *
      * @param name of the attack to validate
      * @return name of the validated attack
@@ -303,8 +324,8 @@ public class Attack {
     /**
      * Validates the value of hit modifier. If the empty value is given, this method converts it to 0.
      *
-     * @param hitModifier to validate
-     * @return 0 if the hit modifier is empty. Otherwise, the integer value of hitModifier
+     * @param hitModifier value to validate
+     * @return 0 if the hit modifier is empty. Otherwise, it returns the hitModifier as Integer
      * @exception InvalidIntegerException
      * @author Atsuko Takanabe
      */
@@ -472,7 +493,7 @@ public class Attack {
     public void setDie(Die die) { this.die = die; }
 
     /**
-     * Using the attack ID, it inquires the database and gets the rest of the attack's attribute,
+     * Using the attack ID, it returns the rest of the attack's attribute from the database table
      * then sets them in the object
      *
      * @param id Attack ID

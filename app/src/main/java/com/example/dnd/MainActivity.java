@@ -3,14 +3,11 @@ package com.example.dnd;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -103,8 +100,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Set OnItemClickLister to characters' listView
         characterListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            //boolean clicked = false;
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -129,7 +124,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /*
-     * Use this method to grab a on-clicked character and set it to Main.character
+     * Use this method to grab the on-clicked character and set it to Main.character
+     *
      */
     private void getOnClickedCharacter(AdapterView<?> view, Integer position){
 
@@ -144,6 +140,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         character.generateAttacksForCharacter();
     }
 
+
+    /*
+     * ContextMenu is the menu options that are displayed only when the user long-press on the character's name.
+     *
+     */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
@@ -160,6 +161,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /*
+     * This method defines the actions that need to be taken by the user's selection of ContextMenu
+     */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
 

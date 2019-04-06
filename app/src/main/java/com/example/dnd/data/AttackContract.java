@@ -3,6 +3,11 @@ package com.example.dnd.data;
 import android.provider.BaseColumns;
 
 
+/**
+ * AttackContract class contains the constant definitions for the database table and the SQL queries
+ * used for Attack class
+ *
+ */
 public class AttackContract implements BaseColumns {
 
     private static final String db_name = "Attacks.db";
@@ -25,15 +30,16 @@ public class AttackContract implements BaseColumns {
                     ")";
 
     /**
-     * Gets the name of the database for Attack
+     * Returns the name of the database for Attack class
      *
-     * @return the database name
+     * @return The database name
      * @author Atsuko Takanabe
      */
     public static String getDbName() { return db_name; }
 
+
     /**
-     * Gets the sql query that creates the table for attacks
+     * Returns the sql query for creating database table for the Attack class
      *
      * @return The SQL query
      * @author Atsuko Takanabe
@@ -42,48 +48,54 @@ public class AttackContract implements BaseColumns {
         return SQL_CREATE_TABLE_ATTACKS;
     }
 
+
     /**
-     * Gets the name of the table for attacks in the database
+     * Returns the name of the table for Attack class
      *
      * @return Table name for attacks
      * @author Atsuko Takanabe
      */
     public static String getTableName() { return table_name; }
 
+
     /**
-     * Gets the name of attack Id column in the table
+     * Returns the name of the attack Id column in the table
      *
      * @return The name of attack ID column
      * @author Atsuko Takanabe
      */
     public static String getIdColName() { return _id; }
 
+
     /**
-     * Gets the name of hit modifier column in the table
+     * Returns the name of the hit modifier column in the table
      *
      * @return The name of hit modifier column
      * @author Atsuko Takanabe
      */
     public static String getHitModifierColName() { return hitModifier; }
 
+
     /**
-     * Gets the name of damage modifiler column in the table
+     * Returns the name of the damage modifier column in the table
      *
      * @return The name of damage modifier column
      * @author Atsuko Takanabe
      */
     public static String getDamageModifierColName() { return damageModifier; }
 
+
     /**
-     * Gets the name of Dice ID column in the table
+     * Returns the name of the Dice ID column in the table
      *
      * @return The name of Dice ID column
      * @author Atsuko Takanabe
      */
     public static String getDiceIdColName() { return dice_id; }
 
+
     /**
-     * Gets the name of the column for attack's name in the database table
+     * Returns the name of the attack name column in the database table
      *
      * @return The name of attack name column
      * @author Atsuko Takanabe
@@ -91,8 +103,9 @@ public class AttackContract implements BaseColumns {
     public static String getAttackNameColName() { return attackName; }
 
 
+
     /**
-     * Gets the name of column for Number of Die for the attack
+     * Returns the name of the number of dice column in the database table
      *
      * @return The name of the column for Number of Die
      * @author Atsuko Takanabe

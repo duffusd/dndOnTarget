@@ -16,6 +16,7 @@ import java.util.Map;
  * <h>RollResultListAdapter</h>
  *
  * An adapter class used to display the result from rolling the attack(s)
+ * @author Atsuko Takanabe
  */
 public class RollResultListAdapter extends ArrayAdapter<RollResult> {
 
