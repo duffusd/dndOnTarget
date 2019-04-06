@@ -34,6 +34,13 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
     private volatile static AttackDatabaseHelper dbHelper;
 
 
+    /**
+     * Returns the instance of AttackDatabaseHelper
+     *
+     * @param context
+     * @return The instance of AttackDatabaseHelper
+     * @author Atsuko Takanabe
+     */
     public static AttackDatabaseHelper getInstance(Context context){
 
         if(dbHelper == null){

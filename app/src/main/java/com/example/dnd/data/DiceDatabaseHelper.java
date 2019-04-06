@@ -32,7 +32,13 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
+    /**
+     * Returns the instance of the DiceDatabaseHelper
+     *
+     * @param context
+     * @return The instance of the DiceDatabaseHelper
+     * @author Atsuko Takanabe
+     */
     public static DiceDatabaseHelper getInstance(Context context){
 
         if(dbHelper == null){
@@ -48,9 +54,7 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
 
         return  dbHelper;
     }
-
-
-
+    
 
     @Override
     public void onCreate(SQLiteDatabase db) {

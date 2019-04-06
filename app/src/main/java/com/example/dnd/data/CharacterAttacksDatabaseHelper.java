@@ -43,6 +43,13 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    /**
+     * Returns the instance of the CharacterAttacksDatabaseHelper
+     *
+     * @param context
+     * @return The instance of the CharacterAttacksDatabaseHelper
+     * @author Atsuko Takanabe
+     */
     public static CharacterAttacksDatabaseHelper getInstance(Context context){
 
         if(dbHelper == null){
