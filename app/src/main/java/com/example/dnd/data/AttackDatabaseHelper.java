@@ -31,11 +31,38 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
     //Constants for db name and version
     private static final String ERROR_SQLite = "SQLite:Attacks";
     private Context _context;
+    private volatile static AttackDatabaseHelper dbHelper;
+
+
+    /**
+     * Returns the instance of AttackDatabaseHelper
+     *
+     * @param context
+     * @return The instance of AttackDatabaseHelper
+     * @author Atsuko Takanabe
+     */
+    public static AttackDatabaseHelper getInstance(Context context){
+
+        if(dbHelper == null){
+
+            synchronized (AttackDatabaseHelper.class){
+
+                if(dbHelper == null){
+
+                    dbHelper = new AttackDatabaseHelper(context);
+                }
+            }
+        }
+
+        return  dbHelper;
+    }
 
     public AttackDatabaseHelper(Context context){
+
         super(context, AttackContract.getDbName(), null, DatabaseContract.version);
         SQLiteDatabase db = getWritableDatabase();
         _context = context;
+
     }
 
 
@@ -77,10 +104,6 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
     public int addAttack(String attackName, Integer hit, Integer damage, Integer diceId, Integer numOfDie){
 
         SQLiteDatabase db = getWritableDatabase();
-
-        // verify that attackDiceId exists in the AttackDice table
-        DiceDatabaseHelper diceDbHelper = new DiceDatabaseHelper(_context);
-        //Boolean validDiceId = diceDbHelper.findDiceById(diceId);
 
         Long newId = null;
 
@@ -135,6 +158,7 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
             Log.e(ERROR_SQLite, "Attack table: Updating an attack name failed");
         }
     }
+
 
     /**
      * Updates the hit modifier value of the existing attack

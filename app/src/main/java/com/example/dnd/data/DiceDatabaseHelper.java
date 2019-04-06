@@ -19,7 +19,7 @@ import android.util.Log;
 public class DiceDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String ERROR_SQLite = "SQLite:Dice";
-
+    private volatile static DiceDatabaseHelper dbHelper;
 
     /**
      * Non-default constructor
@@ -31,6 +31,30 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
         super(context, DiceContract.getDbName(), null, DatabaseContract.version);
     }
 
+
+    /**
+     * Returns the instance of the DiceDatabaseHelper
+     *
+     * @param context
+     * @return The instance of the DiceDatabaseHelper
+     * @author Atsuko Takanabe
+     */
+    public static DiceDatabaseHelper getInstance(Context context){
+
+        if(dbHelper == null){
+
+            synchronized (DiceDatabaseHelper.class){
+
+                if(dbHelper == null){
+
+                    dbHelper = new DiceDatabaseHelper(context);
+                }
+            }
+        }
+
+        return  dbHelper;
+    }
+    
 
     @Override
     public void onCreate(SQLiteDatabase db) {

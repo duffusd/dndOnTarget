@@ -20,8 +20,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row, parent, false);
         return new MyViewHolder(view);
+
     }
 
     @Override
@@ -45,32 +47,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 model.setSelected(!model.isSelected());
                 holder.view.setBackgroundColor(model.isSelected() ? Color.LTGRAY : Color.DKGRAY);
+
                 if(model.isSelected() == true){
+
                     SelectAttack.getAttacksForRoll().add(attack);
+
                 } else {
+
                     SelectAttack.getAttacksForRoll().remove(attack);
+
                 }
-
-
 
                 Log.e(" Adding List Item", "Item that is in the List " + SelectAttack.attacksForRoll);
-
-
-                /*
-                if(model.isSelected()){
-
-                    attackStringList.add(model.getText());
-                    Log.e("OnBind", "Selecting attack position " + model.getText());
-                    for(String s:attackStringList){
-                       Log.e(" Adding List Item", "Item that is in the List " + s);
-                    }
-                }else{
-                    attackStringList.remove(model.getText());
-                    for(String z:attackStringList) {
-                        Log.e(" List Items", "Item that is in the List " + z);
-                    }
-                }
-                */
 
             }
         });
@@ -87,9 +75,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         private TextView textView;
 
         private MyViewHolder(View itemView) {
+
             super(itemView);
             view = itemView;
             textView = (TextView) itemView.findViewById(R.id.text_view);
+
         }
     }
 }

@@ -58,9 +58,9 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
 
         setContentView(R.layout.activity_attack_add_edit);
 
-        dbAttacks = new AttackDatabaseHelper(this);
-        dbCharAttacks = new CharacterAttacksDatabaseHelper(this);
-        dbDice = new DiceDatabaseHelper(this);
+        dbAttacks = AttackDatabaseHelper.getInstance(this);
+        dbCharAttacks = CharacterAttacksDatabaseHelper.getInstance(this);
+        dbDice = DiceDatabaseHelper.getInstance(this);
 
         btnSave = findViewById(R.id.attackSaveButton);
         nameAtk = findViewById(R.id.attackNameEditText);

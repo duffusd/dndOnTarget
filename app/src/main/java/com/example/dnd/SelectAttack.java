@@ -3,7 +3,6 @@ package com.example.dnd;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,22 +12,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-
-import com.example.dnd.data.AttackContract;
-import com.example.dnd.data.AttackDatabaseHelper;
-import com.example.dnd.data.CharacterDatabaseHelper;
-
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class SelectAttack extends AppCompatActivity {
-
-    AttackDatabaseHelper myAttackDB;
 
     private List<Model> mModelList;
     private List<Attack> mAttackList;
@@ -79,6 +66,7 @@ public class SelectAttack extends AppCompatActivity {
 
         Button goToRollerButton = findViewById(R.id.attackbtn);
         goToRollerButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
 
@@ -86,15 +74,18 @@ public class SelectAttack extends AppCompatActivity {
 
                 Boolean validTargetAC = validateTargetAC();
 
-                //List<String> attackStringList = RecyclerViewAdapter.attackStringList;
-                //ArrayList<String> myList = new ArrayList<String>();
-
                 if (attacksForRoll.size() == 0){
+
                     Toast.makeText(SelectAttack.this, "Please select at least one attack", Toast.LENGTH_LONG).show();
+
                 } else if (!validTargetAC){
+
                     Toast.makeText(SelectAttack.this, "What is the target AC?", Toast.LENGTH_LONG).show();
+
                 } else {
+
                     startActivity(new Intent(SelectAttack.this, Roller.class));
+
                 }
 
 
@@ -104,14 +95,18 @@ public class SelectAttack extends AppCompatActivity {
     }
 
     private boolean validateTargetAC(){
+
         // set up targetAC shared preference and get the value
         Integer targetAcNum = Integer.parseInt(targetACText.getText().toString().isEmpty() ? "0" : targetACText.getText().toString());
 
         // first, make sure targetAC is not empty
         switch (targetAcNum){
+
             case 0:
                 return false;
+
             default:
+
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt(targetAC, targetAcNum);
                 editor.commit();
@@ -139,26 +134,6 @@ public class SelectAttack extends AppCompatActivity {
         }
 
         return mModelList;
-
-        /*
-        List<Integer> attackIds = MainActivity.getCharacter().getAttackIdsForCharacter();
-        myAttackDB = new AttackDatabaseHelper(this);
-        mModelList = new ArrayList<>();
-        Cursor dataAttack = (Cursor) myAttackDB.getAttackContents(attackIds);
-
-        if (dataAttack.getCount() == 0) {
-            Toast.makeText(this, String.format("There are no attacks for %s!", MainActivity.getCharacter().getName()), Toast.LENGTH_LONG).show();
-        } else {
-            while (dataAttack.moveToNext()) {
-
-                mModelList.add(new Model(dataAttack.getString(dataAttack.getColumnIndex(AttackContract.getIdColName()))));
-            }
-        }
-
-
-        return mModelList;
-    }
-    */
 
     }
 

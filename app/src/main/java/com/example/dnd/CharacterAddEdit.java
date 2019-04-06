@@ -139,10 +139,10 @@ public class CharacterAddEdit extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                Toast.makeText(CharacterAddEdit.this, String.format("Deleted %s", MainActivity.getCharacter().getName()), Toast.LENGTH_LONG).show();
+
                 // call deleteCharacter method in Character to delete the character
                 MainActivity.getCharacter().deleteCharacter();
-
-                Toast.makeText(CharacterAddEdit.this, String.format("Deleted %s", MainActivity.getCharacter().getName()), Toast.LENGTH_LONG).show();
 
                 //MainActivity.clearSharedPreferences();
                 MainActivity.getCharacter().clearCharacter();

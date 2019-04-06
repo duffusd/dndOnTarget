@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import org.w3c.dom.CharacterData;
+
 /**
  * <h>CharacterDatabaseHelper</h>
  *
@@ -18,6 +20,7 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
 
     //Constants for db name and version
     private static final String ERROR_SQLite = "SQLite:Characters";
+    private volatile static CharacterDatabaseHelper dbHelper;
 
 
     /**
@@ -30,16 +33,43 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    /**
+     * Returns the instance of the CharacterDatabaseHelper
+     *
+     * @param context
+     * @return The instance of the CharacterDatabaseHelper
+     * @author Atsuko Takanabe
+     */
+    public static CharacterDatabaseHelper getInstance(Context context){
+
+        if(dbHelper == null){
+
+            synchronized (CharacterDatabaseHelper.class){
+
+                if(dbHelper == null){
+
+                    dbHelper = new CharacterDatabaseHelper(context);
+                }
+            }
+        }
+
+        return  dbHelper;
+    }
+
+
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         db.execSQL(CharacterContract.getSQLCreateTable());
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
         db.execSQL("DROP TABLE IF EXISTS " + CharacterContract.getTableName());
         onCreate(db);
+
     }
 
 
@@ -52,6 +82,7 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
      * @author Atsuko Takanabe
      */
     public Integer addName(String name){
+
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(CharacterContract.getNameColName(), name);
@@ -60,7 +91,9 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
         try {
             // if the insert goes wrong, it returns -1. Otherwise, it returns the new character ID
             result = db.insert(CharacterContract.getTableName(), null, contentValues);
+
         }catch(SQLiteException e){
+
             e.printStackTrace();
             Log.e(ERROR_SQLite, "Inserting a new character name failed");
         }
@@ -89,6 +122,7 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
             db.close();
 
         } catch (SQLiteException e){
+
             e.printStackTrace();
             Log.e(ERROR_SQLite, "Chracters table: Updating a character name failed");
 
@@ -134,15 +168,22 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
         try{
 
             c = db.rawQuery(sqlFindCharacterByName, null);
+
         }catch(SQLiteException e){
+
             e.printStackTrace();
             Log.e(ERROR_SQLite, "findCharacterByName Failed");
+
         }
 
         if(c.getCount() == 1){
+
             return true;
+
         }else{
+
             return false;
+
         }
     }
 
@@ -167,18 +208,23 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
         Cursor c = null;
 
         try{
+
             c = db.rawQuery(sqlSelectCharacterId, null);
+
         } catch(SQLiteException e){
+
             e.printStackTrace();
             Log.e(ERROR_SQLite, "getCharacterIdByName failed");
+
         }
 
         if (c != null){
+
             c.moveToFirst();
             Integer id = c.getInt(c.getColumnIndex(CharacterContract.getIdColName()));
             return id;
-        }
-        else
+
+        } else
             return null;
 
     }
@@ -190,9 +236,11 @@ public class CharacterDatabaseHelper extends SQLiteOpenHelper {
      * @author Aaron Lee
      */
     public Cursor getListContents(){
+
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor data = db.rawQuery("SELECT * FROM " + CharacterContract.getTableName(), null);
         return data;
+
     }
 
 }

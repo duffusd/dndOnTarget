@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onStart();
 
       // insert rows to Dice table if it hasn't been populated yet
-        DiceDatabaseHelper dbHelper = new DiceDatabaseHelper(this);
+        DiceDatabaseHelper dbHelper = DiceDatabaseHelper.getInstance(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor data = db.rawQuery("SELECT Count(*) FROM " + DiceContract.getTableName(), null);
 
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         characterListView.setSelector(R.drawable.ic_launcher_background);
         registerForContextMenu(characterListView);
 
-        myCharacterDB = new CharacterDatabaseHelper(this);
+        myCharacterDB = CharacterDatabaseHelper.getInstance(this);
         characters = new ArrayList<>();
         ListAdapter listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, characters);
 
@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         });
 
-        //characterListView.setLongClickable(true);
         characterListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,
@@ -194,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
 
         switch (view.getId()){
+
             case R.id.addNewCharacter:
 
                 // make sure that the character is not set to any existing character
@@ -210,6 +210,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(this, "Pleasee choose a character", Toast.LENGTH_LONG).show();
                     break;
                 }
+
                 Log.e("Select Attack Button", "Going to SelectAttack ");
 
                 // create the new intend
