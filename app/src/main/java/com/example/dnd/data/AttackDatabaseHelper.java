@@ -339,7 +339,7 @@ public class AttackDatabaseHelper extends SQLiteOpenHelper {
         return row;
     }
 
-    
+
     public Cursor getAttackContents(List<Integer> attackIds){
         // converts int list into a string
         String listString = attackIds.toString();
