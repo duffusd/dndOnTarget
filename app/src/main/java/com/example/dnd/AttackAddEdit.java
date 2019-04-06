@@ -246,7 +246,7 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
                 break;
             case R.id.minusNumDice:
                 num = Integer.parseInt(numDice.getText().toString());
-                num--;
+                num = (num == 0) ? 0 : num - 1;
                 updateEditText(numDice, num);
                 break;
             case R.id.plusHit:
