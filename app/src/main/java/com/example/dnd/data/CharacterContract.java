@@ -2,6 +2,11 @@ package com.example.dnd.data;
 
 import android.provider.BaseColumns;
 
+/**
+ * CharacterContract class contains the constant definitions for the database table and the SQL queries
+ * used for Character class
+ *
+ */
 public final class CharacterContract implements BaseColumns {
 
     private static final String db_name = "Characters.db";
@@ -13,12 +18,12 @@ public final class CharacterContract implements BaseColumns {
     private static final String SQL_CREATE_TABLE_CHARACTERS =
             "CREATE TABLE " + table_name + " (" +
                     _id + " INTEGER PRIMARY KEY, " +
-                    name_col + " TEXT NOT NULL UNIQUE, " +
-                    characterAttacksId_col + " INTEGER" +
+                    name_col + " TEXT NOT NULL UNIQUE" +
                     ")";
 
+
     /**
-     * Returns the name of database used for Character class
+     * Returns the database name for Character class
      *
      * @return Name of the database for Character class
      * @author Atsuko Takanabe
@@ -29,14 +34,14 @@ public final class CharacterContract implements BaseColumns {
     /**
      * Returns the SQL query used for creating the table for storing character information
      *
-     * @return SQL query for creating the database table for storing characters
+     * @return SQL query for creating the database table
      * @author Atsuko Takanabe
      */
     public static String getSQLCreateTable() { return SQL_CREATE_TABLE_CHARACTERS; }
 
 
     /**
-     * Returns the name of the table used for storing character information
+     * Returns the table name used for storing character information
      *
      * @return Name of the table used for storing characters
      * @author Atsuko Takanabe
@@ -61,14 +66,6 @@ public final class CharacterContract implements BaseColumns {
      */
     public static String getNameColName() { return name_col; }
 
-
-    /**
-     * Returns the name of AttackID column in the database table
-     *
-     * @return Name of the AttackID column
-     * @author Atsuko Takanabe
-     */
-    public static String getCharacterAttacksIdColName() { return characterAttacksId_col; }
 
 }
 
