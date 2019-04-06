@@ -236,8 +236,13 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
     }
 
     public void plusMinusButtons(View view) {
+        // gotta get the id of the button that was pressed to know which EditText should be changed
         int id = view.getId();
+
+        // Integer to store the value from the EditText, and inc or dec
         Integer num;
+
+        // switch used to differentiate the EditTexts and allow this to be just one function
         switch (id) {
             case R.id.plusNumDice:
                 num = Integer.parseInt(numDice.getText().toString());
