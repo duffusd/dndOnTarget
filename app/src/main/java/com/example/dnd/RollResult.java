@@ -9,8 +9,8 @@ import java.util.List;
 /**
  * <H>RollResult</H>
  *
- * The purpose of this class is to store the necessary details from rolling the attack so the result
- * can be displayed easily
+ * The purpose of this class is to store the roll results
+ * @author Atsuko Takanabe
  */
 public class RollResult {
 
@@ -24,7 +24,7 @@ public class RollResult {
 
 
     /**
-     * Copy constructor
+     * Non-default constructor
      */
     public RollResult(Attack attack){
 
@@ -38,9 +38,9 @@ public class RollResult {
     }
 
     /**
-     * Calculates the damage result total by summing all the damages from the roll and damage modifier
+     * Calculates the damage result by adding the sum of all the damages and the damage modifier
      *
-     * @author Atsuko Takanabe
+     * @author Atsuko Takanabe, Aaron Lee
      *
      */
     public void calculateDamageResult(int crit){
@@ -48,8 +48,11 @@ public class RollResult {
         int totalNumberOfDice = 0;
 
         if (crit ==20)
+
             totalNumberOfDice = attack.getNumOfDice() * 2;
+
         else
+
             totalNumberOfDice = attack.getNumOfDice();
 
         for (int i = 0; i < totalNumberOfDice; i++){

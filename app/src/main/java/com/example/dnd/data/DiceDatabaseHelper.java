@@ -102,7 +102,7 @@ public class DiceDatabaseHelper extends SQLiteOpenHelper {
 
             e.printStackTrace();
             Log.e(ERROR_SQLite, "getDieNumber() failed");
-            
+
         }
 
         if (data != null) {
