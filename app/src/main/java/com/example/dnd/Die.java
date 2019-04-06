@@ -22,6 +22,12 @@ import com.example.dnd.data.DiceDatabaseHelper;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * <h>Die Class</h>
+ *
+ * This entity contains the attributes of a die and methods for maintaining those attributes
+ *
+ */
 public class Die {
 
     Context context;
@@ -35,6 +41,7 @@ public class Die {
      * @param diceId
      */
     Die(Context context, Integer diceId){
+
         this.context = context;
         diceDbHelper = new DiceDatabaseHelper(context);
         this.dieId = diceId;
@@ -46,6 +53,7 @@ public class Die {
      *
      */
     Die(){
+
         context = null;
         dieId = null;
         sides = null;
@@ -61,6 +69,7 @@ public class Die {
      * @author Justin Parry
      */
     public Integer rollDamage() {
+
         return ThreadLocalRandom.current().nextInt(1,sides + 1);
 
     }
@@ -75,6 +84,7 @@ public class Die {
     public void updateSides(){
         sides = diceDbHelper.getDieNumber(dieId);
     }
+
 
     /********************************** GETTER AND SETTERS ***************************************/
 
