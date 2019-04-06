@@ -26,17 +26,18 @@ public class RollResultListAdapter extends ArrayAdapter<RollResult> {
 
   
     public RollResultListAdapter(Context context, int textViewResourceId, List<RollResult> results) {
+
         super(context, textViewResourceId, results);
         this.results = results;
         mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mViewResourceId = textViewResourceId;
+
     }
 
 
     public View getView(int position, View contentView, ViewGroup parents) {
 
         contentView = mInflater.inflate(mViewResourceId, null);
-
         RollResult result = results.get(position);
 
         TextView attackName = contentView.findViewById(R.id.rolled_attack_name);
@@ -56,7 +57,6 @@ public class RollResultListAdapter extends ArrayAdapter<RollResult> {
             hit.setText(String.format("D20: %d *** Critical Hit ***", result.getHit()));
 
         }else {
-
 
             hit.setText(String.format("D20: %d + %d Mod = %d", result.getHit(), result.getAttack().getModHit(), result.getHitResult()));
         }
@@ -82,8 +82,8 @@ public class RollResultListAdapter extends ArrayAdapter<RollResult> {
 
                     numOfDamages = result.getDamages().size();
                     numOfDie = numOfDie * 2;
-                }
-                else{
+
+                }else{
 
                     numOfDamages = result.getDamages().size();
                 }
@@ -94,20 +94,25 @@ public class RollResultListAdapter extends ArrayAdapter<RollResult> {
                 Log.e("Number of Damages: ", "is " + numOfDamages);
 
                 for(int i = 0; i < numOfDamages - 1; i++){
+
                     damagesBreakdown.append(result.getDamages().get(i).toString() + ", ");
+
                 }
 
 
                 damagesBreakdown.append(result.getDamages().get(numOfDamages - 1));
 
                 damage.setText(String.format("Damage Roll: %dD%d (%s) + %d Mod", numOfDie, dieType, damagesBreakdown, result.getAttack().getModDamage()));
+
             }
 
             // display the total damage
             totalDamage.setText(String.format("Total Damage: %d", result.getTotalDamage()));
 
         } else { // when the AC was greater than hit
+
             damage.setText("Fail AC");
+
         }
       
         return contentView;

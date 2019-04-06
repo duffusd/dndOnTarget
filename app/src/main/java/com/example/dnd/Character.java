@@ -8,6 +8,8 @@ import android.widget.Toast;
 import com.example.dnd.data.CharacterAttacksDatabaseHelper;
 import com.example.dnd.data.CharacterDatabaseHelper;
 
+import org.w3c.dom.CharacterData;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,8 +57,8 @@ public class Character {
     Character(Context context){
         id = null;
         name = null;
-        dbHelper = new CharacterDatabaseHelper(context);
-        characterAttacksDbHelper = new CharacterAttacksDatabaseHelper(context);
+        dbHelper = CharacterDatabaseHelper.getInstance(context);
+        characterAttacksDbHelper = CharacterAttacksDatabaseHelper.getInstance(context);
         attacks = new ArrayList<>();
         this.context = context;
     }
@@ -139,7 +141,7 @@ public class Character {
         try{
 
             dbHelper.deleteCharacter(id);
-            CharacterAttacksDatabaseHelper charAttackDbHelper = new CharacterAttacksDatabaseHelper(context);
+            CharacterAttacksDatabaseHelper charAttackDbHelper = CharacterAttacksDatabaseHelper.getInstance(context);
             charAttackDbHelper.deleteCharacter(id);
 
         }catch(SQLiteException e){

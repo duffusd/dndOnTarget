@@ -43,7 +43,7 @@ public class Die {
     Die(Context context, Integer diceId){
 
         this.context = context;
-        diceDbHelper = new DiceDatabaseHelper(context);
+        diceDbHelper = DiceDatabaseHelper.getInstance(context);
         this.dieId = diceId;
         sides = diceDbHelper.getDieNumber(dieId);
     }

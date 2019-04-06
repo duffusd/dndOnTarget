@@ -40,7 +40,7 @@ public class TestCharacter {
         character.setId(characterId);
 
         // Get the character's name by characterId from the database table
-        CharacterDatabaseHelper dbHelper = new CharacterDatabaseHelper(InstrumentationRegistry.getTargetContext());
+        CharacterDatabaseHelper dbHelper = CharacterDatabaseHelper.getInstance(InstrumentationRegistry.getTargetContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         Cursor result = db.rawQuery("SELECT "
@@ -164,7 +164,7 @@ public class TestCharacter {
         Integer attack2_id = attack2.addAttack(attack2_name, attack2_hitModifier, attack2_damageModifier, attack2_dieType, attack2_numOfDice);
 
         // add a character and attack to CharacterAttacks Database
-        CharacterAttacksDatabaseHelper dbHelper = new CharacterAttacksDatabaseHelper(InstrumentationRegistry.getTargetContext());
+        CharacterAttacksDatabaseHelper dbHelper = CharacterAttacksDatabaseHelper.getInstance(InstrumentationRegistry.getTargetContext());
         dbHelper.addCharacterAttack(characterId, attack1_id);
         dbHelper.addCharacterAttack(characterId, attack2_id);
 
@@ -206,7 +206,7 @@ public class TestCharacter {
         attack.setNumOfDice(attack_numOfDice);
 
         // add a character and attack to CharacterAttacks Database
-        CharacterAttacksDatabaseHelper dbHelper = new CharacterAttacksDatabaseHelper(InstrumentationRegistry.getTargetContext());
+        CharacterAttacksDatabaseHelper dbHelper = CharacterAttacksDatabaseHelper.getInstance(InstrumentationRegistry.getTargetContext());
         dbHelper.addCharacterAttack(characterId, attack_id);
 
         // test
@@ -240,7 +240,7 @@ public class TestCharacter {
         character.deleteCharacter();
 
         // check if the character is removed from the database table
-        CharacterDatabaseHelper dbHelper = new CharacterDatabaseHelper(InstrumentationRegistry.getTargetContext());
+        CharacterDatabaseHelper dbHelper = CharacterDatabaseHelper.getInstance(InstrumentationRegistry.getTargetContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor result = db.rawQuery("SELECT * FROM " +
                 CharacterContract.getTableName() +

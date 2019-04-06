@@ -30,18 +30,41 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String ERROR_SQLite = "SQLite:characterAttacks";
     Context _context;
+    private volatile static CharacterAttacksDatabaseHelper dbHelper;
 
     /**
      * Non-default constructor
      * @param context
      */
     public CharacterAttacksDatabaseHelper(Context context){
+
         super(context, CharacterAttacksContract.getDbName(), null, DatabaseContract.version);
         _context = context;
     }
 
+
+    public static CharacterAttacksDatabaseHelper getInstance(Context context){
+
+        if(dbHelper == null){
+
+            synchronized (CharacterAttacksDatabaseHelper.class){
+
+                if(dbHelper == null){
+
+                    dbHelper = new CharacterAttacksDatabaseHelper(context);
+                }
+            }
+        }
+
+        return  dbHelper;
+    }
+
+
+
+
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         db.execSQL(CharacterAttacksContract.getSQLCreateTable());
     }
 
@@ -64,7 +87,7 @@ public class CharacterAttacksDatabaseHelper extends SQLiteOpenHelper {
 
         try {
 
-            AttackDatabaseHelper attackDbHelper = new AttackDatabaseHelper(_context);
+            AttackDatabaseHelper attackDbHelper = AttackDatabaseHelper.getInstance(_context);
             SQLiteDatabase db = getReadableDatabase();
 
             boolean findAttack = attackDbHelper.findAttackById(attackId);

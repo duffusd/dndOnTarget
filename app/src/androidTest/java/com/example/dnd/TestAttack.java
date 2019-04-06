@@ -45,7 +45,7 @@ public class TestAttack {
         assertTrue(attackId > 0);
 
         // get the attack from the database table
-        AttackDatabaseHelper dbHelper = new AttackDatabaseHelper(InstrumentationRegistry.getTargetContext());
+        AttackDatabaseHelper dbHelper = AttackDatabaseHelper.getInstance(InstrumentationRegistry.getTargetContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor result = db.rawQuery("SELECT * FROM "
                 + AttackContract.getTableName()
@@ -106,14 +106,14 @@ public class TestAttack {
         assertTrue(attackId > 0);
 
         // add the attack to CharacterAttack database
-        CharacterAttacksDatabaseHelper characterAttackDbHelper = new CharacterAttacksDatabaseHelper(InstrumentationRegistry.getTargetContext());
+        CharacterAttacksDatabaseHelper characterAttackDbHelper = CharacterAttacksDatabaseHelper.getInstance(InstrumentationRegistry.getTargetContext());
         characterAttackDbHelper.addCharacterAttack(1, attackId);
 
         // delete the attack
         attack.deleteAttack(attackId);
 
         // check in the database table
-        AttackDatabaseHelper dbHelper = new AttackDatabaseHelper(InstrumentationRegistry.getTargetContext());
+        AttackDatabaseHelper dbHelper = AttackDatabaseHelper.getInstance(InstrumentationRegistry.getTargetContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor result = db.rawQuery("SELECT * FROM "
                 + AttackContract.getTableName()
@@ -158,7 +158,7 @@ public class TestAttack {
         attack.updateName(newAttackName);
 
         // check the attack name in the database table
-        AttackDatabaseHelper dbHelper = new AttackDatabaseHelper(InstrumentationRegistry.getTargetContext());
+        AttackDatabaseHelper dbHelper = AttackDatabaseHelper.getInstance(InstrumentationRegistry.getTargetContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor result = db.rawQuery("SELECT "
                                     + AttackContract.getAttackNameColName()
@@ -173,7 +173,9 @@ public class TestAttack {
 
         String dbAttackName = null;
         while(result.moveToNext()){
+
             dbAttackName = result.getString(result.getColumnIndex(AttackContract.getAttackNameColName()));
+
         }
 
         assertEquals(newAttackName, dbAttackName);
@@ -202,7 +204,7 @@ public class TestAttack {
         attack.updateHitModifier(newHitModifier);
 
         // check the hit modifier in the database table
-        AttackDatabaseHelper dbHelper = new AttackDatabaseHelper(InstrumentationRegistry.getTargetContext());
+        AttackDatabaseHelper dbHelper = AttackDatabaseHelper.getInstance(InstrumentationRegistry.getTargetContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor result = db.rawQuery("SELECT "
                 + AttackContract.getHitModifierColName()
@@ -217,7 +219,9 @@ public class TestAttack {
 
         Integer dbHitModifier = null;
         while(result.moveToNext()){
+
             dbHitModifier = result.getInt(result.getColumnIndex(AttackContract.getHitModifierColName()));
+
         }
 
         assertEquals(newHitModifier, dbHitModifier);
@@ -246,7 +250,7 @@ public class TestAttack {
         attack.updateDamageModifier(newDamageModifier);
 
         // check the damage modifier in the database table
-        AttackDatabaseHelper dbHelper = new AttackDatabaseHelper(InstrumentationRegistry.getTargetContext());
+        AttackDatabaseHelper dbHelper = AttackDatabaseHelper.getInstance(InstrumentationRegistry.getTargetContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor result = db.rawQuery("SELECT "
                 + AttackContract.getDamageModifierColName()
@@ -261,7 +265,9 @@ public class TestAttack {
 
         Integer dbDamageModifier = null;
         while(result.moveToNext()){
+
             dbDamageModifier = result.getInt(result.getColumnIndex(AttackContract.getDamageModifierColName()));
+
         }
 
         assertEquals(newDamageModifier, dbDamageModifier);
@@ -288,7 +294,7 @@ public class TestAttack {
         attack.updateDiceID(newDiceId);
 
         // check the diceID in the database table
-        AttackDatabaseHelper dbHelper = new AttackDatabaseHelper(InstrumentationRegistry.getTargetContext());
+        AttackDatabaseHelper dbHelper = AttackDatabaseHelper.getInstance(InstrumentationRegistry.getTargetContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor result = db.rawQuery("SELECT "
                 + AttackContract.getDiceIdColName()
@@ -303,7 +309,9 @@ public class TestAttack {
 
         Integer dbDiceId = null;
         while(result.moveToNext()){
+
             dbDiceId = result.getInt(result.getColumnIndex(AttackContract.getDiceIdColName()));
+
         }
 
         assertEquals(newDiceId, dbDiceId);
@@ -331,7 +339,7 @@ public class TestAttack {
         attack.updateNumOfDie(newNumOfDice);
 
         // check the diceID in the database table
-        AttackDatabaseHelper dbHelper = new AttackDatabaseHelper(InstrumentationRegistry.getTargetContext());
+        AttackDatabaseHelper dbHelper = AttackDatabaseHelper.getInstance(InstrumentationRegistry.getTargetContext());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor result = db.rawQuery("SELECT "
                 + AttackContract.getNumOfDieColName()
@@ -346,7 +354,9 @@ public class TestAttack {
 
         Integer dbNumOfDice = null;
         while(result.moveToNext()){
+
             dbNumOfDice = result.getInt(result.getColumnIndex(AttackContract.getNumOfDieColName()));
+
         }
 
         assertEquals(newNumOfDice, dbNumOfDice);

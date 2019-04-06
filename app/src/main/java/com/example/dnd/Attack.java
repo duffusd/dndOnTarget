@@ -67,7 +67,8 @@ public class Attack {
      * @param context
      */
     Attack(Context context){
-        dbHelper = new AttackDatabaseHelper(context);
+
+        dbHelper = AttackDatabaseHelper.getInstance(context);
         this.context = context;
         modHit = null;
         modDamage = null;
