@@ -103,24 +103,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Set OnItemClickLister to characters' listView
         characterListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            boolean clicked = false;
+            //boolean clicked = false;
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if(!clicked){
-
-                    parent.getChildAt(position).setBackgroundColor(Color.GRAY);
-                    getOnClickedCharacter(parent, position);
-
-                    clicked = true;
-
-                } else{
-
-                    parent.getChildAt(position).setBackgroundColor(Color.TRANSPARENT);
-                    character.clearCharacter();
-                    clicked = false;
-                }
+                character.clearCharacter();
+                getOnClickedCharacter(parent, position);
             }
 
         });
