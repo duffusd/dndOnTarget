@@ -40,9 +40,9 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
     private EditText damageModifier;
     private EditText numDice;
     private String attackNameStr;
-    private String hitModifierStr;
-    private String damageModifierStr;
-    private String numDiceStr;
+    private String hitModifierStr = "0";
+    private String damageModifierStr = "0";
+    private String numDiceStr = "0";
     private String tag = "AttackAddEdit";
     private String dieType;
     private Long dieId = null;
@@ -79,9 +79,16 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
         spinner.setSelection(0);
 
         attackNameStr = null;
-        hitModifierStr = null;
-        damageModifierStr = null;
-        numDiceStr = null;
+
+        // defaults values are zero to work with plus minus buttons
+        hitModifierStr = "0";
+        damageModifierStr = "0";
+        numDiceStr = "0";
+
+        // default values with 0 to use with plus and minus buttons from the start
+        hitModifier.setText(hitModifierStr);
+        damageModifier.setText(damageModifierStr);
+        numDice.setText(numDiceStr);
 
         // Set the field values if the attack was selected to edit in the previous activity
         if (MainActivity.getAttack().getId() != null) {
@@ -227,4 +234,48 @@ public class AttackAddEdit extends AppCompatActivity implements AdapterView.OnIt
     public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
+
+    public void plusMinusButtons(View view) {
+        int id = view.getId();
+        Integer num;
+        switch (id) {
+            case R.id.plusNumDice:
+                num = Integer.parseInt(numDice.getText().toString());
+                num++;
+                updateEditText(numDice, num);
+                break;
+            case R.id.minusNumDice:
+                num = Integer.parseInt(numDice.getText().toString());
+                num--;
+                updateEditText(numDice, num);
+                break;
+            case R.id.plusHit:
+                num = Integer.parseInt(hitModifier.getText().toString());
+                num++;
+                updateEditText(hitModifier, num);
+                break;
+            case R.id.minusHit:
+                num = Integer.parseInt(hitModifier.getText().toString());
+                num--;
+                updateEditText(hitModifier, num);
+                break;
+            case R.id.plusDamage:
+                num = Integer.parseInt(damageModifier.getText().toString());
+                num++;
+                updateEditText(damageModifier, num);
+                break;
+            case R.id.minusDamage:
+                num = Integer.parseInt(damageModifier.getText().toString());
+                num--;
+                updateEditText(damageModifier, num);
+                break;
+
+        }
+    }
+
+    private void updateEditText(EditText view, Integer number) {
+        String stringNew = number.toString();
+        view.setText(stringNew);
+    }
+
 }
