@@ -56,7 +56,19 @@ public class SelectAttack extends AppCompatActivity {
         // set up shared preferences for this app
         sharedPreferences = getSharedPreferences(targetAcSharedPreference, Context.MODE_PRIVATE);
 
-        goToRoller();
+
+        if(MainActivity.getCharacter().getAttacks().size() == 0){
+
+            Toast.makeText(SelectAttack.this,
+                    String.format("No attacks available for %s",
+                            MainActivity.getCharacter().getName()), Toast.LENGTH_LONG).show();
+
+            MainActivity.getCharacter().clearCharacter();
+
+        }else{
+
+            goToRoller();
+        }
     }
 
 

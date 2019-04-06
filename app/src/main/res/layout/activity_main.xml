@@ -23,15 +23,15 @@
         tools:text="Manage Characters" />
 
     <Button
-        android:id="@+id/addEditAttackButton"
+        android:id="@+id/addNewCharacter"
         android:layout_width="wrap_content"
-        android:layout_height="47dp"
-        android:layout_marginEnd="128dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:onClick="onClick"
-        android:text="@string/AddEditCharacter"
+        android:text="@string/AddNewCharacter"
         app:layout_constraintBottom_toTopOf="@+id/rollAttackbtn"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ListView
         android:id="@+id/listView"
@@ -43,7 +43,7 @@
         android:layout_marginBottom="16dp"
         android:choiceMode="singleChoice"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/addEditAttackButton"
+        app:layout_constraintBottom_toTopOf="@+id/addNewCharacter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
