@@ -11,6 +11,8 @@
     <string name="atkNameInputGuide">What is the name of the attack?</string>
     <string name="hitModInputGuide">What is the Hit Modifier?</string>
     <string name="damageModInputGuide">What is the Damage Modifier?</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
     <string-array name="diceType_array">
         <item>Choose...</item>
         <item>4</item>

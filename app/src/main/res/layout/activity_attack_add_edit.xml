@@ -6,6 +6,48 @@
     android:layout_height="match_parent"
     tools:context=".AttackAddEdit">
 
+    <Button
+        android:id="@+id/minusHit"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:onClick="plusMinusButtons"
+        android:text="@string/minus"
+        app:layout_constraintBaseline_toBaselineOf="@+id/hitModEditText"
+        app:layout_constraintEnd_toStartOf="@+id/plusHit" />
+
+    <Button
+        android:id="@+id/minusDamage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:onClick="plusMinusButtons"
+        android:text="@string/minus"
+        app:layout_constraintBaseline_toBaselineOf="@+id/damageModifierText"
+        app:layout_constraintEnd_toStartOf="@+id/plusDamage" />
+
+    <Button
+        android:id="@+id/plusDamage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:onClick="plusMinusButtons"
+        android:text="@string/plus"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        app:layout_constraintBaseline_toBaselineOf="@+id/minusDamage"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/plusHit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:onClick="plusMinusButtons"
+        android:text="@string/plus"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        app:layout_constraintBaseline_toBaselineOf="@+id/minusHit"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
@@ -48,40 +90,43 @@
 
     <EditText
         android:id="@+id/hitModEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="41dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:ems="10"
         android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/minusHit"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <EditText
         android:id="@+id/damageModifierText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:inputType="number"
+        app:layout_constraintEnd_toStartOf="@+id/minusDamage"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     <EditText
         android:id="@+id/numberOfDice"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:ems="10"
         android:inputType="number"
+        app:layout_constraintEnd_toStartOf="@+id/minusNumDice"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
@@ -149,5 +194,26 @@
         app:layout_constraintBottom_toTopOf="@+id/damageModifierText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hitModEditText" />
+
+    <Button
+        android:id="@+id/minusNumDice"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:onClick="plusMinusButtons"
+        android:text="@string/minus"
+        app:layout_constraintBaseline_toBaselineOf="@+id/numberOfDice"
+        app:layout_constraintEnd_toStartOf="@+id/plusNumDice" />
+
+    <Button
+        android:id="@+id/plusNumDice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:onClick="plusMinusButtons"
+        android:text="@string/plus"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        app:layout_constraintBaseline_toBaselineOf="@+id/minusNumDice"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
